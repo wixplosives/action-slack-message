@@ -21,4 +21,9 @@ jobs:
       - uses: actions/checkout@v2
       - uses: ./
         with:
-          milliseconds: 1000
+          status: true
+          text: "Hello"
+          channel: "core3-ci"
+          slack_token: "undefined"
+
+
