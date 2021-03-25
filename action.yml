@@ -19,7 +19,7 @@ inputs:
     description: 'slack token'
     default: ''
 runs:
-  using: 'node14'
+  using: 'node12'
   main: 'dist/index.js'
 branding:
   icon: upload-cloud
