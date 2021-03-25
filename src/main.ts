@@ -27,10 +27,15 @@ async function run(): Promise<void> {
           {
             title: workflowName,
             title_link: 'https://workflow.link',
-            text: `Status: ${status.toUpperCase()}
-            **Repo**: <http://repo.url|${repoName}>
-            **Branch**: <http://branch.commit.url|${branchName}>
-            *Alert details*:\n*Alert:* api-server down - \n*Description:* api-server at 1.2.3.4:8080 couldn't be scraped *Details:*\n   • *alertname:* \n`,
+            text:
+              // eslint-disable-next-line prefer-template
+              'Status: ' +
+              status.toUpperCase() +
+              '\n**Repo**: <http://repo.url|' +
+              repoName +
+              '> **Branch**: <http://branch.commit.url|' +
+              branchName +
+              '>',
             color: colors[status],
             mrkdwn_in: ['pretext', 'text']
           }
