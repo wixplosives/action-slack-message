@@ -58,14 +58,13 @@ function run() {
             const slackToken = core.getInput('slack_token');
             core.debug(`Processing ${status} ${text} ${channel} ${slackToken}`); // debug is only output if you set the secret `ACTIONS_RUNNER_DEBUG` to true
             const client = new web_api_1.WebClient(slackToken, {
-                // LogLevel can be imported and used to make debugging simpler
                 logLevel: web_api_1.LogLevel.DEBUG
             });
             try {
                 // Call the chat.postMessage method using the WebClient
                 const result = yield client.chat.postMessage({
                     channel,
-                    text: 'Hello world'
+                    text
                 });
                 console.log(result);
             }
