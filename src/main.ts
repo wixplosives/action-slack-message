@@ -28,8 +28,7 @@ async function run(): Promise<void> {
           {
             title: workflowName,
             title_link: 'https://workflow.link',
-            text: `Status: ${status.toUpperCase()}
-            *Repo*: <http://repo.url|${repoName}>   *Branch*: <http://branch.commit.url|${branchName}>`,
+            text: `Status: *${status.toUpperCase()}*\n*Repo*: <http://repo.url|${repoName}>\n*Branch*: <http://branch.commit.url|${branchName}>`,
             color: colors[status],
             mrkdwn_in: ['text']
           }
