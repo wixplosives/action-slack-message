@@ -72,9 +72,9 @@ function run() {
             const text = core.getInput('text');
             const channel = core.getInput('channel');
             const slackToken = core.getInput('slack_token');
-            const repoName = 'someRepoName';
-            const workflowName = 'someWorkflowName';
-            const branchName = 'someBranchName';
+            const repoName = 'Example Workflow';
+            const workflowName = 'This is the workflow name';
+            const branchName = 'master';
             core.debug(`Processing ${status} ${text} ${channel} ${slackToken}`); // debug is only output if you set the secret `ACTIONS_RUNNER_DEBUG` to true
             const client = new web_api_1.WebClient(slackToken, {
                 logLevel: web_api_1.LogLevel.DEBUG
@@ -89,7 +89,7 @@ function run() {
                             title: workflowName,
                             title_link: 'https://workflow.link',
                             text: `Status: ${status.toUpperCase()}
-            *Repo*: <http://repo.url|${repoName}   *Branch*: <http://branch.commit.url|${branchName}>`,
+            *Repo*: <http://repo.url|${repoName}>   *Branch*: <http://branch.commit.url|${branchName}>`,
                             color: const_1.colors[status],
                             mrkdwn_in: ['text']
                         }

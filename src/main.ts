@@ -10,9 +10,9 @@ async function run(): Promise<void> {
     const text: string = core.getInput('text');
     const channel: string = core.getInput('channel');
     const slackToken: string = core.getInput('slack_token');
-    const repoName: string = 'someRepoName';
-    const workflowName: string = 'someWorkflowName';
-    const branchName: string = 'someBranchName';
+    const repoName: string = 'Example Workflow';
+    const workflowName: string = 'This is the workflow name';
+    const branchName: string = 'master';
     core.debug(`Processing ${status} ${text} ${channel} ${slackToken}`); // debug is only output if you set the secret `ACTIONS_RUNNER_DEBUG` to true
 
     const client = new WebClient(slackToken, {
@@ -29,7 +29,7 @@ async function run(): Promise<void> {
             title: workflowName,
             title_link: 'https://workflow.link',
             text: `Status: ${status.toUpperCase()}
-            *Repo*: <http://repo.url|${repoName}   *Branch*: <http://branch.commit.url|${branchName}>`,
+            *Repo*: <http://repo.url|${repoName}>   *Branch*: <http://branch.commit.url|${branchName}>`,
             color: colors[status],
             mrkdwn_in: ['text']
           }
