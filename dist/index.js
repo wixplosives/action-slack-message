@@ -10,6 +10,23 @@ module.exports = JSON.parse("{\"name\":\"@slack/web-api\",\"version\":\"6.1.0\",
 
 /***/ }),
 
+/***/ 6695:
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.colors = void 0;
+exports.colors = {
+    fail: 'danger',
+    failed: 'danger',
+    success: 'success',
+    info: 'primary'
+};
+
+
+/***/ }),
+
 /***/ 3109:
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
@@ -47,8 +64,7 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 /* eslint-disable no-console */
 const core = __importStar(__webpack_require__(2186));
 const web_api_1 = __webpack_require__(431);
-// WebClient insantiates a client that can call API methods
-// When using Bolt, you can use either `app.client` or the `client` passed to listeners.
+const const_1 = __webpack_require__(6695);
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
@@ -56,6 +72,9 @@ function run() {
             const text = core.getInput('text');
             const channel = core.getInput('channel');
             const slackToken = core.getInput('slack_token');
+            const repoName = 'someRepoName';
+            const workflowName = 'someWorkflowName';
+            const branchName = 'someBranchName';
             core.debug(`Processing ${status} ${text} ${channel} ${slackToken}`); // debug is only output if you set the secret `ACTIONS_RUNNER_DEBUG` to true
             const client = new web_api_1.WebClient(slackToken, {
                 logLevel: web_api_1.LogLevel.DEBUG
@@ -63,14 +82,16 @@ function run() {
             try {
                 const result = yield client.chat.postMessage({
                     channel,
-                    text,
-                    color: 'green',
+                    text: '',
                     attachments: [
                         {
-                            title: '[FIRING:2] InstanceDown for api-server (env="prod", severity="critical")',
-                            title_link: 'https://alertmanager.local//#/alerts?receiver=default',
-                            text: ":chart_with_upwards_trend: *<http://generator.local/1|Graph>*   :notebook: *<https://runbook.local/1|Runbook>*\n\n*Alert details*:\n*Alert:* api-server down - `critical`\n*Description:* api-server at 1.2.3.4:8080 couldn't be scraped *Details:*\n   • *alertname:* `InstanceDown`\n   • *env:* `prod`\n   • *instance:* `1.2.3.4:8080`\n   • *job:* `api-server`\n   • *severity:* `critical`\n  \n*Alert:* api-server down - `critical`\n*Description:* api-server at 1.2.3.4:8081 couldn't be scraped *Details:*\n   • *alertname:* `InstanceDown`\n   • *env:* `prod`\n   • *instance:* `1.2.3.4:8081`\n   • *job:* `api-server`\n   • *severity:* `critical`\n  \n",
-                            color: 'danger',
+                            title: workflowName,
+                            title_link: 'https://workflow.link',
+                            text: `Status: ${status.toUpperCase()}
+            **Repo**: <http://repo.url|${repoName}>
+            **Branch**: <http://branch.commit.url|${branchName}>
+            *Alert details*:\n*Alert:* api-server down - \n*Description:* api-server at 1.2.3.4:8080 couldn't be scraped *Details:*\n   • *alertname:* \n`,
+                            color: const_1.colors[status],
                             mrkdwn_in: ['pretext', 'text']
                         }
                     ]
