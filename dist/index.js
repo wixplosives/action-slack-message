@@ -89,7 +89,7 @@ function run() {
                             title: workflowName,
                             title_link: 'https://workflow.link',
                             text: `Status: ${status.toUpperCase()}
-            '*Repo*: <http://repo.url|${repoName}   *Branch*: <http://branch.commit.url|${branchName}>`,
+            *Repo*: <http://repo.url|${repoName}   *Branch*: <http://branch.commit.url|${branchName}>`,
                             color: const_1.colors[status],
                             mrkdwn_in: ['text']
                         }
