@@ -64,9 +64,7 @@ function run() {
                 const result = yield client.chat.postMessage({
                     channel,
                     text,
-                    blocks: [
-                        { type: 'section', text: { type: 'plain_text', text: 'Hello world' } }
-                    ]
+                    blocks: [{ type: 'section', text: { type: 'plain_text', text } }]
                 });
                 console.log(result);
             }

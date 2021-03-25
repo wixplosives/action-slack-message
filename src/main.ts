@@ -21,9 +21,7 @@ async function run(): Promise<void> {
       const result = await client.chat.postMessage({
         channel,
         text,
-        blocks: [
-          { type: 'section', text: { type: 'plain_text', text: 'Hello world' } }
-        ]
+        blocks: [{ type: 'section', text: { type: 'plain_text', text } }]
       });
 
       console.log(result);
