@@ -61,10 +61,12 @@ function run() {
                 logLevel: web_api_1.LogLevel.DEBUG
             });
             try {
-                // Call the chat.postMessage method using the WebClient
                 const result = yield client.chat.postMessage({
                     channel,
-                    text
+                    text,
+                    blocks: [
+                        { type: 'section', text: { type: 'plain_text', text: 'Hello world' } }
+                    ]
                 });
                 console.log(result);
             }

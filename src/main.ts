@@ -18,10 +18,12 @@ async function run(): Promise<void> {
     });
 
     try {
-      // Call the chat.postMessage method using the WebClient
       const result = await client.chat.postMessage({
         channel,
-        text
+        text,
+        blocks: [
+          { type: 'section', text: { type: 'plain_text', text: 'Hello world' } }
+        ]
       });
 
       console.log(result);
