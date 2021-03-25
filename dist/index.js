@@ -44,7 +44,7 @@ function run() {
             const text = core.getInput('text');
             const channel = core.getInput('channel');
             const slack_token = core.getInput('slack_token');
-            core.debug(`Processing ${status} ${text} ${channel} ${slack_token}`); // debug is only output if you set the secret `ACTIONS_RUNNER_DEBUG` to true  
+            core.debug(`Processing ${status} ${text} ${channel} ${slack_token}`); // debug is only output if you set the secret `ACTIONS_RUNNER_DEBUG` to true
         }
         catch (error) {
             core.setFailed(error.message);
