@@ -1,20 +1,20 @@
 name: 'action-slack-message'
 description: 'Sends slack messages'
-author: 'Alex Shemshurenko'
+author: 'Yarden Porat'
 inputs:
-  status: 
+  status:
     required: false
     description: 'failed or success'
     default: true
-  text: 
+  text:
     required: false
     description: 'free text'
     default: ''
-  channel: 
+  channel:
     required: true
     description: 'channel to send message'
     default: 'core3-ci'
-  slack_token: 
+  slack_token:
     required: true
     description: 'slack token'
     default: ''
