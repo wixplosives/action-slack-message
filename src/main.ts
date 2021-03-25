@@ -27,15 +27,15 @@ async function run(): Promise<void> {
           {
             title: workflowName,
             title_link: 'https://workflow.link',
-            text:
+            text: '*test*'
               // eslint-disable-next-line prefer-template
-              'Status: ' +
-              status.toUpperCase() +
-              '\n**Repo**: <http://repo.url|' +
-              repoName +
-              '> **Branch**: <http://branch.commit.url|' +
-              branchName +
-              '>',
+              // 'Status: ' +
+              // status.toUpperCase() +
+              // '\n**Repo**: <http://repo.url|' +
+              // repoName +
+              // '> **Branch**: <http://branch.commit.url|' +
+              // branchName +
+              // '>',
             color: colors[status],
             mrkdwn_in: ['pretext', 'text']
           }

@@ -1,6 +1,6 @@
 export const colors = {
   fail: 'danger',
   failed: 'danger',
-  success: 'success',
-  info: 'primary'
+  success: 'good',
+  info: '#0d6efd'
 };
