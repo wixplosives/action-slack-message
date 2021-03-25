@@ -1,15 +1,37 @@
-import * as core from '@actions/core'
+/* eslint-disable no-console */
+import * as core from '@actions/core';
+import {WebClient, LogLevel} from '@slack/web-api';
+
+// WebClient insantiates a client that can call API methods
+// When using Bolt, you can use either `app.client` or the `client` passed to listeners.
 
 async function run(): Promise<void> {
   try {
-    const status: string = core.getInput('status')
-    const text: string = core.getInput('text')
-    const channel: string = core.getInput('channel')
-    const slack_token: string = core.getInput('slack_token')
-    core.debug(`Processing ${status} ${text} ${channel} ${slack_token}`) // debug is only output if you set the secret `ACTIONS_RUNNER_DEBUG` to true
+    const status: string = core.getInput('status');
+    const text: string = core.getInput('text');
+    const channel: string = core.getInput('channel');
+    const slackToken: string = core.getInput('slack_token');
+    core.debug(`Processing ${status} ${text} ${channel} ${slackToken}`); // debug is only output if you set the secret `ACTIONS_RUNNER_DEBUG` to true
+
+    const client = new WebClient(slackToken, {
+      // LogLevel can be imported and used to make debugging simpler
+      logLevel: LogLevel.DEBUG
+    });
+
+    try {
+      // Call the chat.postMessage method using the WebClient
+      const result = await client.chat.postMessage({
+        channel,
+        text: 'Hello world'
+      });
+
+      console.log(result);
+    } catch (error) {
+      console.error(error);
+    }
   } catch (error) {
-    core.setFailed(error.message)
+    core.setFailed(error.message);
   }
 }
 
-run()
+run();
