@@ -20,8 +20,8 @@ exports.colors = void 0;
 exports.colors = {
     fail: 'danger',
     failed: 'danger',
-    success: 'success',
-    info: 'primary'
+    success: 'good',
+    info: '#0d6efd'
 };
 
 
@@ -87,15 +87,14 @@ function run() {
                         {
                             title: workflowName,
                             title_link: 'https://workflow.link',
-                            text: 
-                            // eslint-disable-next-line prefer-template
-                            'Status: ' +
-                                status.toUpperCase() +
-                                '\n**Repo**: <http://repo.url|' +
-                                repoName +
-                                '> **Branch**: <http://branch.commit.url|' +
-                                branchName +
-                                '>',
+                            text: `*test* \n ${repoName} ${branchName}`,
+                            // 'Status: ' +
+                            // status.toUpperCase() +
+                            // '\n**Repo**: <http://repo.url|' +
+                            // repoName +
+                            // '> **Branch**: <http://branch.commit.url|' +
+                            // branchName +
+                            // '>',
                             color: const_1.colors[status],
                             mrkdwn_in: ['pretext', 'text']
                         }
