@@ -23,20 +23,15 @@ async function run(): Promise<void> {
       const result = await client.chat.postMessage({
         channel,
         text: '',
+        username: 'CI Slack Notifier',
         attachments: [
           {
             title: workflowName,
             title_link: 'https://workflow.link',
-            text: `*test* \n ${repoName} ${branchName}`,
-            // 'Status: ' +
-            // status.toUpperCase() +
-            // '\n**Repo**: <http://repo.url|' +
-            // repoName +
-            // '> **Branch**: <http://branch.commit.url|' +
-            // branchName +
-            // '>',
+            text: `Status: ${status.toUpperCase()}
+            '*Repo*: <http://repo.url|${repoName}   *Branch*: <http://branch.commit.url|${branchName}>`,
             color: colors[status],
-            mrkdwn_in: ['pretext', 'text']
+            mrkdwn_in: ['text']
           }
         ]
       });
