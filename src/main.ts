@@ -21,20 +21,16 @@ async function run(): Promise<void> {
       const result = await client.chat.postMessage({
         channel,
         text,
+        color: 'green',
         attachments: [
           {
-            mrkdwn_in: ['text'],
-            color: '#2eb886',
-            fields: [
+            blocks: [
               {
-                title: '**Priority**',
-                value: '**High**',
-                short: true
-              },
-              {
-                title: 'Priority',
-                value: 'High',
-                short: true
+                type: 'header',
+                text: {
+                  type: 'mrkdwn',
+                  text: '*Type:*\nPaid Time Off'
+                }
               }
             ]
           }
