@@ -28,7 +28,7 @@ async function run(): Promise<void> {
             fields: [
               {
                 title: '**Priority**',
-                value: 'High',
+                value: '**High**',
                 short: true
               },
               {

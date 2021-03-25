@@ -71,7 +71,7 @@ function run() {
                             fields: [
                                 {
                                     title: '**Priority**',
-                                    value: 'High',
+                                    value: '**High**',
                                     short: true
                                 },
                                 {
