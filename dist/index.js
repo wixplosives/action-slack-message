@@ -20,7 +20,9 @@ exports.colors = void 0;
 exports.colors = {
     fail: 'danger',
     failed: 'danger',
+    false: 'danger',
     success: 'good',
+    true: 'good',
     info: '#0d6efd'
 };
 
@@ -69,33 +71,34 @@ const const_1 = __webpack_require__(6695);
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            const status = (core.getInput('status') || 'info');
+            const status = core.getInput('status');
             const text = core.getInput('text');
             const channel = core.getInput('channel');
             const slackToken = core.getInput('slack_token');
-            const repoName = 'Example Workflow';
-            const branchName = 'master';
-            core.debug(`Processing ${status} ${text} ${channel} ${slackToken}`); // debug is only output if you set the secret `ACTIONS_RUNNER_DEBUG` to true
-            const { runId, workflow } = github_1.context;
+            const actionLink = core.getInput('action_link');
+            core.debug(`Processing ${status} ${text} ${channel} ${slackToken} ${actionLink}`); // debug is only output if you set the secret `ACTIONS_RUNNER_DEBUG` to true
+            const { workflow } = github_1.context;
             const sha = github_1.context.sha;
             const { owner, repo } = github_1.context.repo;
             const repoUrl = `https://github.com/${owner}/${repo}`;
+            const { ref } = github_1.context;
+            const branchName = ref.startsWith('refs/heads/') ? ref.slice(11) : ref;
+            const textString = `
+    Status: *${status.toUpperCase()}*
+    *Repo*: <${repoUrl}|${repo}>
+    *Branch*: <${repoUrl}/commit/${sha}|${branchName}>`;
             const client = new web_api_1.WebClient(slackToken, {
                 logLevel: web_api_1.LogLevel.DEBUG
             });
-            const textString = `
-    Status: *${status.toUpperCase()}*
-    *Repo*: <${repoUrl}|${repoName}>
-    *Branch*: <${repoUrl}/commit/${sha}|${branchName}>`;
             try {
                 const result = yield client.chat.postMessage({
                     channel,
-                    text: '',
+                    text,
                     username: 'CI Slack Notifier',
                     attachments: [
                         {
                             title: workflow,
-                            title_link: `${repoUrl}/runs/${runId}`,
+                            title_link: actionLink || '',
                             text: textString,
                             color: const_1.colors[status],
                             mrkdwn_in: ['text']
