@@ -76,13 +76,24 @@ function run() {
             const repoName = 'Example Workflow';
             const branchName = 'master';
             core.debug(`Processing ${status} ${text} ${channel} ${slackToken}`); // debug is only output if you set the secret `ACTIONS_RUNNER_DEBUG` to true
-            const { runId, job } = github_1.context;
+            const { runId, workflow } = github_1.context;
             const sha = github_1.context.sha;
             const { owner, repo } = github_1.context.repo;
             const repoUrl = `https://github.com/${owner}/${repo}`;
             const client = new web_api_1.WebClient(slackToken, {
                 logLevel: web_api_1.LogLevel.DEBUG
             });
+            const textString = `
+    Status: *${status.toUpperCase()}*
+    *Repo*: <${repoUrl}|${repoName}>
+    *Branch*: <${repoUrl}/commit/${sha}|${branchName}>
+    context.action:${github_1.context.action}
+    context.actor:${github_1.context.actor}
+    context.eventName:${github_1.context.eventName}
+    context.ref:${github_1.context.ref}
+    context.runNumber:${github_1.context.runNumber}
+    context.workflow:${github_1.context.workflow}
+    `;
             try {
                 const result = yield client.chat.postMessage({
                     channel,
@@ -90,19 +101,9 @@ function run() {
                     username: 'CI Slack Notifier',
                     attachments: [
                         {
-                            title: job,
+                            title: workflow,
                             title_link: `${repoUrl}/runs/${runId}`,
-                            text: `
-              Status: *${status.toUpperCase()}*
-              *Repo*: <${repoUrl}|${repoName}>
-              *Branch*: <${repoUrl}/commit/${sha}|${branchName}>
-              context.action:${github_1.context.action}
-              context.actor:${github_1.context.actor}
-              context.eventName:${github_1.context.eventName}
-              context.ref:${github_1.context.ref}
-              context.runNumber:${github_1.context.runNumber}
-              context.workflow:${github_1.context.workflow}
-              `.trim(),
+                            text: textString,
                             color: const_1.colors[status],
                             mrkdwn_in: ['text']
                         }

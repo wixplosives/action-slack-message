@@ -15,13 +15,25 @@ async function run(): Promise<void> {
     const branchName: string = 'master';
     core.debug(`Processing ${status} ${text} ${channel} ${slackToken}`); // debug is only output if you set the secret `ACTIONS_RUNNER_DEBUG` to true
 
-    const { runId, job } = context;
+    const { runId, workflow } = context;
     const sha = context.sha;
     const { owner, repo } = context.repo;
     const repoUrl = `https://github.com/${owner}/${repo}`;
     const client = new WebClient(slackToken, {
       logLevel: LogLevel.DEBUG
     });
+
+    const textString: string = `
+    Status: *${status.toUpperCase()}*
+    *Repo*: <${repoUrl}|${repoName}>
+    *Branch*: <${repoUrl}/commit/${sha}|${branchName}>
+    context.action:${context.action}
+    context.actor:${context.actor}
+    context.eventName:${context.eventName}
+    context.ref:${context.ref}
+    context.runNumber:${context.runNumber}
+    context.workflow:${context.workflow}
+    `;
 
     try {
       const result = await client.chat.postMessage({
@@ -30,19 +42,9 @@ async function run(): Promise<void> {
         username: 'CI Slack Notifier',
         attachments: [
           {
-            title: job,
+            title: workflow,
             title_link: `${repoUrl}/runs/${runId}`,
-            text: `
-              Status: *${status.toUpperCase()}*
-              *Repo*: <${repoUrl}|${repoName}>
-              *Branch*: <${repoUrl}/commit/${sha}|${branchName}>
-              context.action:${context.action}
-              context.actor:${context.actor}
-              context.eventName:${context.eventName}
-              context.ref:${context.ref}
-              context.runNumber:${context.runNumber}
-              context.workflow:${context.workflow}
-              `.trim(),
+            text: textString,
             color: colors[status],
             mrkdwn_in: ['text']
           }
