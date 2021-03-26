@@ -77,11 +77,9 @@ function run() {
             const slackToken = core.getInput('slack_token');
             const actionLink = core.getInput('action_link');
             core.debug(`Processing ${status} ${text} ${channel} ${slackToken} ${actionLink}`); // debug is only output if you set the secret `ACTIONS_RUNNER_DEBUG` to true
-            const { workflow } = github_1.context;
-            const sha = github_1.context.sha;
+            const { workflow, sha, ref } = github_1.context;
             const { owner, repo } = github_1.context.repo;
             const repoUrl = `https://github.com/${owner}/${repo}`;
-            const { ref } = github_1.context;
             const branchName = ref.startsWith('refs/heads/') ? ref.slice(11) : ref;
             const textString = `
     Status: *${status.toUpperCase()}*

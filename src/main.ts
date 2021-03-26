@@ -17,11 +17,9 @@ async function run(): Promise<void> {
       `Processing ${status} ${text} ${channel} ${slackToken} ${actionLink}`
     ); // debug is only output if you set the secret `ACTIONS_RUNNER_DEBUG` to true
 
-    const { workflow } = context;
-    const sha = context.sha;
+    const { workflow, sha, ref } = context;
     const { owner, repo } = context.repo;
     const repoUrl = `https://github.com/${owner}/${repo}`;
-    const { ref } = context;
     const branchName = ref.startsWith('refs/heads/') ? ref.slice(11) : ref;
 
     const textString: string = `
