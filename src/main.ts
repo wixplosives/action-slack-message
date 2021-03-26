@@ -33,7 +33,7 @@ async function run(): Promise<void> {
         attachments: [
           {
             title: workflow,
-            title_link: actionLink || '',
+            title_link: actionLink,
             text: textString,
             color: colors[status],
             mrkdwn_in: ['text']

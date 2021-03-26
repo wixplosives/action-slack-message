@@ -92,7 +92,7 @@ function run() {
                     attachments: [
                         {
                             title: workflow,
-                            title_link: actionLink || '',
+                            title_link: actionLink,
                             text: textString,
                             color: const_1.colors[status],
                             mrkdwn_in: ['text']
