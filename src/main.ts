@@ -18,14 +18,9 @@ async function run(): Promise<void> {
     ); // debug is only output if you set the secret `ACTIONS_RUNNER_DEBUG` to true
 
     const { workflow, sha, ref } = context;
-    const { owner, repo } = context.repo;
-    const repoUrl = `https://github.com/${owner}/${repo}`;
-    const branchName = ref.startsWith('refs/heads/') ? ref.slice(11) : ref;
+    const { owner: repoOwner, repo: repoName } = context.repo;
 
-    const textString: string = `
-    ${status ? `Status: *${status.toUpperCase()}*` : ''}
-    *Repo*: <${repoUrl}|${repo}>
-    *Branch*: <${repoUrl}/commit/${sha}|${branchName}>`;
+    const textString = getTextString({ status, repoOwner, repoName, ref, sha });
 
     const client = new WebClient(slackToken, {
       logLevel: LogLevel.DEBUG
@@ -55,5 +50,30 @@ async function run(): Promise<void> {
     core.setFailed(error.message);
   }
 }
+
+export interface ITextString {
+  status?: string;
+  repoOwner: string;
+  repoName: string;
+  ref: string;
+  sha: string;
+}
+
+const getTextString = ({
+  status,
+  repoOwner,
+  repoName,
+  ref,
+  sha
+}: ITextString): string => {
+  const repoUrl = `https://github.com/${repoOwner}/${repoName}`;
+  const statusString = status ? `Status: *${status.toUpperCase()}*` : '';
+  const repoString = `*Repo*: <${repoUrl}|${repoName}>`;
+
+  const branchName = ref.startsWith('refs/heads/') ? ref.slice(11) : ref;
+  const branchString = `*Branch*: <${repoUrl}/commit/${sha}|${branchName}>`;
+
+  return `${statusString}\n${repoString}\n${branchString}`;
+};
 
 run();
