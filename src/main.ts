@@ -26,14 +26,7 @@ async function run(): Promise<void> {
     const textString: string = `
     Status: *${status.toUpperCase()}*
     *Repo*: <${repoUrl}|${repoName}>
-    *Branch*: <${repoUrl}/commit/${sha}|${branchName}>
-    context.action:${context.action}
-    context.actor:${context.actor}
-    context.eventName:${context.eventName}
-    context.ref:${context.ref}
-    context.runNumber:${context.runNumber}
-    context.workflow:${context.workflow}
-    `;
+    *Branch*: <${repoUrl}/commit/${sha}|${branchName}>`;
 
     try {
       const result = await client.chat.postMessage({

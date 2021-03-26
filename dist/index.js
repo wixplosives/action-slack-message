@@ -86,14 +86,7 @@ function run() {
             const textString = `
     Status: *${status.toUpperCase()}*
     *Repo*: <${repoUrl}|${repoName}>
-    *Branch*: <${repoUrl}/commit/${sha}|${branchName}>
-    context.action:${github_1.context.action}
-    context.actor:${github_1.context.actor}
-    context.eventName:${github_1.context.eventName}
-    context.ref:${github_1.context.ref}
-    context.runNumber:${github_1.context.runNumber}
-    context.workflow:${github_1.context.workflow}
-    `;
+    *Branch*: <${repoUrl}/commit/${sha}|${branchName}>`;
             try {
                 const result = yield client.chat.postMessage({
                     channel,
