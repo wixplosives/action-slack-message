@@ -30,7 +30,6 @@ async function run(): Promise<void> {
       const result = await client.chat.postMessage({
         channel,
         text,
-        username: 'CI Slack Notifier',
         attachments: [
           {
             title: workflow,

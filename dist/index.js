@@ -17,14 +17,15 @@ module.exports = JSON.parse("{\"_from\":\"@slack/web-api@^6.1.0\",\"_id\":\"@sla
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.colors = void 0;
+const primaryBlue = '#0d6efd';
 exports.colors = {
     fail: 'danger',
     failed: 'danger',
     false: 'danger',
     success: 'good',
     true: 'good',
-    info: '#0d6efd',
-    '': '#0d6efd'
+    info: primaryBlue,
+    '': primaryBlue
 };
 
 
@@ -79,13 +80,8 @@ function run() {
             const actionLink = core.getInput('action_link');
             core.debug(`Processing ${status} ${text} ${channel} ${slackToken} ${actionLink}`); // debug is only output if you set the secret `ACTIONS_RUNNER_DEBUG` to true
             const { workflow, sha, ref } = github_1.context;
-            const { owner, repo } = github_1.context.repo;
-            const repoUrl = `https://github.com/${owner}/${repo}`;
-            const branchName = ref.startsWith('refs/heads/') ? ref.slice(11) : ref;
-            const textString = `
-    ${status ? `Status: *${status.toUpperCase()}*` : ''}
-    *Repo*: <${repoUrl}|${repo}>
-    *Branch*: <${repoUrl}/commit/${sha}|${branchName}>`;
+            const { owner: repoOwner, repo: repoName } = github_1.context.repo;
+            const textString = getTextString({ status, repoOwner, repoName, ref, sha });
             const client = new web_api_1.WebClient(slackToken, {
                 logLevel: web_api_1.LogLevel.DEBUG
             });
@@ -93,7 +89,6 @@ function run() {
                 const result = yield client.chat.postMessage({
                     channel,
                     text,
-                    username: 'CI Slack Notifier',
                     attachments: [
                         {
                             title: workflow,
@@ -115,6 +110,14 @@ function run() {
         }
     });
 }
+const getTextString = ({ status, repoOwner, repoName, ref, sha }) => {
+    const repoUrl = `https://github.com/${repoOwner}/${repoName}`;
+    const statusString = status ? `Status: *${status.toUpperCase()}*` : '';
+    const repoString = `*Repo*: <${repoUrl}|${repoName}>`;
+    const branchName = ref.startsWith('refs/heads/') ? ref.slice(11) : ref;
+    const branchString = `*Branch*: <${repoUrl}/commit/${sha}|${branchName}>`;
+    return `${statusString}\n${repoString}\n${branchString}`;
+};
 run();
 
 
