@@ -7,10 +7,11 @@ import type { Status } from './types';
 
 async function run(): Promise<void> {
   try {
-    const status = (core.getInput('status') || 'info') as Status;
+    const status = core.getInput('status') as Status;
     const text: string = core.getInput('text');
     const channel: string = core.getInput('channel');
     const slackToken: string = core.getInput('slack_token');
+    const actionLink: string = core.getInput('action_link');
     const repoName: string = 'Example Workflow';
     const branchName: string = 'master';
     core.debug(`Processing ${status} ${text} ${channel} ${slackToken}`); // debug is only output if you set the secret `ACTIONS_RUNNER_DEBUG` to true
@@ -31,12 +32,12 @@ async function run(): Promise<void> {
     try {
       const result = await client.chat.postMessage({
         channel,
-        text: '',
+        text,
         username: 'CI Slack Notifier',
         attachments: [
           {
             title: workflow,
-            title_link: `${repoUrl}/runs/${runId}`,
+            title_link: actionLink || '',
             text: textString,
             color: colors[status],
             mrkdwn_in: ['text']
