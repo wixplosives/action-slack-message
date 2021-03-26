@@ -1,9 +1,11 @@
+const primaryBlue = '#0d6efd';
+
 export const colors = {
   fail: 'danger',
   failed: 'danger',
   false: 'danger',
   success: 'good',
   true: 'good',
-  info: '#0d6efd',
-  '': '#0d6efd'
+  info: primaryBlue,
+  '': primaryBlue
 };
