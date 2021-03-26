@@ -12,7 +12,6 @@ async function run(): Promise<void> {
     const channel: string = core.getInput('channel');
     const slackToken: string = core.getInput('slack_token');
     const actionLink: string = core.getInput('action_link');
-
     core.debug(
       `Processing ${status} ${text} ${channel} ${slackToken} ${actionLink}`
     ); // debug is only output if you set the secret `ACTIONS_RUNNER_DEBUG` to true
