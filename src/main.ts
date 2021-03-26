@@ -7,7 +7,7 @@ import type { Status } from './types';
 
 async function run(): Promise<void> {
   try {
-    const status = core.getInput('status') as Status;
+    const status = (core.getInput('status') || 'info') as Status;
     const text: string = core.getInput('text');
     const channel: string = core.getInput('channel');
     const slackToken: string = core.getInput('slack_token');
@@ -36,8 +36,13 @@ async function run(): Promise<void> {
               Status: *${status.toUpperCase()}*
               *Repo*: <${repoUrl}|${repoName}>
               *Branch*: <${repoUrl}/commit/${sha}|${branchName}>
-              sha: 
-              `,
+              context.action:${context.action}
+              context.actor:${context.actor}
+              context.eventName:${context.eventName}
+              context.ref:${context.ref}
+              context.runNumber:${context.runNumber}
+              context.workflow:${context.workflow}
+              `.trim(),
             color: colors[status],
             mrkdwn_in: ['text']
           }

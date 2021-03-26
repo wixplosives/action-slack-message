@@ -69,7 +69,7 @@ const const_1 = __webpack_require__(6695);
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            const status = core.getInput('status');
+            const status = (core.getInput('status') || 'info');
             const text = core.getInput('text');
             const channel = core.getInput('channel');
             const slackToken = core.getInput('slack_token');
@@ -96,8 +96,13 @@ function run() {
               Status: *${status.toUpperCase()}*
               *Repo*: <${repoUrl}|${repoName}>
               *Branch*: <${repoUrl}/commit/${sha}|${branchName}>
-              sha: 
-              `,
+              context.action:${github_1.context.action}
+              context.actor:${github_1.context.actor}
+              context.eventName:${github_1.context.eventName}
+              context.ref:${github_1.context.ref}
+              context.runNumber:${github_1.context.runNumber}
+              context.workflow:${github_1.context.workflow}
+              `.trim(),
                             color: const_1.colors[status],
                             mrkdwn_in: ['text']
                         }
