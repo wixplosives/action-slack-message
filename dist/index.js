@@ -23,7 +23,8 @@ exports.colors = {
     false: 'danger',
     success: 'good',
     true: 'good',
-    info: '#0d6efd'
+    info: '#0d6efd',
+    '': '#0d6efd'
 };
 
 
@@ -82,7 +83,7 @@ function run() {
             const repoUrl = `https://github.com/${owner}/${repo}`;
             const branchName = ref.startsWith('refs/heads/') ? ref.slice(11) : ref;
             const textString = `
-    Status: *${status.toUpperCase()}*
+    ${status ? `Status: *${status.toUpperCase()}*` : ''}
     *Repo*: <${repoUrl}|${repo}>
     *Branch*: <${repoUrl}/commit/${sha}|${branchName}>`;
             const client = new web_api_1.WebClient(slackToken, {

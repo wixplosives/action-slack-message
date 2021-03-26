@@ -5,7 +5,7 @@ inputs:
   status:
     required: false
     description: 'failed or success'
-    default: 'info'
+    default: ''
   text:
     required: false
     description: 'free text'
@@ -21,6 +21,7 @@ inputs:
   action_link:
     required: false
     description: 'direct link to action'
+    default: ''
 runs:
   using: 'node12'
   main: 'dist/index.js'

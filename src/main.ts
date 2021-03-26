@@ -23,7 +23,7 @@ async function run(): Promise<void> {
     const branchName = ref.startsWith('refs/heads/') ? ref.slice(11) : ref;
 
     const textString: string = `
-    Status: *${status.toUpperCase()}*
+    ${status ? `Status: *${status.toUpperCase()}*` : ''}
     *Repo*: <${repoUrl}|${repo}>
     *Branch*: <${repoUrl}/commit/${sha}|${branchName}>`;
 
