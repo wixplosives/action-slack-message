@@ -16,18 +16,20 @@ module.exports = JSON.parse("{\"_from\":\"@slack/web-api@^6.1.0\",\"_id\":\"@sla
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.colors = void 0;
-const primaryBlue = '#0d6efd';
+exports.colors = exports.danger = exports.good = exports.primaryBlue = void 0;
+exports.primaryBlue = '#0d6efd';
+exports.good = 'good';
+exports.danger = 'danger';
 exports.colors = {
-    fail: 'danger',
-    failed: 'danger',
-    failure: 'danger',
-    false: 'danger',
-    success: 'good',
-    true: 'good',
-    cancelled: primaryBlue,
-    info: primaryBlue,
-    '': primaryBlue
+    fail: exports.danger,
+    failed: exports.danger,
+    failure: exports.danger,
+    false: exports.danger,
+    success: exports.good,
+    true: exports.good,
+    cancelled: exports.primaryBlue,
+    info: exports.primaryBlue,
+    '': exports.primaryBlue
 };
 
 
@@ -67,6 +69,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.createSlackAttachment = exports.getTextString = void 0;
 /* eslint-disable no-console */
 const core = __importStar(__webpack_require__(2186));
 const github_1 = __webpack_require__(5438);
@@ -83,7 +86,13 @@ function run() {
             core.debug(`Processing ${status} ${text} ${channel} ${slackToken} ${actionLink}`); // debug is only output if you set the secret `ACTIONS_RUNNER_DEBUG` to true
             const { workflow, sha, ref } = github_1.context;
             const { owner: repoOwner, repo: repoName } = github_1.context.repo;
-            const textString = getTextString({ status, repoOwner, repoName, ref, sha });
+            const textString = exports.getTextString({
+                status,
+                repoOwner,
+                repoName,
+                ref,
+                sha
+            });
             const client = new web_api_1.WebClient(slackToken, {
                 logLevel: web_api_1.LogLevel.DEBUG
             });
@@ -92,13 +101,12 @@ function run() {
                     channel,
                     text,
                     attachments: [
-                        {
-                            title: workflow,
-                            title_link: actionLink,
-                            text: textString,
-                            color: const_1.colors[status],
-                            mrkdwn_in: ['text']
-                        }
+                        exports.createSlackAttachment({
+                            workflow,
+                            actionLink,
+                            textString,
+                            status
+                        })
                     ]
                 });
                 console.log(result);
@@ -120,6 +128,17 @@ const getTextString = ({ status, repoOwner, repoName, ref, sha }) => {
     const branchString = `*Branch*: <${repoUrl}/commit/${sha}|${branchName}>`;
     return `${statusString}\n${repoString}\n${branchString}`;
 };
+exports.getTextString = getTextString;
+const createSlackAttachment = ({ workflow, actionLink, textString, status }) => {
+    return {
+        title: workflow,
+        title_link: actionLink,
+        text: textString,
+        color: const_1.colors[status],
+        mrkdwn_in: ['text']
+    };
+};
+exports.createSlackAttachment = createSlackAttachment;
 run();
 
 
