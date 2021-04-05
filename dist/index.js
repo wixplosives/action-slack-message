@@ -76,16 +76,24 @@ const github_1 = __webpack_require__(5438);
 const web_api_1 = __webpack_require__(431);
 const const_1 = __webpack_require__(6695);
 const core_1 = __webpack_require__(6762);
-const getActionLink = (repoOwner, repoName, runId) => __awaiter(void 0, void 0, void 0, function* () {
+const getActionLink = (repoOwner, repoName, runId, matrixOs) => __awaiter(void 0, void 0, void 0, function* () {
     const github_token = process.env['GITHUB_TOKEN'];
     const octokit = new core_1.Octokit({ auth: github_token });
-    const data = yield octokit.request('GET /repos/{owner}/{repo}/actions/runs/{run_id}/jobs', {
+    const response = yield octokit.request('GET /repos/{owner}/{repo}/actions/runs/{run_id}/jobs', {
         owner: repoOwner,
         repo: repoName,
         run_id: runId
     });
-    console.log(JSON.stringify(data));
-    return '1';
+    let jobId;
+    for (const job of response.data.jobs) {
+        if (job.name.includes(matrixOs)) {
+            jobId = String(job.id);
+            break;
+        }
+    }
+    if (!jobId)
+        throw new Error('Action link not found');
+    return jobId;
 });
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
@@ -94,13 +102,14 @@ function run() {
             const text = core.getInput('text');
             const channel = core.getInput('channel');
             const slackToken = core.getInput('slack_token');
+            const matrixOs = core.getInput('matrix_os');
             let actionLink = core.getInput('action_link');
             core.debug(`Processing ${status} ${text} ${channel} ${slackToken} ${actionLink}`); // debug is only output if you set the secret `ACTIONS_RUNNER_DEBUG` to true
             const { workflow, sha, ref } = github_1.context;
             const { owner: repoOwner, repo: repoName } = github_1.context.repo;
             const runId = github_1.context.runId;
             if (!actionLink)
-                actionLink = yield getActionLink(repoOwner, repoName, runId);
+                actionLink = yield getActionLink(repoOwner, repoName, runId, matrixOs);
             const textString = exports.getTextString({
                 status,
                 repoOwner,

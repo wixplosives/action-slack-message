@@ -9,11 +9,12 @@ import { Octokit } from '@octokit/core';
 const getActionLink = async (
     repoOwner: string,
     repoName: string,
-    runId: number
+    runId: number,
+    matrixOs: string
 ): Promise<string> => {
     const github_token = process.env['GITHUB_TOKEN'];
     const octokit = new Octokit({ auth: github_token });
-    const data = await octokit.request(
+    const response = await octokit.request(
         'GET /repos/{owner}/{repo}/actions/runs/{run_id}/jobs',
         {
             owner: repoOwner,
@@ -21,8 +22,15 @@ const getActionLink = async (
             run_id: runId
         }
     );
-    console.log(JSON.stringify(data));
-    return '1';
+    let jobId;
+    for (const job of response.data.jobs) {
+        if (job.name.includes(matrixOs)) {
+            jobId = String(job.id);
+            break;
+        }
+    }
+    if (!jobId) throw new Error('Action link not found');
+    return jobId;
 };
 
 async function run(): Promise<void> {
@@ -31,7 +39,9 @@ async function run(): Promise<void> {
         const text: string = core.getInput('text');
         const channel: string = core.getInput('channel');
         const slackToken: string = core.getInput('slack_token');
+        const matrixOs = core.getInput('matrix_os');
         let actionLink: string = core.getInput('action_link');
+
         core.debug(
             `Processing ${status} ${text} ${channel} ${slackToken} ${actionLink}`
         ); // debug is only output if you set the secret `ACTIONS_RUNNER_DEBUG` to true
@@ -41,7 +51,12 @@ async function run(): Promise<void> {
         const runId = context.runId;
 
         if (!actionLink)
-            actionLink = await getActionLink(repoOwner, repoName, runId);
+            actionLink = await getActionLink(
+                repoOwner,
+                repoName,
+                runId,
+                matrixOs
+            );
 
         const textString = getTextString({
             status,
