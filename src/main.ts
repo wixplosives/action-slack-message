@@ -76,7 +76,7 @@ async function run(): Promise<void> {
         try {
             const result = await client.chat.postMessage({
                 channel,
-                text: text + actionLink,
+                text,
                 attachments: [
                     createSlackAttachment({
                         workflow,
