@@ -104,6 +104,7 @@ function run() {
             const slackToken = core.getInput('slack_token');
             const matrixOs = core.getInput('matrix_os');
             let actionLink = core.getInput('action_link');
+            console.log(matrixOs);
             core.debug(`Processing ${status} ${text} ${channel} ${slackToken} ${actionLink}`); // debug is only output if you set the secret `ACTIONS_RUNNER_DEBUG` to true
             const { workflow, sha, ref } = github_1.context;
             const { owner: repoOwner, repo: repoName } = github_1.context.repo;
