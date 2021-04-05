@@ -4,6 +4,11 @@ import { context } from '@actions/github';
 import { WebClient, LogLevel } from '@slack/web-api';
 import { colors } from './const';
 import type { Status, MrkDwnIn } from './types';
+//import { Octokit } from '@octokit/core';
+
+const getActionLink = (): string => {
+    return String(context.runId);
+};
 
 async function run(): Promise<void> {
     try {
@@ -11,13 +16,15 @@ async function run(): Promise<void> {
         const text: string = core.getInput('text');
         const channel: string = core.getInput('channel');
         const slackToken: string = core.getInput('slack_token');
-        const actionLink: string = core.getInput('action_link');
+        let actionLink: string = core.getInput('action_link');
         core.debug(
             `Processing ${status} ${text} ${channel} ${slackToken} ${actionLink}`
         ); // debug is only output if you set the secret `ACTIONS_RUNNER_DEBUG` to true
 
         const { workflow, sha, ref } = context;
         const { owner: repoOwner, repo: repoName } = context.repo;
+
+        if (!actionLink) actionLink = getActionLink();
 
         const textString = getTextString({
             status,
