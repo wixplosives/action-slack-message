@@ -4,24 +4,24 @@ import { context } from '@actions/github';
 import { WebClient, LogLevel } from '@slack/web-api';
 import { colors } from './const';
 import type { Status, MrkDwnIn } from './types';
-import { Octokit } from '@octokit/core';
+//import { Octokit } from '@octokit/core';
 
-const getActionLink = async (
-    repoOwner: string,
-    repoName: string
-): Promise<string> => {
-    const octokit = new Octokit();
-    const data = await octokit.request(
-        'GET /repos/{owner}/{repo}/actions/runs/{run_id}/artifacts',
-        {
-            owner: repoOwner,
-            repo: repoName,
-            run_id: 42
-        }
-    );
-    console.log(data);
-    return '1';
-};
+// const getActionLink = async (
+//     repoOwner: string,
+//     repoName: string
+// ): Promise<string> => {
+//     const octokit = new Octokit();
+//     const data = await octokit.request(
+//         'GET /repos/{owner}/{repo}/actions/runs/{run_id}/artifacts',
+//         {
+//             owner: repoOwner,
+//             repo: repoName,
+//             run_id: 42
+//         }
+//     );
+//     console.log(data);
+//     return '1';
+// };
 
 async function run(): Promise<void> {
     try {
@@ -37,7 +37,7 @@ async function run(): Promise<void> {
         const { workflow, sha, ref } = context;
         const { owner: repoOwner, repo: repoName } = context.repo;
 
-        if (!actionLink) actionLink = await getActionLink(repoOwner, repoName);
+        if (!actionLink) actionLink = '1'; //await getActionLink(repoOwner, repoName);
 
         const textString = getTextString({
             status,

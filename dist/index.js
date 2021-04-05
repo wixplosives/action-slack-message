@@ -75,17 +75,23 @@ const core = __importStar(__webpack_require__(2186));
 const github_1 = __webpack_require__(5438);
 const web_api_1 = __webpack_require__(431);
 const const_1 = __webpack_require__(6695);
-const core_1 = __webpack_require__(6762);
-const getActionLink = (repoOwner, repoName) => __awaiter(void 0, void 0, void 0, function* () {
-    const octokit = new core_1.Octokit();
-    const data = yield octokit.request('GET /repos/{owner}/{repo}/actions/runs/{run_id}/artifacts', {
-        owner: repoOwner,
-        repo: repoName,
-        run_id: 42
-    });
-    console.log(data);
-    return '1';
-});
+//import { Octokit } from '@octokit/core';
+// const getActionLink = async (
+//     repoOwner: string,
+//     repoName: string
+// ): Promise<string> => {
+//     const octokit = new Octokit();
+//     const data = await octokit.request(
+//         'GET /repos/{owner}/{repo}/actions/runs/{run_id}/artifacts',
+//         {
+//             owner: repoOwner,
+//             repo: repoName,
+//             run_id: 42
+//         }
+//     );
+//     console.log(data);
+//     return '1';
+// };
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
@@ -98,7 +104,7 @@ function run() {
             const { workflow, sha, ref } = github_1.context;
             const { owner: repoOwner, repo: repoName } = github_1.context.repo;
             if (!actionLink)
-                actionLink = yield getActionLink(repoOwner, repoName);
+                actionLink = '1'; //await getActionLink(repoOwner, repoName);
             const textString = exports.getTextString({
                 status,
                 repoOwner,
