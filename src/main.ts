@@ -11,7 +11,8 @@ const getActionLink = async (
     repoName: string,
     runId: number
 ): Promise<string> => {
-    const octokit = new Octokit();
+    const github_token = process.env['GITHUB_TOKEN'];
+    const octokit = new Octokit({ auth: github_token });
     const data = await octokit.request(
         'GET /repos/{owner}/{repo}/actions/runs/{run_id}/artifacts',
         {

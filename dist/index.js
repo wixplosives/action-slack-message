@@ -77,7 +77,8 @@ const web_api_1 = __webpack_require__(431);
 const const_1 = __webpack_require__(6695);
 const core_1 = __webpack_require__(6762);
 const getActionLink = (repoOwner, repoName, runId) => __awaiter(void 0, void 0, void 0, function* () {
-    const octokit = new core_1.Octokit();
+    const github_token = process.env['GITHUB_TOKEN'];
+    const octokit = new core_1.Octokit({ auth: github_token });
     const data = yield octokit.request('GET /repos/{owner}/{repo}/actions/runs/{run_id}/artifacts', {
         owner: repoOwner,
         repo: repoName,
