@@ -108,8 +108,10 @@ function run() {
             const { workflow, sha, ref } = github_1.context;
             const { owner: repoOwner, repo: repoName } = github_1.context.repo;
             const runId = github_1.context.runId;
-            if (!actionLink)
-                actionLink = yield getActionLink(repoOwner, repoName, runId, matrixOs);
+            if (!actionLink) {
+                const innerJobId = yield getActionLink(repoOwner, repoName, runId, matrixOs);
+                actionLink = `https://github.com/${repoOwner}/${repoName}/runs/${innerJobId}?check_suite_focus=true`;
+            }
             const textString = exports.getTextString({
                 status,
                 repoOwner,

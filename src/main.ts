@@ -50,13 +50,15 @@ async function run(): Promise<void> {
         const { owner: repoOwner, repo: repoName } = context.repo;
         const runId = context.runId;
 
-        if (!actionLink)
-            actionLink = await getActionLink(
+        if (!actionLink) {
+            const innerJobId = await getActionLink(
                 repoOwner,
                 repoName,
                 runId,
                 matrixOs
             );
+            actionLink = `https://github.com/${repoOwner}/${repoName}/runs/${innerJobId}?check_suite_focus=true`;
+        }
 
         const textString = getTextString({
             status,
