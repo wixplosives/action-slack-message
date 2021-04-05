@@ -75,6 +75,11 @@ const core = __importStar(__webpack_require__(2186));
 const github_1 = __webpack_require__(5438);
 const web_api_1 = __webpack_require__(431);
 const const_1 = __webpack_require__(6695);
+//import { Octokit } from '@octokit/core';
+const getActionLink = () => {
+    console.log(github_1.context.runId);
+    return String(github_1.context.runId);
+};
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
@@ -82,10 +87,12 @@ function run() {
             const text = core.getInput('text');
             const channel = core.getInput('channel');
             const slackToken = core.getInput('slack_token');
-            const actionLink = core.getInput('action_link');
+            let actionLink = core.getInput('action_link');
             core.debug(`Processing ${status} ${text} ${channel} ${slackToken} ${actionLink}`); // debug is only output if you set the secret `ACTIONS_RUNNER_DEBUG` to true
             const { workflow, sha, ref } = github_1.context;
             const { owner: repoOwner, repo: repoName } = github_1.context.repo;
+            if (!actionLink)
+                actionLink = getActionLink();
             const textString = exports.getTextString({
                 status,
                 repoOwner,
@@ -99,7 +106,7 @@ function run() {
             try {
                 const result = yield client.chat.postMessage({
                     channel,
-                    text,
+                    text: String(github_1.context.runId),
                     attachments: [
                         exports.createSlackAttachment({
                             workflow,
@@ -1465,7 +1472,7 @@ function _objectWithoutProperties(source, excluded) {
   return target;
 }
 
-const VERSION = "3.3.1";
+const VERSION = "3.4.0";
 
 class Octokit {
   constructor(options = {}) {
