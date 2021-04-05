@@ -76,12 +76,12 @@ const github_1 = __webpack_require__(5438);
 const web_api_1 = __webpack_require__(431);
 const const_1 = __webpack_require__(6695);
 const core_1 = __webpack_require__(6762);
-const getActionLink = (repoOwner, repoName) => __awaiter(void 0, void 0, void 0, function* () {
+const getActionLink = (repoOwner, repoName, runId) => __awaiter(void 0, void 0, void 0, function* () {
     const octokit = new core_1.Octokit();
     const data = yield octokit.request('GET /repos/{owner}/{repo}/actions/runs/{run_id}/artifacts', {
         owner: repoOwner,
         repo: repoName,
-        run_id: 42
+        run_id: runId
     });
     console.log(data);
     return '1';
@@ -97,8 +97,9 @@ function run() {
             core.debug(`Processing ${status} ${text} ${channel} ${slackToken} ${actionLink}`); // debug is only output if you set the secret `ACTIONS_RUNNER_DEBUG` to true
             const { workflow, sha, ref } = github_1.context;
             const { owner: repoOwner, repo: repoName } = github_1.context.repo;
+            const runId = github_1.context.runId;
             if (!actionLink)
-                actionLink = yield getActionLink(repoOwner, repoName);
+                actionLink = yield getActionLink(repoOwner, repoName, runId);
             const textString = exports.getTextString({
                 status,
                 repoOwner,

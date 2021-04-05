@@ -8,7 +8,8 @@ import { Octokit } from '@octokit/core';
 
 const getActionLink = async (
     repoOwner: string,
-    repoName: string
+    repoName: string,
+    runId: number
 ): Promise<string> => {
     const octokit = new Octokit();
     const data = await octokit.request(
@@ -16,7 +17,7 @@ const getActionLink = async (
         {
             owner: repoOwner,
             repo: repoName,
-            run_id: 42
+            run_id: runId
         }
     );
     console.log(data);
@@ -36,8 +37,10 @@ async function run(): Promise<void> {
 
         const { workflow, sha, ref } = context;
         const { owner: repoOwner, repo: repoName } = context.repo;
+        const runId = context.runId;
 
-        if (!actionLink) actionLink = await getActionLink(repoOwner, repoName);
+        if (!actionLink)
+            actionLink = await getActionLink(repoOwner, repoName, runId);
 
         const textString = getTextString({
             status,
