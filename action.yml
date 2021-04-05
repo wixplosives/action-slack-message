@@ -2,29 +2,33 @@ name: 'action-slack-message'
 description: 'Sends slack messages'
 author: 'Yarden Porat'
 inputs:
-  status:
-    required: false
-    description: 'failed or success'
-    default: ''
-  text:
-    required: false
-    description: 'free text'
-    default: ''
-  channel:
-    required: true
-    description: 'channel to send message'
-    default: 'core3-ci'
-  slack_token:
-    required: true
-    description: 'slack token'
-    default: ''
-  action_link:
-    required: false
-    description: 'direct link to action'
-    default: ''
+    status:
+        required: false
+        description: 'failed or success'
+        default: ''
+    text:
+        required: false
+        description: 'free text'
+        default: ''
+    channel:
+        required: true
+        description: 'channel to send message'
+        default: 'core3-ci'
+    slack_token:
+        required: true
+        description: 'slack token'
+        default: ''
+    action_link:
+        required: false
+        description: 'direct link to action'
+        default: ''
+    matrix_os:
+        required: false
+        description: 'current os in the matrix'
+        default: ${{matrix.os}}
 runs:
-  using: 'node12'
-  main: 'dist/index.js'
+    using: 'node12'
+    main: 'dist/index.js'
 branding:
-  icon: upload-cloud
-  color: blue
+    icon: upload-cloud
+    color: blue
