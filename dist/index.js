@@ -84,7 +84,7 @@ const getActionLink = (repoOwner, repoName, runId) => __awaiter(void 0, void 0, 
         repo: repoName,
         run_id: runId
     });
-    console.log(data.toString());
+    console.log(JSON.stringify(data));
     return '1';
 });
 function run() {
