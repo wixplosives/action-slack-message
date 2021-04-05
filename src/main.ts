@@ -4,11 +4,23 @@ import { context } from '@actions/github';
 import { WebClient, LogLevel } from '@slack/web-api';
 import { colors } from './const';
 import type { Status, MrkDwnIn } from './types';
-//import { Octokit } from '@octokit/core';
+import { Octokit } from '@octokit/core';
 
-const getActionLink = (): string => {
-    console.log(context.runId);
-    return String(context.runId);
+const getActionLink = async (
+    repoOwner: string,
+    repoName: string
+): Promise<string> => {
+    const octokit = new Octokit();
+    const data = await octokit.request(
+        'GET /repos/{owner}/{repo}/actions/runs/{run_id}/artifacts',
+        {
+            owner: repoOwner,
+            repo: repoName,
+            run_id: 42
+        }
+    );
+    console.log(data);
+    return '1';
 };
 
 async function run(): Promise<void> {
@@ -25,7 +37,7 @@ async function run(): Promise<void> {
         const { workflow, sha, ref } = context;
         const { owner: repoOwner, repo: repoName } = context.repo;
 
-        if (!actionLink) actionLink = getActionLink();
+        if (!actionLink) actionLink = await getActionLink(repoOwner, repoName);
 
         const textString = getTextString({
             status,
@@ -42,7 +54,7 @@ async function run(): Promise<void> {
         try {
             const result = await client.chat.postMessage({
                 channel,
-                text: String(context.runId),
+                text: actionLink,
                 attachments: [
                     createSlackAttachment({
                         workflow,
