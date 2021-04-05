@@ -21,7 +21,7 @@ const getActionLink = async (
             run_id: runId
         }
     );
-    console.log(data);
+    console.log(data.toString());
     return '1';
 };
 
