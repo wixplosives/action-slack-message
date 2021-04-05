@@ -76,7 +76,7 @@ const github_1 = __webpack_require__(5438);
 const web_api_1 = __webpack_require__(431);
 const const_1 = __webpack_require__(6695);
 const core_1 = __webpack_require__(6762);
-const getActionLink = (repoOwner, repoName, runId, matrixOs) => __awaiter(void 0, void 0, void 0, function* () {
+const getActionLink = (repoOwner, repoName, runId, matrixOs, matrixNode) => __awaiter(void 0, void 0, void 0, function* () {
     const github_token = process.env['GITHUB_TOKEN'];
     const octokit = new core_1.Octokit({ auth: github_token });
     const response = yield octokit.request('GET /repos/{owner}/{repo}/actions/runs/{run_id}/jobs', {
@@ -86,7 +86,8 @@ const getActionLink = (repoOwner, repoName, runId, matrixOs) => __awaiter(void 0
     });
     let jobId;
     for (const job of response.data.jobs) {
-        if (job.name.includes(matrixOs)) {
+        const jobName = job.name;
+        if (jobName.includes(matrixOs) && jobName.includes(matrixNode)) {
             jobId = String(job.id);
             break;
         }
@@ -103,14 +104,14 @@ function run() {
             const channel = core.getInput('channel');
             const slackToken = core.getInput('slack_token');
             const matrixOs = core.getInput('matrix_os');
+            const matrixNode = core.getInput('matrix_node');
             let actionLink = core.getInput('action_link');
-            console.log(matrixOs);
-            core.debug(`Processing ${status} ${text} ${channel} ${slackToken} ${actionLink}`); // debug is only output if you set the secret `ACTIONS_RUNNER_DEBUG` to true
+            console.log(matrixNode);
             const { workflow, sha, ref } = github_1.context;
             const { owner: repoOwner, repo: repoName } = github_1.context.repo;
             const runId = github_1.context.runId;
             if (!actionLink) {
-                const innerJobId = yield getActionLink(repoOwner, repoName, runId, matrixOs);
+                const innerJobId = yield getActionLink(repoOwner, repoName, runId, matrixOs, matrixNode);
                 actionLink = `https://github.com/${repoOwner}/${repoName}/runs/${innerJobId}?check_suite_focus=true`;
             }
             const textString = exports.getTextString({
@@ -126,7 +127,7 @@ function run() {
             try {
                 const result = yield client.chat.postMessage({
                     channel,
-                    text: actionLink,
+                    text: text + actionLink,
                     attachments: [
                         exports.createSlackAttachment({
                             workflow,

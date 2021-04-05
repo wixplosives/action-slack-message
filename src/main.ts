@@ -10,7 +10,8 @@ const getActionLink = async (
     repoOwner: string,
     repoName: string,
     runId: number,
-    matrixOs: string
+    matrixOs: string,
+    matrixNode: string
 ): Promise<string> => {
     const github_token = process.env['GITHUB_TOKEN'];
     const octokit = new Octokit({ auth: github_token });
@@ -24,7 +25,8 @@ const getActionLink = async (
     );
     let jobId;
     for (const job of response.data.jobs) {
-        if (job.name.includes(matrixOs)) {
+        const jobName = job.name;
+        if (jobName.includes(matrixOs) && jobName.includes(matrixNode)) {
             jobId = String(job.id);
             break;
         }
@@ -40,11 +42,9 @@ async function run(): Promise<void> {
         const channel: string = core.getInput('channel');
         const slackToken: string = core.getInput('slack_token');
         const matrixOs = core.getInput('matrix_os');
+        const matrixNode = core.getInput('matrix_node');
         let actionLink: string = core.getInput('action_link');
-        console.log(matrixOs);
-        core.debug(
-            `Processing ${status} ${text} ${channel} ${slackToken} ${actionLink}`
-        ); // debug is only output if you set the secret `ACTIONS_RUNNER_DEBUG` to true
+        console.log(matrixNode);
 
         const { workflow, sha, ref } = context;
         const { owner: repoOwner, repo: repoName } = context.repo;
@@ -55,7 +55,8 @@ async function run(): Promise<void> {
                 repoOwner,
                 repoName,
                 runId,
-                matrixOs
+                matrixOs,
+                matrixNode
             );
             actionLink = `https://github.com/${repoOwner}/${repoName}/runs/${innerJobId}?check_suite_focus=true`;
         }
@@ -75,7 +76,7 @@ async function run(): Promise<void> {
         try {
             const result = await client.chat.postMessage({
                 channel,
-                text: actionLink,
+                text: text + actionLink,
                 attachments: [
                     createSlackAttachment({
                         workflow,
