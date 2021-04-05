@@ -7,6 +7,7 @@ import type { Status, MrkDwnIn } from './types';
 //import { Octokit } from '@octokit/core';
 
 const getActionLink = (): string => {
+    console.log(context.runId);
     return String(context.runId);
 };
 
