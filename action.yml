@@ -26,7 +26,7 @@ inputs:
         required: false
         description: 'current os in the matrix'
         default: ${{matrix.os}}
-            matrix_os:
+    matrix_node:
         required: false
         description: 'current node version in the matrix'
         default: ${{matrix.node}}
