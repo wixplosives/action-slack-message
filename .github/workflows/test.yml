@@ -1,5 +1,5 @@
 name: 'build-test'
-on: [pull_request, push]
+on: push
 
 jobs:
     build: # make sure build/ci work properly
@@ -24,10 +24,8 @@ jobs:
               with:
                   node-version: ${{ matrix.node }}
             - run: echo ${{ github.head_ref }}
-            - name: Set env
-              run: echo ::set-env name=BRANCH_NAME::${{ github.head_ref }}
             - name: Notify slack
-              uses: wixplosives/action-slack-message@$BRANCH_NAME
+              uses: 'wixplosives/action-slack-message@' + ${{ github.head_ref }}
               env:
                   GITHUB_TOKEN: ${{ github.token }}
               with:
