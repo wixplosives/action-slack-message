@@ -10,6 +10,28 @@ module.exports = JSON.parse("{\"_from\":\"@slack/web-api@^6.1.0\",\"_id\":\"@sla
 
 /***/ }),
 
+/***/ 1702:
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.createSlackAttachment = void 0;
+const const_1 = __webpack_require__(6695);
+const createSlackAttachment = ({ workflow, actionLink, textString, status, jobName = '' }) => {
+    return {
+        title: `${workflow}${jobName ? ` :${jobName}` : ''} `,
+        title_link: actionLink,
+        text: textString,
+        color: const_1.colors[status],
+        mrkdwn_in: ['text']
+    };
+};
+exports.createSlackAttachment = createSlackAttachment;
+
+
+/***/ }),
+
 /***/ 6695:
 /***/ ((__unused_webpack_module, exports) => {
 
@@ -69,13 +91,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.createSlackAttachment = exports.getTextString = void 0;
+exports.getTextString = void 0;
 /* eslint-disable no-console */
 const core = __importStar(__webpack_require__(2186));
 const github_1 = __webpack_require__(5438);
 const web_api_1 = __webpack_require__(431);
-const const_1 = __webpack_require__(6695);
 const core_1 = __webpack_require__(6762);
+const create_slack_attachment_1 = __webpack_require__(1702);
 const getActionLink = (repoOwner, repoName, runId, matrixOs, matrixNode) => __awaiter(void 0, void 0, void 0, function* () {
     const github_token = process.env['GITHUB_TOKEN'];
     const octokit = new core_1.Octokit({ auth: github_token });
@@ -85,16 +107,19 @@ const getActionLink = (repoOwner, repoName, runId, matrixOs, matrixNode) => __aw
         run_id: runId
     });
     let jobId;
+    let jobName;
     for (const job of response.data.jobs) {
-        const jobName = job.name;
-        if (jobName.includes(matrixOs) && jobName.includes(matrixNode)) {
+        const currentJobName = job.name;
+        if (currentJobName.includes(matrixOs) &&
+            currentJobName.includes(matrixNode)) {
             jobId = String(job.id);
+            jobName = currentJobName;
             break;
         }
     }
-    if (!jobId)
+    if (!jobId || !jobName)
         throw new Error('Action link not found');
-    return jobId;
+    return { jobId, jobName };
 });
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
@@ -110,8 +135,11 @@ function run() {
             const { workflow, sha, ref } = github_1.context;
             const { owner: repoOwner, repo: repoName } = github_1.context.repo;
             const runId = github_1.context.runId;
+            let jobName;
             if (!actionLink) {
-                const innerJobId = yield getActionLink(repoOwner, repoName, runId, matrixOs, matrixNode);
+                const data = yield getActionLink(repoOwner, repoName, runId, matrixOs, matrixNode);
+                const { jobId: innerJobId } = data;
+                jobName = data.jobName;
                 actionLink = `https://github.com/${repoOwner}/${repoName}/runs/${innerJobId}?check_suite_focus=true`;
             }
             const textString = exports.getTextString({
@@ -131,11 +159,12 @@ function run() {
                     channel,
                     text,
                     attachments: [
-                        exports.createSlackAttachment({
+                        create_slack_attachment_1.createSlackAttachment({
                             workflow,
                             actionLink,
                             textString,
-                            status
+                            status,
+                            jobName
                         })
                     ]
                 });
@@ -162,16 +191,6 @@ const getTextString = ({ status, repoOwner, repoName, ref, sha, matrixOs, matrix
     return `${statusString}\n${repoString}\n${branchString}\n${details}`;
 };
 exports.getTextString = getTextString;
-const createSlackAttachment = ({ workflow, actionLink, textString, status }) => {
-    return {
-        title: workflow,
-        title_link: actionLink,
-        text: textString,
-        color: const_1.colors[status],
-        mrkdwn_in: ['text']
-    };
-};
-exports.createSlackAttachment = createSlackAttachment;
 run();
 
 

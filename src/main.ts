@@ -2,9 +2,9 @@
 import * as core from '@actions/core';
 import { context } from '@actions/github';
 import { WebClient, LogLevel } from '@slack/web-api';
-import { colors } from './const';
-import type { Status, MrkDwnIn } from './types';
 import { Octokit } from '@octokit/core';
+import type { Status } from './types';
+import { createSlackAttachment } from './components/create-slack-attachment';
 
 const getActionLink = async (
     repoOwner: string,
@@ -12,7 +12,7 @@ const getActionLink = async (
     runId: number,
     matrixOs: string,
     matrixNode: string
-): Promise<string> => {
+): Promise<{ jobId: string; jobName: string }> => {
     const github_token = process.env['GITHUB_TOKEN'];
     const octokit = new Octokit({ auth: github_token });
     const response = await octokit.request(
@@ -24,15 +24,20 @@ const getActionLink = async (
         }
     );
     let jobId;
+    let jobName;
     for (const job of response.data.jobs) {
-        const jobName = job.name;
-        if (jobName.includes(matrixOs) && jobName.includes(matrixNode)) {
+        const currentJobName = job.name;
+        if (
+            currentJobName.includes(matrixOs) &&
+            currentJobName.includes(matrixNode)
+        ) {
             jobId = String(job.id);
+            jobName = currentJobName;
             break;
         }
     }
-    if (!jobId) throw new Error('Action link not found');
-    return jobId;
+    if (!jobId || !jobName) throw new Error('Action link not found');
+    return { jobId, jobName };
 };
 
 async function run(): Promise<void> {
@@ -49,15 +54,18 @@ async function run(): Promise<void> {
         const { workflow, sha, ref } = context;
         const { owner: repoOwner, repo: repoName } = context.repo;
         const runId = context.runId;
+        let jobName;
 
         if (!actionLink) {
-            const innerJobId = await getActionLink(
+            const data = await getActionLink(
                 repoOwner,
                 repoName,
                 runId,
                 matrixOs,
                 matrixNode
             );
+            const { jobId: innerJobId } = data;
+            jobName = data.jobName;
             actionLink = `https://github.com/${repoOwner}/${repoName}/runs/${innerJobId}?check_suite_focus=true`;
         }
 
@@ -84,7 +92,8 @@ async function run(): Promise<void> {
                         workflow,
                         actionLink,
                         textString,
-                        status
+                        status,
+                        jobName
                     })
                 ]
             });
@@ -129,36 +138,6 @@ export const getTextString = ({
     const details = matrixOs || matrixNode ? `*Details*: ${os} ${node}` : '';
 
     return `${statusString}\n${repoString}\n${branchString}\n${details}`;
-};
-
-export interface ICreateSlackAttachment {
-    workflow: string;
-    actionLink: string;
-    textString: string;
-    status: Status;
-}
-
-export interface ISlackAttachment {
-    title: string;
-    title_link: string;
-    text: string;
-    color: string;
-    mrkdwn_in: MrkDwnIn;
-}
-
-export const createSlackAttachment = ({
-    workflow,
-    actionLink,
-    textString,
-    status
-}: ICreateSlackAttachment): ISlackAttachment => {
-    return {
-        title: workflow,
-        title_link: actionLink,
-        text: textString,
-        color: colors[status],
-        mrkdwn_in: ['text']
-    };
 };
 
 run();
