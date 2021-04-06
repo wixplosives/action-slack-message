@@ -11,9 +11,10 @@ const getActionLink = async (
     repoOwner: string,
     repoName: string,
     runId: number,
+    jobName: string,
     matrixOs: string,
     matrixNode: string
-): Promise<{ jobId: string; jobName: string }> => {
+): Promise<string> => {
     const github_token = process.env['GITHUB_TOKEN'];
     const octokit = new Octokit({ auth: github_token });
     const response = await octokit.request(
@@ -25,10 +26,10 @@ const getActionLink = async (
         }
     );
     let jobId;
-    let jobName;
     for (const job of response.data.jobs) {
         const currentJobName = job.name;
         if (
+            jobName === currentJobName &&
             currentJobName.includes(matrixOs) &&
             currentJobName.includes(matrixNode)
         ) {
@@ -37,8 +38,8 @@ const getActionLink = async (
             break;
         }
     }
-    if (!jobId || !jobName) throw new Error('Action link not found');
-    return { jobId, jobName };
+    if (!jobId) throw new Error('Action link not found');
+    return jobId;
 };
 
 async function run(): Promise<void> {
@@ -50,23 +51,21 @@ async function run(): Promise<void> {
         const matrixOs = core.getInput('matrix_os');
         const matrixNode = core.getInput('matrix_node');
         let actionLink: string = core.getInput('action_link');
-        console.log(context.job);
+        const jobName = context.job;
 
         const { workflow, sha, ref } = context;
         const { owner: repoOwner, repo: repoName } = context.repo;
         const runId = context.runId;
-        let jobName;
 
         if (!actionLink) {
-            const data = await getActionLink(
+            const innerJobId = await getActionLink(
                 repoOwner,
                 repoName,
                 runId,
+                jobName,
                 matrixOs,
                 matrixNode
             );
-            const { jobId: innerJobId } = data;
-            jobName = data.jobName;
             actionLink = `https://github.com/${repoOwner}/${repoName}/runs/${innerJobId}?check_suite_focus=true`;
         }
 

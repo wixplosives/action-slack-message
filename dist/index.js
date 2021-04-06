@@ -121,7 +121,7 @@ const web_api_1 = __webpack_require__(431);
 const core_1 = __webpack_require__(6762);
 const create_slack_attachment_1 = __webpack_require__(1702);
 const get_text_string_1 = __webpack_require__(4916);
-const getActionLink = (repoOwner, repoName, runId, matrixOs, matrixNode) => __awaiter(void 0, void 0, void 0, function* () {
+const getActionLink = (repoOwner, repoName, runId, jobName, matrixOs, matrixNode) => __awaiter(void 0, void 0, void 0, function* () {
     const github_token = process.env['GITHUB_TOKEN'];
     const octokit = new core_1.Octokit({ auth: github_token });
     const response = yield octokit.request('GET /repos/{owner}/{repo}/actions/runs/{run_id}/jobs', {
@@ -130,19 +130,19 @@ const getActionLink = (repoOwner, repoName, runId, matrixOs, matrixNode) => __aw
         run_id: runId
     });
     let jobId;
-    let jobName;
     for (const job of response.data.jobs) {
         const currentJobName = job.name;
-        if (currentJobName.includes(matrixOs) &&
+        if (jobName === currentJobName &&
+            currentJobName.includes(matrixOs) &&
             currentJobName.includes(matrixNode)) {
             jobId = String(job.id);
             jobName = currentJobName;
             break;
         }
     }
-    if (!jobId || !jobName)
+    if (!jobId)
         throw new Error('Action link not found');
-    return { jobId, jobName };
+    return jobId;
 });
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
@@ -154,15 +154,12 @@ function run() {
             const matrixOs = core.getInput('matrix_os');
             const matrixNode = core.getInput('matrix_node');
             let actionLink = core.getInput('action_link');
-            console.log(github_1.context.job);
+            const jobName = github_1.context.job;
             const { workflow, sha, ref } = github_1.context;
             const { owner: repoOwner, repo: repoName } = github_1.context.repo;
             const runId = github_1.context.runId;
-            let jobName;
             if (!actionLink) {
-                const data = yield getActionLink(repoOwner, repoName, runId, matrixOs, matrixNode);
-                const { jobId: innerJobId } = data;
-                jobName = data.jobName;
+                const innerJobId = yield getActionLink(repoOwner, repoName, runId, jobName, matrixOs, matrixNode);
                 actionLink = `https://github.com/${repoOwner}/${repoName}/runs/${innerJobId}?check_suite_focus=true`;
             }
             const textString = get_text_string_1.getTextString({
