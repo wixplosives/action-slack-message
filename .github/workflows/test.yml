@@ -62,3 +62,30 @@ jobs:
                   status: ${{job.status}}
                   channel: 'testing-yarden-public'
                   slack_token: ${{ secrets.SLACK_BOT_TOKEN }}
+    notify-1-os-1-node:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/setup-node@v1
+              with:
+                  node-version: 14
+            - name: Notify slack
+              uses: 'wixplosives/action-slack-message@yarden/get-action-links'
+              env:
+                  GITHUB_TOKEN: ${{ github.token }}
+              with:
+                  text: 'Some optional text above the attachment'
+                  status: ${{job.status}}
+                  channel: 'testing-yarden-public'
+                  slack_token: ${{ secrets.SLACK_BOT_TOKEN }}
+    notify-1-os-only:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Notify slack
+              uses: 'wixplosives/action-slack-message@yarden/get-action-links'
+              env:
+                  GITHUB_TOKEN: ${{ github.token }}
+              with:
+                  text: 'Some optional text above the attachment'
+                  status: ${{job.status}}
+                  channel: 'testing-yarden-public'
+                  slack_token: ${{ secrets.SLACK_BOT_TOKEN }}
