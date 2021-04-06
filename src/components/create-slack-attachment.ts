@@ -25,7 +25,7 @@ export const createSlackAttachment = ({
     jobName = ''
 }: ICreateSlackAttachment): ISlackAttachment => {
     return {
-        title: `${workflow}${jobName ? ` :${jobName}` : ''} `,
+        title: `${workflow}${jobName ? `: ${jobName}` : ''} `,
         title_link: actionLink,
         text: textString,
         color: colors[status],

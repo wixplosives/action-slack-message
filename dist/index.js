@@ -20,7 +20,7 @@ exports.createSlackAttachment = void 0;
 const const_1 = __webpack_require__(6695);
 const createSlackAttachment = ({ workflow, actionLink, textString, status, jobName = '' }) => {
     return {
-        title: `${workflow}${jobName ? ` :${jobName}` : ''} `,
+        title: `${workflow}${jobName ? `: ${jobName}` : ''} `,
         title_link: actionLink,
         text: textString,
         color: const_1.colors[status],
@@ -28,6 +28,29 @@ const createSlackAttachment = ({ workflow, actionLink, textString, status, jobNa
     };
 };
 exports.createSlackAttachment = createSlackAttachment;
+
+
+/***/ }),
+
+/***/ 4916:
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.getTextString = void 0;
+const getTextString = ({ status, repoOwner, repoName, ref, sha, matrixOs, matrixNode }) => {
+    const repoUrl = `https://github.com/${repoOwner}/${repoName}`;
+    const statusString = status ? `Status: *${status.toUpperCase()}*` : '';
+    const repoString = `*Repo*: <${repoUrl}|${repoName}>`;
+    const os = `${matrixOs ? `OS: ${matrixOs}` : ''}`;
+    const node = `${matrixOs ? `\n${' '.repeat(14)}` : ''} ${matrixNode ? `Node version: ${matrixNode}` : ''}`;
+    const branchName = ref.startsWith('refs/heads/') ? ref.slice(11) : ref;
+    const branchString = `*Branch*: <${repoUrl}/commit/${sha}|${branchName}>`;
+    const details = matrixOs || matrixNode ? `*Details*: ${os} ${node}` : '';
+    return `${statusString}\n${repoString}\n${branchString}\n${details}`;
+};
+exports.getTextString = getTextString;
 
 
 /***/ }),
@@ -91,13 +114,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.getTextString = void 0;
 /* eslint-disable no-console */
 const core = __importStar(__webpack_require__(2186));
 const github_1 = __webpack_require__(5438);
 const web_api_1 = __webpack_require__(431);
 const core_1 = __webpack_require__(6762);
 const create_slack_attachment_1 = __webpack_require__(1702);
+const get_text_string_1 = __webpack_require__(4916);
 const getActionLink = (repoOwner, repoName, runId, matrixOs, matrixNode) => __awaiter(void 0, void 0, void 0, function* () {
     const github_token = process.env['GITHUB_TOKEN'];
     const octokit = new core_1.Octokit({ auth: github_token });
@@ -142,7 +165,7 @@ function run() {
                 jobName = data.jobName;
                 actionLink = `https://github.com/${repoOwner}/${repoName}/runs/${innerJobId}?check_suite_focus=true`;
             }
-            const textString = exports.getTextString({
+            const textString = get_text_string_1.getTextString({
                 status,
                 repoOwner,
                 repoName,
@@ -179,18 +202,6 @@ function run() {
         }
     });
 }
-const getTextString = ({ status, repoOwner, repoName, ref, sha, matrixOs, matrixNode }) => {
-    const repoUrl = `https://github.com/${repoOwner}/${repoName}`;
-    const statusString = status ? `Status: *${status.toUpperCase()}*` : '';
-    const repoString = `*Repo*: <${repoUrl}|${repoName}>`;
-    const os = `${matrixOs ? `OS: ${matrixOs}` : ''}`;
-    const node = `${matrixOs ? `\n${' '.repeat(14)}` : ''} ${matrixNode ? `Node version: ${matrixNode}` : ''}`;
-    const branchName = ref.startsWith('refs/heads/') ? ref.slice(11) : ref;
-    const branchString = `*Branch*: <${repoUrl}/commit/${sha}|${branchName}>`;
-    const details = matrixOs || matrixNode ? `*Details*: ${os} ${node}` : '';
-    return `${statusString}\n${repoString}\n${branchString}\n${details}`;
-};
-exports.getTextString = getTextString;
 run();
 
 
