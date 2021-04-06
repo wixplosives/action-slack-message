@@ -29,7 +29,7 @@ const getActionLink = async (
     for (const job of response.data.jobs) {
         const currentJobName = job.name;
         if (
-            jobName === currentJobName &&
+            currentJobName.includes(jobName) &&
             currentJobName.includes(matrixOs) &&
             currentJobName.includes(matrixNode)
         ) {

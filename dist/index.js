@@ -132,7 +132,7 @@ const getActionLink = (repoOwner, repoName, runId, jobName, matrixOs, matrixNode
     let jobId;
     for (const job of response.data.jobs) {
         const currentJobName = job.name;
-        if (jobName === currentJobName &&
+        if (currentJobName.includes(jobName) &&
             currentJobName.includes(matrixOs) &&
             currentJobName.includes(matrixNode)) {
             jobId = String(job.id);
