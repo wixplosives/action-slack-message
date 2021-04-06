@@ -28,12 +28,30 @@ jobs:
                   status: ${{job.status}}
                   channel: 'testing-yarden-public'
                   slack_token: ${{ secrets.SLACK_BOT_TOKEN }}
-    notify:
+    notify-3-os-on-2-nodes-matrix:
         runs-on: ${{ matrix.os }}
         strategy:
             matrix:
                 node-version: [14, 12]
                 os: [ubuntu-latest, macos-latest, windows-latest]
+        steps:
+            - uses: actions/setup-node@v1
+              with:
+                  node-version: ${{ matrix.node }}
+            - name: Notify slack
+              uses: 'wixplosives/action-slack-message@yarden/get-action-links'
+              env:
+                  GITHUB_TOKEN: ${{ github.token }}
+              with:
+                  text: 'Some optional text above the attachment'
+                  status: ${{job.status}}
+                  channel: 'testing-yarden-public'
+                  slack_token: ${{ secrets.SLACK_BOT_TOKEN }}
+    notify-2-os-matrix:
+        runs-on: ${{ matrix.os }}
+        strategy:
+            matrix:
+                os: [ubuntu-latest, windows-latest]
         steps:
             - uses: actions/setup-node@v1
               with:
