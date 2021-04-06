@@ -24,7 +24,7 @@ jobs:
               env:
                   GITHUB_TOKEN: ${{ github.token }}
               with:
-                  text: 'failed text - optional'
+                  text: '2 OS - Details should only detail the Node Version'
                   status: ${{job.status}}
                   channel: 'testing-yarden-public'
                   slack_token: ${{ secrets.SLACK_BOT_TOKEN }}
@@ -43,7 +43,7 @@ jobs:
               env:
                   GITHUB_TOKEN: ${{ github.token }}
               with:
-                  text: 'Some optional text above the attachment'
+                  text: '3 OS + 2 Nodes - Full detail'
                   status: ${{job.status}}
                   channel: 'testing-yarden-public'
                   slack_token: ${{ secrets.SLACK_BOT_TOKEN }}
@@ -58,7 +58,7 @@ jobs:
               env:
                   GITHUB_TOKEN: ${{ github.token }}
               with:
-                  text: 'Some optional text above the attachment'
+                  text: '2 OS - Details should only detail the OS'
                   status: ${{job.status}}
                   channel: 'testing-yarden-public'
                   slack_token: ${{ secrets.SLACK_BOT_TOKEN }}
