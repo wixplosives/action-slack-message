@@ -30,7 +30,7 @@ jobs:
                   node-version: ${{ matrix.node }}
             - run: echo ${{ github.head_ref }}
             - name: Notify slack
-              uses: wixplosives/action-slack-message@yarden/get-action-links
+              uses: wixplosives/action-slack-message@${{ github.head_ref }}
               env:
                   GITHUB_TOKEN: ${{ github.token }}
               with:
