@@ -1,46 +1,10 @@
-/* eslint-disable no-console */
 import * as core from '@actions/core';
 import { context } from '@actions/github';
 import { WebClient, LogLevel } from '@slack/web-api';
-import { Octokit } from '@octokit/core';
+import { getInnerJobId } from './components/get-inner-job-id';
 import type { Status } from './types';
 import { createSlackAttachment } from './components/create-slack-attachment';
 import { getTextString } from './components/get-text-string';
-
-const getActionLink = async (
-    repoOwner: string,
-    repoName: string,
-    runId: number,
-    jobName: string,
-    matrixOs: string,
-    matrixNode: string
-): Promise<string> => {
-    const github_token = process.env['GITHUB_TOKEN'];
-    const octokit = new Octokit({ auth: github_token });
-    const response = await octokit.request(
-        'GET /repos/{owner}/{repo}/actions/runs/{run_id}/jobs',
-        {
-            owner: repoOwner,
-            repo: repoName,
-            run_id: runId
-        }
-    );
-    let jobId;
-    for (const job of response.data.jobs) {
-        const currentJobName = job.name;
-        if (
-            currentJobName.includes(jobName) &&
-            currentJobName.includes(matrixOs) &&
-            currentJobName.includes(matrixNode)
-        ) {
-            jobId = String(job.id);
-            jobName = currentJobName;
-            break;
-        }
-    }
-    if (!jobId) throw new Error('Action link not found');
-    return jobId;
-};
 
 async function run(): Promise<void> {
     try {
@@ -51,14 +15,14 @@ async function run(): Promise<void> {
         const matrixOs = core.getInput('matrix_os');
         const matrixNode = core.getInput('matrix_node');
         let actionLink: string = core.getInput('action_link');
-        const jobName = context.job;
 
+        const jobName = context.job;
         const { workflow, sha, ref } = context;
         const { owner: repoOwner, repo: repoName } = context.repo;
         const runId = context.runId;
 
         if (!actionLink) {
-            const innerJobId = await getActionLink(
+            const innerJobId = await getInnerJobId(
                 repoOwner,
                 repoName,
                 runId,
@@ -80,7 +44,7 @@ async function run(): Promise<void> {
         });
 
         const client = new WebClient(slackToken, {
-            logLevel: LogLevel.DEBUG
+            logLevel: LogLevel.ERROR
         });
 
         try {
@@ -98,8 +62,10 @@ async function run(): Promise<void> {
                 ]
             });
 
+            // eslint-disable-next-line no-console
             console.log(result);
         } catch (error) {
+            // eslint-disable-next-line no-console
             console.error(error);
         }
     } catch (error) {
