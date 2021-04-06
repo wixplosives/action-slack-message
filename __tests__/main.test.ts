@@ -1,4 +1,5 @@
-import { getTextString, createSlackAttachment } from '../src/main';
+import { getTextString } from '../src/components/get-text-string';
+import { createSlackAttachment } from '../src/components/create-slack-attachment';
 import { primaryBlue } from '../src/const';
 
 describe('main.ts', () => {

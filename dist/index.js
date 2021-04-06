@@ -10,6 +10,96 @@ module.exports = JSON.parse("{\"_from\":\"@slack/web-api@^6.1.0\",\"_id\":\"@sla
 
 /***/ }),
 
+/***/ 1702:
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.createSlackAttachment = void 0;
+const const_1 = __webpack_require__(6695);
+const createSlackAttachment = ({ workflow, actionLink, textString, status, jobName = '' }) => {
+    return {
+        title: `${workflow}${jobName ? `: ${jobName}` : ''} `,
+        title_link: actionLink,
+        text: textString,
+        color: const_1.colors[status],
+        mrkdwn_in: ['text']
+    };
+};
+exports.createSlackAttachment = createSlackAttachment;
+
+
+/***/ }),
+
+/***/ 4659:
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+"use strict";
+
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.getInnerJobId = void 0;
+const core_1 = __webpack_require__(6762);
+const getInnerJobId = (repoOwner, repoName, runId, jobName, matrixOs, matrixNode) => __awaiter(void 0, void 0, void 0, function* () {
+    const github_token = process.env['GITHUB_TOKEN'];
+    const octokit = new core_1.Octokit({ auth: github_token });
+    const response = yield octokit.request('GET /repos/{owner}/{repo}/actions/runs/{run_id}/jobs', {
+        owner: repoOwner,
+        repo: repoName,
+        run_id: runId
+    });
+    let jobId;
+    for (const job of response.data.jobs) {
+        const currentJobName = job.name;
+        if (currentJobName.includes(jobName) &&
+            currentJobName.includes(matrixOs) &&
+            currentJobName.includes(matrixNode)) {
+            jobId = String(job.id);
+            jobName = currentJobName;
+            break;
+        }
+    }
+    if (!jobId)
+        throw new Error('Action link not found');
+    return jobId;
+});
+exports.getInnerJobId = getInnerJobId;
+
+
+/***/ }),
+
+/***/ 4916:
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.getTextString = void 0;
+const getTextString = ({ status, repoOwner, repoName, ref, sha, matrixOs, matrixNode }) => {
+    const repoUrl = `https://github.com/${repoOwner}/${repoName}`;
+    const statusString = status ? `Status: *${status.toUpperCase()}*` : '';
+    const repoString = `*Repo*: <${repoUrl}|${repoName}>`;
+    const os = `${matrixOs ? `OS: ${matrixOs}` : ''}`;
+    const node = `${matrixOs ? `\n${' '.repeat(14)}` : ''} ${matrixNode ? `Node version: ${matrixNode}` : ''}`;
+    const branchName = ref.startsWith('refs/heads/') ? ref.slice(11) : ref;
+    const branchString = `*Branch*: <${repoUrl}/commit/${sha}|${branchName}>`;
+    const details = matrixOs || matrixNode ? `*Details*: ${os} ${node}` : '';
+    return `${statusString}\n${repoString}\n${branchString}\n${details}`;
+};
+exports.getTextString = getTextString;
+
+
+/***/ }),
+
 /***/ 6695:
 /***/ ((__unused_webpack_module, exports) => {
 
@@ -69,12 +159,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.createSlackAttachment = exports.getTextString = void 0;
-/* eslint-disable no-console */
 const core = __importStar(__webpack_require__(2186));
 const github_1 = __webpack_require__(5438);
 const web_api_1 = __webpack_require__(431);
-const const_1 = __webpack_require__(6695);
+const get_inner_job_id_1 = __webpack_require__(4659);
+const create_slack_attachment_1 = __webpack_require__(1702);
+const get_text_string_1 = __webpack_require__(4916);
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
@@ -82,36 +172,48 @@ function run() {
             const text = core.getInput('text');
             const channel = core.getInput('channel');
             const slackToken = core.getInput('slack_token');
-            const actionLink = core.getInput('action_link');
-            core.debug(`Processing ${status} ${text} ${channel} ${slackToken} ${actionLink}`); // debug is only output if you set the secret `ACTIONS_RUNNER_DEBUG` to true
+            const matrixOs = core.getInput('matrix_os');
+            const matrixNode = core.getInput('matrix_node');
+            let actionLink = core.getInput('action_link');
+            const jobName = github_1.context.job;
             const { workflow, sha, ref } = github_1.context;
             const { owner: repoOwner, repo: repoName } = github_1.context.repo;
-            const textString = exports.getTextString({
+            const runId = github_1.context.runId;
+            if (!actionLink) {
+                const innerJobId = yield get_inner_job_id_1.getInnerJobId(repoOwner, repoName, runId, jobName, matrixOs, matrixNode);
+                actionLink = `https://github.com/${repoOwner}/${repoName}/runs/${innerJobId}?check_suite_focus=true`;
+            }
+            const textString = get_text_string_1.getTextString({
                 status,
                 repoOwner,
                 repoName,
                 ref,
-                sha
+                sha,
+                matrixOs,
+                matrixNode
             });
             const client = new web_api_1.WebClient(slackToken, {
-                logLevel: web_api_1.LogLevel.DEBUG
+                logLevel: web_api_1.LogLevel.ERROR
             });
             try {
                 const result = yield client.chat.postMessage({
                     channel,
                     text,
                     attachments: [
-                        exports.createSlackAttachment({
+                        create_slack_attachment_1.createSlackAttachment({
                             workflow,
                             actionLink,
                             textString,
-                            status
+                            status,
+                            jobName
                         })
                     ]
                 });
+                // eslint-disable-next-line no-console
                 console.log(result);
             }
             catch (error) {
+                // eslint-disable-next-line no-console
                 console.error(error);
             }
         }
@@ -120,25 +222,6 @@ function run() {
         }
     });
 }
-const getTextString = ({ status, repoOwner, repoName, ref, sha }) => {
-    const repoUrl = `https://github.com/${repoOwner}/${repoName}`;
-    const statusString = status ? `Status: *${status.toUpperCase()}*` : '';
-    const repoString = `*Repo*: <${repoUrl}|${repoName}>`;
-    const branchName = ref.startsWith('refs/heads/') ? ref.slice(11) : ref;
-    const branchString = `*Branch*: <${repoUrl}/commit/${sha}|${branchName}>`;
-    return `${statusString}\n${repoString}\n${branchString}`;
-};
-exports.getTextString = getTextString;
-const createSlackAttachment = ({ workflow, actionLink, textString, status }) => {
-    return {
-        title: workflow,
-        title_link: actionLink,
-        text: textString,
-        color: const_1.colors[status],
-        mrkdwn_in: ['text']
-    };
-};
-exports.createSlackAttachment = createSlackAttachment;
 run();
 
 
@@ -1465,7 +1548,7 @@ function _objectWithoutProperties(source, excluded) {
   return target;
 }
 
-const VERSION = "3.3.1";
+const VERSION = "3.4.0";
 
 class Octokit {
   constructor(options = {}) {
