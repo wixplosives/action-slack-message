@@ -85,7 +85,7 @@ jobs:
               env:
                   GITHUB_TOKEN: ${{ github.token }}
               with:
-                  text: 'Some optional text above the attachment'
+                  text: '1 OS should appear'
                   status: ${{job.status}}
                   channel: 'testing-yarden-public'
                   slack_token: ${{ secrets.SLACK_BOT_TOKEN }}
