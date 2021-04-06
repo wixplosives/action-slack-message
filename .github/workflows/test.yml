@@ -20,13 +20,11 @@ jobs:
               with:
                   node-version: ${{ matrix.node }}
             - name: Notify slack
-              uses: 'wixplosives/action-slack-message@main'
+              uses: 'wixplosives/action-slack-message@yarden/get-action-links'
               env:
                   GITHUB_TOKEN: ${{ github.token }}
               with:
-                  ref: ${{ github.head_ref }}
                   text: 'failed text - optional'
                   status: ${{job.status}}
                   channel: 'testing-yarden-public'
                   slack_token: ${{ secrets.SLACK_BOT_TOKEN }}
-                  action_link: #${{ steps.get-action-link.outputs.url }}
