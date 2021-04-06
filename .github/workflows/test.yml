@@ -1,6 +1,6 @@
 name: 'build-test'
 on: push
-
+branch: &BRANCH_NAME '${{ github.head_ref }}'
 jobs:
     build: # make sure build/ci work properly
         runs-on: ubuntu-latest
@@ -16,16 +16,12 @@ jobs:
             matrix:
                 node-version: [14, 12]
         steps:
-            # - id: get-action-link
-            #   uses: wixplosives/action-direct-link@main
-            #   env:
-            #     GITHUB_TOKEN: ${{ github.token }}
             - uses: actions/setup-node@v1
               with:
                   node-version: ${{ matrix.node }}
-            - run: echo ${{ github.head_ref }}
             - name: Notify slack
-              uses: 'wixplosives/action-slack-message@' + ${{ github.head_ref }}
+
+              uses: 'wixplosives/action-slack-message@*BRANCH_NAME'
               env:
                   GITHUB_TOKEN: ${{ github.token }}
               with:
