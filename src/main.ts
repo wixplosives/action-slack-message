@@ -50,7 +50,7 @@ async function run(): Promise<void> {
         const matrixOs = core.getInput('matrix_os');
         const matrixNode = core.getInput('matrix_node');
         let actionLink: string = core.getInput('action_link');
-        console.log(matrixNode);
+        console.log(context.job);
 
         const { workflow, sha, ref } = context;
         const { owner: repoOwner, repo: repoName } = context.repo;
