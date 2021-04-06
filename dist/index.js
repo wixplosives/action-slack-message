@@ -119,7 +119,9 @@ function run() {
                 repoOwner,
                 repoName,
                 ref,
-                sha
+                sha,
+                matrixOs,
+                matrixNode
             });
             const client = new web_api_1.WebClient(slackToken, {
                 logLevel: web_api_1.LogLevel.DEBUG
@@ -127,7 +129,7 @@ function run() {
             try {
                 const result = yield client.chat.postMessage({
                     channel,
-                    text: text + actionLink,
+                    text,
                     attachments: [
                         exports.createSlackAttachment({
                             workflow,
@@ -148,13 +150,16 @@ function run() {
         }
     });
 }
-const getTextString = ({ status, repoOwner, repoName, ref, sha }) => {
+const getTextString = ({ status, repoOwner, repoName, ref, sha, matrixOs, matrixNode }) => {
     const repoUrl = `https://github.com/${repoOwner}/${repoName}`;
     const statusString = status ? `Status: *${status.toUpperCase()}*` : '';
     const repoString = `*Repo*: <${repoUrl}|${repoName}>`;
+    const os = `${matrixOs ? `OS: ${matrixOs}` : ''}`;
+    const node = `${matrixOs ? '\n' : ''} ${matrixNode ? `OS: ${matrixNode}` : ''}`;
     const branchName = ref.startsWith('refs/heads/') ? ref.slice(11) : ref;
     const branchString = `*Branch*: <${repoUrl}/commit/${sha}|${branchName}>`;
-    return `${statusString}\n${repoString}\n${branchString}`;
+    const details = matrixOs || matrixNode ? `*Details*: ${os} ${node}` : '';
+    return `${statusString}\n${repoString}\n${branchString}\n${details}`;
 };
 exports.getTextString = getTextString;
 const createSlackAttachment = ({ workflow, actionLink, textString, status }) => {

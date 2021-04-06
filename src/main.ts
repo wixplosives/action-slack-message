@@ -66,7 +66,9 @@ async function run(): Promise<void> {
             repoOwner,
             repoName,
             ref,
-            sha
+            sha,
+            matrixOs,
+            matrixNode
         });
 
         const client = new WebClient(slackToken, {
@@ -102,6 +104,8 @@ export interface ITextString {
     repoName: string;
     ref: string;
     sha: string;
+    matrixOs?: string;
+    matrixNode?: string;
 }
 
 export const getTextString = ({
@@ -109,16 +113,22 @@ export const getTextString = ({
     repoOwner,
     repoName,
     ref,
-    sha
+    sha,
+    matrixOs,
+    matrixNode
 }: ITextString): string => {
     const repoUrl = `https://github.com/${repoOwner}/${repoName}`;
     const statusString = status ? `Status: *${status.toUpperCase()}*` : '';
     const repoString = `*Repo*: <${repoUrl}|${repoName}>`;
-
+    const os = `${matrixOs ? `OS: ${matrixOs}` : ''}`;
+    const node = `${matrixOs ? '\n' : ''} ${
+        matrixNode ? `OS: ${matrixNode}` : ''
+    }`;
     const branchName = ref.startsWith('refs/heads/') ? ref.slice(11) : ref;
     const branchString = `*Branch*: <${repoUrl}/commit/${sha}|${branchName}>`;
+    const details = matrixOs || matrixNode ? `*Details*: ${os} ${node}` : '';
 
-    return `${statusString}\n${repoString}\n${branchString}`;
+    return `${statusString}\n${repoString}\n${branchString}\n${details}`;
 };
 
 export interface ICreateSlackAttachment {
