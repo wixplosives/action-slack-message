@@ -28,7 +28,7 @@ jobs:
                   status: ${{job.status}}
                   channel: 'testing-yarden-public'
                   slack_token: ${{ secrets.SLACK_BOT_TOKEN }}
-    notify-2-node-versions-with-3-os:
+    notify:
         runs-on: ${{ matrix.os }}
         strategy:
             matrix:
