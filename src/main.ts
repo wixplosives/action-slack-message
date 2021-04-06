@@ -122,7 +122,7 @@ export const getTextString = ({
     const repoString = `*Repo*: <${repoUrl}|${repoName}>`;
     const os = `${matrixOs ? `OS: ${matrixOs}` : ''}`;
     const node = `${matrixOs ? '\n' : ''} ${
-        matrixNode ? `OS: ${matrixNode}` : ''
+        matrixNode ? `${' '.repeat(14)}Node version: ${matrixNode}` : ''
     }`;
     const branchName = ref.startsWith('refs/heads/') ? ref.slice(11) : ref;
     const branchString = `*Branch*: <${repoUrl}/commit/${sha}|${branchName}>`;
