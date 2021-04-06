@@ -24,8 +24,10 @@ jobs:
               with:
                   node-version: ${{ matrix.node }}
             - run: echo ${{ github.head_ref }}
+            - name: Set env
+              run: echo ::set-env name=BRANCH_NAME::${{ github.head_ref }}
             - name: Notify slack
-              uses: wixplosives/action-slack-message@${{ github.head_ref }}
+              uses: wixplosives/action-slack-message@$BRANCH_NAME
               env:
                   GITHUB_TOKEN: ${{ github.token }}
               with:
