@@ -1,29 +1,40 @@
 name: 'build-test'
 on: # rebuild any PRs and main branch changes
-  pull_request:
-  push:
-    branches:
-      - main
-      - 'releases/*'
+    pull_request:
+    push:
+        branches:
+            - main
+            - 'releases/*'
 
 jobs:
-  build: # make sure build/ci work properly
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - run: |
-          npm install
-      - run: |
-          npm run all
-  test: # make sure the action works on a clean machine without building
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - uses: ./
-        with:
-          status: true
-          text: "Hello"
-          channel: "core3-ci"
-          slack_token: "undefined"
-
-
+    build: # make sure build/ci work properly
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v2
+            - run: |
+                  npm install
+            - run: |
+                  npm run all
+    notify: # Send a Slack message
+        runs-on: ubuntu-latest
+        strategy:
+            matrix:
+                node-version: [14, 12]
+        steps:
+            # - id: get-action-link
+            #   uses: wixplosives/action-direct-link@main
+            #   env:
+            #     GITHUB_TOKEN: ${{ github.token }}
+            - uses: actions/setup-node@v1
+              with:
+                  node-version: ${{ matrix.node }}
+            - name: Notify slack
+              uses: wixplosives/action-slack-message@${{ github.ref	}}
+              env:
+                  GITHUB_TOKEN: ${{ github.token }}
+              with:
+                  text: 'failed text - optional'
+                  status: ${{job.status}}
+                  channel: 'testing-yarden-public'
+                  slack_token: ${{ secrets.SLACK_BOT_TOKEN }}
+                  action_link: #${{ steps.get-action-link.outputs.url }}
