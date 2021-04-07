@@ -20,7 +20,7 @@ jobs:
               with:
                   node-version: ${{ matrix.node }}
             - name: Notify slack
-              uses: 'wixplosives/action-slack-message@main'
+              uses: 'wixplosives/action-slack-message@yarden/handle-custom-name'
               env:
                   GITHUB_TOKEN: ${{ github.token }}
               with:
@@ -39,7 +39,7 @@ jobs:
               with:
                   node-version: ${{ matrix.node }}
             - name: Notify slack
-              uses: 'wixplosives/action-slack-message@main'
+              uses: 'wixplosives/action-slack-message@yarden/handle-custom-name'
               env:
                   GITHUB_TOKEN: ${{ github.token }}
               with:
@@ -54,7 +54,7 @@ jobs:
                 os: [ubuntu-latest, windows-latest]
         steps:
             - name: Notify slack
-              uses: 'wixplosives/action-slack-message@main'
+              uses: 'wixplosives/action-slack-message@yarden/handle-custom-name'
               env:
                   GITHUB_TOKEN: ${{ github.token }}
               with:
@@ -69,7 +69,7 @@ jobs:
               with:
                   node-version: 14
             - name: Notify slack
-              uses: 'wixplosives/action-slack-message@main'
+              uses: 'wixplosives/action-slack-message@yarden/handle-custom-name'
               env:
                   GITHUB_TOKEN: ${{ github.token }}
               with:
@@ -81,7 +81,7 @@ jobs:
         runs-on: ubuntu-latest
         steps:
             - name: Notify slack
-              uses: 'wixplosives/action-slack-message@main'
+              uses: 'wixplosives/action-slack-message@yarden/handle-custom-name'
               env:
                   GITHUB_TOKEN: ${{ github.token }}
               with:
@@ -97,7 +97,7 @@ jobs:
                 os: [ubuntu-latest, windows-latest]
         steps:
             - name: Notify slack
-              uses: 'wixplosives/action-slack-message@main'
+              uses: 'wixplosives/action-slack-message@yarden/handle-custom-name'
               env:
                   GITHUB_TOKEN: ${{ github.token }}
               with:
