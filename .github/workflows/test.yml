@@ -112,7 +112,7 @@ jobs:
             - name: Dump job context
               env:
                   JOB_CONTEXT: ${{ toJSON(job) }}
-                  run: echo "$JOB_CONTEXT"
+              run: echo "$JOB_CONTEXT"
             - name: Dump steps context
               env:
                   STEPS_CONTEXT: ${{ toJSON(steps) }}
