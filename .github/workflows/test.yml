@@ -21,6 +21,8 @@ jobs:
                   node-version: ${{ matrix.node }}
             - name: Notify slack
               uses: 'wixplosives/action-slack-message@main'
+              env:
+                  GITHUB_TOKEN: ${{ github.token }}
               with:
                   text: '2 OS - Details should only detail the Node Version'
                   status: ${{job.status}}
@@ -38,6 +40,8 @@ jobs:
                   node-version: ${{ matrix.node }}
             - name: Notify slack
               uses: 'wixplosives/action-slack-message@main'
+              env:
+                  GITHUB_TOKEN: ${{ github.token }}
               with:
                   text: '3 OS + 2 Nodes - Full detail'
                   status: ${{job.status}}
@@ -51,6 +55,8 @@ jobs:
         steps:
             - name: Notify slack
               uses: 'wixplosives/action-slack-message@main'
+              env:
+                  GITHUB_TOKEN: ${{ github.token }}
               with:
                   text: '2 OS - Details should only detail the OS'
                   status: ${{job.status}}
@@ -64,6 +70,8 @@ jobs:
                   node-version: 14
             - name: Notify slack
               uses: 'wixplosives/action-slack-message@main'
+              env:
+                  GITHUB_TOKEN: ${{ github.token }}
               with:
                   text: '1 OS 1 node: no details'
                   status: ${{job.status}}
@@ -74,6 +82,8 @@ jobs:
         steps:
             - name: Notify slack
               uses: 'wixplosives/action-slack-message@main'
+              env:
+                  GITHUB_TOKEN: ${{ github.token }}
               with:
                   text: '1 OS: no details'
                   status: ${{job.status}}
