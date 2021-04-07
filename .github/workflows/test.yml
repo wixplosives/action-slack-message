@@ -96,15 +96,6 @@ jobs:
             matrix:
                 os: [ubuntu-latest, windows-latest]
         steps:
-            - name: Notify slack
-              uses: 'wixplosives/action-slack-message@yarden/handle-custom-name'
-              env:
-                  GITHUB_TOKEN: ${{ github.token }}
-              with:
-                  text: 'Custom name with OS matrix'
-                  status: ${{job.status}}
-                  channel: 'testing-yarden-public'
-                  slack_token: ${{ secrets.SLACK_BOT_TOKEN }}
             - name: Dump GitHub context
               env:
                   GITHUB_CONTEXT: ${{ toJSON(github) }}
