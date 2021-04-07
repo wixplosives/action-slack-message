@@ -178,7 +178,9 @@ function run() {
             const matrixNode = core.getInput('matrix_node');
             let actionLink = core.getInput('action_link');
             const jobName = github_1.context.job;
-            console.log(jobName);
+            console.log({ jobName });
+            const actionName = core.getInput('github_action');
+            console.log({ actionName });
             const { workflow, sha, ref } = github_1.context;
             const { owner: repoOwner, repo: repoName } = github_1.context.repo;
             const runId = github_1.context.runId;

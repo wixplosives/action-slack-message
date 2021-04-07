@@ -30,6 +30,10 @@ inputs:
         required: false
         description: 'current node version in the matrix'
         default: ${{matrix.node-version}}
+    github_action:
+        required: false
+        description: 'current job name'
+        default: ${{github.action}}
     job_name:
         required: false
         description: 'current job name'
