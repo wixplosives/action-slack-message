@@ -129,3 +129,12 @@ jobs:
               env:
                   MATRIX_CONTEXT: ${{ toJSON(matrix) }}
               run: echo "$MATRIX_CONTEXT"
+            - name: Notify slack
+              uses: 'wixplosives/action-slack-message@yarden/handle-custom-name'
+              env:
+                  GITHUB_TOKEN: ${{ github.token }}
+              with:
+                  text: 'Custom name with OS matrix'
+                  status: ${{job.status}}
+                  channel: 'testing-yarden-public'
+                  slack_token: ${{ secrets.SLACK_BOT_TOKEN }}
