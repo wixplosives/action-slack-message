@@ -19,8 +19,9 @@ export const getInnerJobId = async (
         }
     );
     let jobId;
+    let currentJobName;
     for (const job of response.data.jobs) {
-        const currentJobName = job.name;
+        currentJobName = job.name;
         if (
             currentJobName.includes(jobName) &&
             currentJobName.includes(matrixOs) &&
@@ -31,6 +32,8 @@ export const getInnerJobId = async (
             break;
         }
     }
-    if (!jobId) throw new Error(`Action link not found for job: ${jobName}`);
+    if (!jobId)
+        throw new Error(`Action link not found for job: ${jobName}
+    ${response.data.jobs}`);
     return jobId;
 };

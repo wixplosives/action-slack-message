@@ -58,8 +58,9 @@ const getInnerJobId = (repoOwner, repoName, runId, jobName, matrixOs, matrixNode
         run_id: runId
     });
     let jobId;
+    let currentJobName;
     for (const job of response.data.jobs) {
-        const currentJobName = job.name;
+        currentJobName = job.name;
         if (currentJobName.includes(jobName) &&
             currentJobName.includes(matrixOs) &&
             currentJobName.includes(matrixNode)) {
@@ -69,7 +70,8 @@ const getInnerJobId = (repoOwner, repoName, runId, jobName, matrixOs, matrixNode
         }
     }
     if (!jobId)
-        throw new Error(`Action link not found for job: ${jobName}`);
+        throw new Error(`Action link not found for job: ${jobName}
+    ${response.data.jobs}`);
     return jobId;
 });
 exports.getInnerJobId = getInnerJobId;
