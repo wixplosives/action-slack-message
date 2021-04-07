@@ -17,6 +17,7 @@ async function run(): Promise<void> {
         let actionLink: string = core.getInput('action_link');
 
         const jobName = context.job;
+        console.log(jobName);
         const { workflow, sha, ref } = context;
         const { owner: repoOwner, repo: repoName } = context.repo;
         const runId = context.runId;
