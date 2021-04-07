@@ -69,7 +69,7 @@ const getInnerJobId = (repoOwner, repoName, runId, jobName, matrixOs, matrixNode
         }
     }
     if (!jobId)
-        throw new Error('Action link not found');
+        throw new Error(`Action link not found for job: ${jobName}`);
     return jobId;
 });
 exports.getInnerJobId = getInnerJobId;
