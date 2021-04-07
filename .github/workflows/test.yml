@@ -89,19 +89,19 @@ jobs:
                   status: ${{job.status}}
                   channel: 'testing-yarden-public'
                   slack_token: ${{ secrets.SLACK_BOT_TOKEN }}
-    # notify-custom-name:
-    #     runs-on: ${{ matrix.os }}
-    #     name: custom name
-    #     strategy:
-    #         matrix:
-    #             os: [ubuntu-latest, windows-latest]
-    #     steps:
-    #         - name: Notify slack
-    #           uses: 'wixplosives/action-slack-message@main'
-    #           env:
-    #               GITHUB_TOKEN: ${{ github.token }}
-    #           with:
-    #               text: '2 OS - Details should only detail the OS'
-    #               status: ${{job.status}}
-    #               channel: 'testing-yarden-public'
-    #               slack_token: ${{ secrets.SLACK_BOT_TOKEN }}
+    notify-custom-name:
+        runs-on: ${{ matrix.os }}
+        name: custom name
+        strategy:
+            matrix:
+                os: [ubuntu-latest, windows-latest]
+        steps:
+            - name: Notify slack
+              uses: 'wixplosives/action-slack-message@main'
+              env:
+                  GITHUB_TOKEN: ${{ github.token }}
+              with:
+                  text: 'Custom name with OS matrix'
+                  status: ${{job.status}}
+                  channel: 'testing-yarden-public'
+                  slack_token: ${{ secrets.SLACK_BOT_TOKEN }}
