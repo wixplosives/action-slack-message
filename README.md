@@ -1,5 +1,5 @@
 <p align="center">
-  <a href="https://github.com/actions/typescript-action/actions"><img alt="typescript-action status" src="https://github.com/actions/typescript-action/workflows/build-test/badge.svg"></a>
+  <a href="https://github.com/wixplosives/action-slack-message/actions"><img alt="typescript-action status" src="https://github.com/wixplosives/action-slack-message/workflows/build-test/badge.svg"></a>
 </p>
 
 ## Usage in a private repo:
