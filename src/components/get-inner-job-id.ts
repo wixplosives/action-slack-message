@@ -34,6 +34,6 @@ export const getInnerJobId = async (
     }
     if (!jobId)
         throw new Error(`Action link not found for job: ${jobName}
-    ${response.data.jobs}`);
+    ${JSON.stringify(response.data.jobs)}`);
     return jobId;
 };
