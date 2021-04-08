@@ -98,8 +98,5 @@ Thumbs.db
 __tests__/runner/*
 lib/**/*
 
-# vscode settings
-.vscode/*
-
 # dev config file
 src/config/dev.ts
