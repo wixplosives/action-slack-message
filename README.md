@@ -2,6 +2,33 @@
   <a href="https://github.com/wixplosives/action-slack-message/actions"><img alt="typescript-action status" src="https://github.com/wixplosives/action-slack-message/workflows/build-test/badge.svg"></a>
 </p>
 
+## Arguments
+
+### **Custom job name**
+
+When you define a custom job name, like this:
+
+```yaml
+notify-custom-name:
+    runs-on: ${{ matrix.os }}
+    name: some custom name # <<< CUSTOM JOB NAME DEFINED HERE
+    strategy:
+        matrix:
+            os: [ubuntu-latest, windows-latest]
+```
+
+You need to pass as an argument the custom job name, as the following:
+
+````yaml
+        steps:
+            - name: Notify slack
+              uses: 'wixplosives/action-slack-message@main'
+              ...
+              with:
+                  ...
+                  custom_job_name: some custom name
+```
+
 ## Usage in a private repo:
 
 Add github.token as an environment variable
@@ -11,9 +38,9 @@ Add github.token as an environment variable
   uses: 'wixplosives/action-slack-message@main'
   env:
       GITHUB_TOKEN: ${{ github.token }}
-```
+````
 
-# Create a JavaScript Action using TypeScript
+# Edit this TypeScript Action
 
 Use this template to bootstrap the creation of a TypeScript action.
 
