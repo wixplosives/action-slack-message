@@ -174,8 +174,9 @@ function run() {
             const slackToken = core.getInput('slack_token');
             const matrixOs = core.getInput('matrix_os');
             const matrixNode = core.getInput('matrix_node');
+            const customJobName = core.getInput('custom_job_name');
             let actionLink = core.getInput('action_link');
-            const jobName = github_1.context.job;
+            const jobName = customJobName || github_1.context.job;
             const { workflow, sha, ref } = github_1.context;
             const { owner: repoOwner, repo: repoName } = github_1.context.repo;
             const runId = github_1.context.runId;

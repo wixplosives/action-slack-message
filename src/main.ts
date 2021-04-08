@@ -14,9 +14,10 @@ async function run(): Promise<void> {
         const slackToken: string = core.getInput('slack_token');
         const matrixOs = core.getInput('matrix_os');
         const matrixNode = core.getInput('matrix_node');
+        const customJobName = core.getInput('custom_job_name');
         let actionLink: string = core.getInput('action_link');
 
-        const jobName = context.job;
+        const jobName = customJobName || context.job;
         const { workflow, sha, ref } = context;
         const { owner: repoOwner, repo: repoName } = context.repo;
         const runId = context.runId;

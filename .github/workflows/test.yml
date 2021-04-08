@@ -10,6 +10,23 @@ jobs:
                   npm install
             - run: |
                   npm run all
+    notify-custom-name:
+        runs-on: ${{ matrix.os }}
+        name: custom name
+        strategy:
+            matrix:
+                os: [ubuntu-latest, windows-latest]
+        steps:
+            - name: Notify slack
+              uses: 'wixplosives/action-slack-message@main'
+              env:
+                  GITHUB_TOKEN: ${{ github.token }}
+              with:
+                  text: 'Custom name with OS matrix'
+                  status: ${{job.status}}
+                  channel: 'testing-yarden-public'
+                  slack_token: ${{ secrets.SLACK_BOT_TOKEN }}
+                  custom_job_name: custom name
     notify-2-node-versions: # Send a Slack message
         runs-on: ubuntu-latest
         strategy:
@@ -89,20 +106,3 @@ jobs:
                   status: ${{job.status}}
                   channel: 'testing-yarden-public'
                   slack_token: ${{ secrets.SLACK_BOT_TOKEN }}
-    notify-custom-name:
-        runs-on: ${{ matrix.os }}
-        name: custom name
-        strategy:
-            matrix:
-                os: [ubuntu-latest, windows-latest]
-        steps:
-            - name: Notify slack
-              uses: 'wixplosives/action-slack-message@main'
-              env:
-                  GITHUB_TOKEN: ${{ github.token }}
-              with:
-                  text: 'Custom name with OS matrix'
-                  status: ${{job.status}}
-                  channel: 'testing-yarden-public'
-                  slack_token: ${{ secrets.SLACK_BOT_TOKEN }}
-                  custom_job_name: custom name
