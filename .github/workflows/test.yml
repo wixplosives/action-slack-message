@@ -105,3 +105,4 @@ jobs:
                   status: ${{job.status}}
                   channel: 'testing-yarden-public'
                   slack_token: ${{ secrets.SLACK_BOT_TOKEN }}
+                  custom_job_name: custom name
