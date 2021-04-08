@@ -19,7 +19,7 @@ notify-custom-name:
 
 You need to pass as an argument the custom job name, as the following:
 
-````yaml
+```yaml
         steps:
             - name: Notify slack
               uses: 'wixplosives/action-slack-message@main'
