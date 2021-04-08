@@ -1,25 +1,13 @@
-import { Octokit } from '@octokit/core';
-import { getGithubToken } from '../config/keys';
+import { IGetInnerJobId } from '../types';
 
-export const getInnerJobId = async (
-    repoOwner: string,
-    repoName: string,
-    runId: number,
-    jobName: string,
-    matrixOs: string,
-    matrixNode: string
-): Promise<string> => {
-    const octokit = new Octokit({ auth: getGithubToken() });
-    const response = await octokit.request(
-        'GET /repos/{owner}/{repo}/actions/runs/{run_id}/jobs',
-        {
-            owner: repoOwner,
-            repo: repoName,
-            run_id: runId
-        }
-    );
+export const getInnerJobId = ({
+    workflowJobs,
+    jobName,
+    matrixOs,
+    matrixNode
+}: IGetInnerJobId): string => {
     let jobId;
-    for (const job of response.data.jobs) {
+    for (const job of workflowJobs) {
         const currentJobName = job.name;
         if (
             currentJobName.includes(jobName) &&

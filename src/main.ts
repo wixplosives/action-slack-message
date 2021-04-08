@@ -5,6 +5,7 @@ import { getInnerJobId } from './components/get-inner-job-id';
 import type { Status } from './types';
 import { createSlackAttachment } from './components/create-slack-attachment';
 import { getTextString } from './components/get-text-string';
+import { getWorkflowJobs } from './components/get-workflow-jobs';
 
 async function run(): Promise<void> {
     try {
@@ -23,14 +24,17 @@ async function run(): Promise<void> {
         const runId = context.runId;
 
         if (!actionLink) {
-            const innerJobId = await getInnerJobId(
+            const workflowJobs = await getWorkflowJobs({
                 repoOwner,
                 repoName,
-                runId,
+                runId
+            });
+            const innerJobId = await getInnerJobId({
+                workflowJobs,
                 jobName,
                 matrixOs,
                 matrixNode
-            );
+            });
             actionLink = `https://github.com/${repoOwner}/${repoName}/runs/${innerJobId}?check_suite_focus=true`;
         }
 
@@ -48,19 +52,19 @@ async function run(): Promise<void> {
             logLevel: LogLevel.ERROR
         });
 
+        const slackAttachment = createSlackAttachment({
+            workflow,
+            actionLink,
+            textString,
+            status,
+            jobName
+        });
+
         try {
             const result = await client.chat.postMessage({
                 channel,
                 text,
-                attachments: [
-                    createSlackAttachment({
-                        workflow,
-                        actionLink,
-                        textString,
-                        status,
-                        jobName
-                    })
-                ]
+                attachments: [slackAttachment]
             });
 
             // eslint-disable-next-line no-console

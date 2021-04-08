@@ -4,7 +4,7 @@ export interface IKeys {
     github_token: string;
 }
 
-export const getGithubToken = (): IKeys => {
+export const getKeys = (): IKeys => {
     if (process.env.GITHUB_TOKEN) {
         return require('./prod');
     } else {

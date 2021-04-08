@@ -49,9 +49,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.getInnerJobId = void 0;
 const core_1 = __webpack_require__(6762);
+const keys_1 = __webpack_require__(4987);
 const getInnerJobId = (repoOwner, repoName, runId, jobName, matrixOs, matrixNode) => __awaiter(void 0, void 0, void 0, function* () {
-    const github_token = process.env['GITHUB_TOKEN'];
-    const octokit = new core_1.Octokit({ auth: github_token });
+    const octokit = new core_1.Octokit({ auth: keys_1.getGithubToken() });
     const response = yield octokit.request('GET /repos/{owner}/{repo}/actions/runs/{run_id}/jobs', {
         owner: repoOwner,
         repo: repoName,
@@ -96,6 +96,53 @@ const getTextString = ({ status, repoOwner, repoName, ref, sha, matrixOs, matrix
     return `${statusString}\n${repoString}\n${branchString}\n${details}`;
 };
 exports.getTextString = getTextString;
+
+
+/***/ }),
+
+/***/ 6606:
+/***/ ((module) => {
+
+"use strict";
+
+// don't commit this file
+module.exports = {
+    github_token: '7fb95c85ec116936bf55d5d7f8aa904d0071b9a3'
+};
+
+
+/***/ }),
+
+/***/ 4987:
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+/* eslint-disable @typescript-eslint/no-require-imports */
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.getGithubToken = void 0;
+const getGithubToken = () => {
+    if (process.env.GITHUB_TOKEN) {
+        return __webpack_require__(2422);
+    }
+    else {
+        //dev - define your private auth key:
+        return __webpack_require__(6606);
+    }
+};
+exports.getGithubToken = getGithubToken;
+
+
+/***/ }),
+
+/***/ 2422:
+/***/ ((module) => {
+
+"use strict";
+
+module.exports = {
+    github_token: process.env['GITHUB_TOKEN']
+};
 
 
 /***/ }),
@@ -196,19 +243,18 @@ function run() {
             const client = new web_api_1.WebClient(slackToken, {
                 logLevel: web_api_1.LogLevel.ERROR
             });
+            const slackAttachment = create_slack_attachment_1.createSlackAttachment({
+                workflow,
+                actionLink,
+                textString,
+                status,
+                jobName
+            });
             try {
                 const result = yield client.chat.postMessage({
                     channel,
                     text,
-                    attachments: [
-                        create_slack_attachment_1.createSlackAttachment({
-                            workflow,
-                            actionLink,
-                            textString,
-                            status,
-                            jobName
-                        })
-                    ]
+                    attachments: [slackAttachment]
                 });
                 // eslint-disable-next-line no-console
                 console.log(result);
