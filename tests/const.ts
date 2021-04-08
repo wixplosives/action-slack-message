@@ -43,5 +43,3 @@ export const JOB_DATA = {
         RESULTS: '2295361636'
     }
 };
-
-export const ALL_WORKFLOW_DATA = ``;

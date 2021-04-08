@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ALL_WORKFLOW_DATA = exports.JOB_DATA = exports.OS = void 0;
+exports.JOB_DATA = exports.OS = void 0;
 exports.OS = {
     UBUNTU: 'ubuntu-latest',
     WINDOWS: 'windows-latest',
@@ -45,4 +45,3 @@ exports.JOB_DATA = {
         RESULTS: '2295361636'
     }
 };
-exports.ALL_WORKFLOW_DATA = ``;

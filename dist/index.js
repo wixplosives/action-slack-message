@@ -33,32 +33,15 @@ exports.createSlackAttachment = createSlackAttachment;
 /***/ }),
 
 /***/ 4659:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ ((__unused_webpack_module, exports) => {
 
 "use strict";
 
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.getInnerJobId = void 0;
-const core_1 = __webpack_require__(6762);
-const keys_1 = __webpack_require__(4987);
-const getInnerJobId = (repoOwner, repoName, runId, jobName, matrixOs, matrixNode) => __awaiter(void 0, void 0, void 0, function* () {
-    const octokit = new core_1.Octokit({ auth: keys_1.getGithubToken() });
-    const response = yield octokit.request('GET /repos/{owner}/{repo}/actions/runs/{run_id}/jobs', {
-        owner: repoOwner,
-        repo: repoName,
-        run_id: runId
-    });
+const getInnerJobId = ({ workflowJobs, jobName, matrixOs, matrixNode }) => {
     let jobId;
-    for (const job of response.data.jobs) {
+    for (const job of workflowJobs) {
         const currentJobName = job.name;
         if (currentJobName.includes(jobName) &&
             currentJobName.includes(matrixOs) &&
@@ -71,7 +54,7 @@ const getInnerJobId = (repoOwner, repoName, runId, jobName, matrixOs, matrixNode
     if (!jobId)
         throw new Error('Action link not found');
     return jobId;
-});
+};
 exports.getInnerJobId = getInnerJobId;
 
 
@@ -100,6 +83,39 @@ exports.getTextString = getTextString;
 
 /***/ }),
 
+/***/ 6001:
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+"use strict";
+
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.getWorkflowJobs = void 0;
+const core_1 = __webpack_require__(6762);
+const keys_1 = __webpack_require__(4987);
+const getWorkflowJobs = ({ repoOwner, repoName, runId }) => __awaiter(void 0, void 0, void 0, function* () {
+    const keys = keys_1.getKeys();
+    const octokit = new core_1.Octokit({ auth: keys.github_token });
+    const response = yield octokit.request('GET /repos/{owner}/{repo}/actions/runs/{run_id}/jobs', {
+        owner: repoOwner,
+        repo: repoName,
+        run_id: runId
+    });
+    return response.data.jobs;
+});
+exports.getWorkflowJobs = getWorkflowJobs;
+
+
+/***/ }),
+
 /***/ 6606:
 /***/ ((module) => {
 
@@ -120,8 +136,8 @@ module.exports = {
 
 /* eslint-disable @typescript-eslint/no-require-imports */
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.getGithubToken = void 0;
-const getGithubToken = () => {
+exports.getKeys = void 0;
+const getKeys = () => {
     if (process.env.GITHUB_TOKEN) {
         return __webpack_require__(2422);
     }
@@ -130,7 +146,7 @@ const getGithubToken = () => {
         return __webpack_require__(6606);
     }
 };
-exports.getGithubToken = getGithubToken;
+exports.getKeys = getKeys;
 
 
 /***/ }),
@@ -212,6 +228,7 @@ const web_api_1 = __webpack_require__(431);
 const get_inner_job_id_1 = __webpack_require__(4659);
 const create_slack_attachment_1 = __webpack_require__(1702);
 const get_text_string_1 = __webpack_require__(4916);
+const get_workflow_jobs_1 = __webpack_require__(6001);
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
@@ -228,7 +245,17 @@ function run() {
             const { owner: repoOwner, repo: repoName } = github_1.context.repo;
             const runId = github_1.context.runId;
             if (!actionLink) {
-                const innerJobId = yield get_inner_job_id_1.getInnerJobId(repoOwner, repoName, runId, jobName, matrixOs, matrixNode);
+                const workflowJobs = yield get_workflow_jobs_1.getWorkflowJobs({
+                    repoOwner,
+                    repoName,
+                    runId
+                });
+                const innerJobId = yield get_inner_job_id_1.getInnerJobId({
+                    workflowJobs,
+                    jobName,
+                    matrixOs,
+                    matrixNode
+                });
                 actionLink = `https://github.com/${repoOwner}/${repoName}/runs/${innerJobId}?check_suite_focus=true`;
             }
             const textString = get_text_string_1.getTextString({
