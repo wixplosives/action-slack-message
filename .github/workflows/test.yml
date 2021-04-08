@@ -18,7 +18,7 @@ jobs:
                 os: [ubuntu-latest, windows-latest]
         steps:
             - name: Notify slack
-              uses: 'wixplosives/action-slack-message@yarden/handle-custom-job-name'
+              uses: 'wixplosives/action-slack-message@main'
               env:
                   GITHUB_TOKEN: ${{ github.token }}
               with:
