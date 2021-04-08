@@ -2,14 +2,6 @@ name: 'action-slack-message'
 description: 'Sends slack messages'
 author: 'Yarden Porat'
 inputs:
-    status:
-        required: false
-        description: 'failed or success'
-        default: ''
-    text:
-        required: false
-        description: 'free text'
-        default: ''
     channel:
         required: true
         description: 'channel to send message'
@@ -18,9 +10,20 @@ inputs:
         required: true
         description: 'slack token'
         default: ''
+    status:
+        required: false
+        description: 'failed | success | true | false | info'
+        default: ''
+    text:
+        required: false
+        description: 'Optional text'
+        default: ''
+    custom_job_name:
+        required: false
+        description: 'if job has custom name defined in `name` field pass it here, otherwise it won`t find inner job in github api'
     action_link:
         required: false
-        description: 'direct link to action'
+        description: 'custom direct link to action'
         default: ''
     matrix_os:
         required: false
