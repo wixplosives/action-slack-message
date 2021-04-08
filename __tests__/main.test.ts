@@ -1,6 +1,7 @@
 import { getTextString } from '../src/components/get-text-string';
 import { createSlackAttachment } from '../src/components/create-slack-attachment';
 import { primaryBlue } from '../src/const';
+import { getGithubToken } from '../src/config/keys';
 
 describe('main.ts', () => {
     describe('getTextString()', () => {
