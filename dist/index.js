@@ -123,7 +123,7 @@ exports.getWorkflowJobs = getWorkflowJobs;
 
 // don't commit this file
 module.exports = {
-    github_token: '7fb95c85ec116936bf55d5d7f8aa904d0071b9a3'
+    github_token: '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'
 };
 
 
@@ -138,7 +138,7 @@ module.exports = {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.getKeys = void 0;
 const getKeys = () => {
-    if (process.env.GITHUB_TOKEN) {
+    if (process.env['GITHUB_TOKEN']) {
         return __webpack_require__(2422);
     }
     else {
@@ -250,7 +250,7 @@ function run() {
                     repoName,
                     runId
                 });
-                const innerJobId = yield get_inner_job_id_1.getInnerJobId({
+                const innerJobId = get_inner_job_id_1.getInnerJobId({
                     workflowJobs,
                     jobName,
                     matrixOs,

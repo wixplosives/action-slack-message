@@ -49,7 +49,7 @@ describe('createSlackAttachment()', () => {
     });
 });
 
-describe('getWorkflowJobs()', () => {
+describe.skip('getWorkflowJobs()', () => {
     it('should get correct workflow data', async () => {
         const basicJobData = {
             repoOwner: 'wixplosives',

@@ -5,7 +5,7 @@ export interface IKeys {
 }
 
 export const getKeys = (): IKeys => {
-    if (process.env.GITHUB_TOKEN) {
+    if (process.env['GITHUB_TOKEN']) {
         return require('./prod');
     } else {
         //dev - define your private auth key:

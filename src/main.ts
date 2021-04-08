@@ -29,7 +29,7 @@ async function run(): Promise<void> {
                 repoName,
                 runId
             });
-            const innerJobId = await getInnerJobId({
+            const innerJobId = getInnerJobId({
                 workflowJobs,
                 jobName,
                 matrixOs,
