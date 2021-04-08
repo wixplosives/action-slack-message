@@ -1,4 +1,5 @@
 import { Octokit } from '@octokit/core';
+import { getGithubToken } from '../config/keys';
 
 export const getInnerJobId = async (
     repoOwner: string,
@@ -8,8 +9,7 @@ export const getInnerJobId = async (
     matrixOs: string,
     matrixNode: string
 ): Promise<string> => {
-    const github_token = process.env['GITHUB_TOKEN'];
-    const octokit = new Octokit({ auth: github_token });
+    const octokit = new Octokit({ auth: getGithubToken() });
     const response = await octokit.request(
         'GET /repos/{owner}/{repo}/actions/runs/{run_id}/jobs',
         {

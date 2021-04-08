@@ -100,3 +100,6 @@ lib/**/*
 
 # vscode settings
 .vscode/*
+
+# dev config file
+src/config/dev.ts
