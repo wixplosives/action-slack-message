@@ -123,7 +123,7 @@ exports.getWorkflowJobs = getWorkflowJobs;
 
 // don't commit this file
 module.exports = {
-    github_token: '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'
+    github_token: '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'
 };
 
 
