@@ -6,12 +6,13 @@ jobs:
         runs-on: ubuntu-latest
         steps:
             - uses: actions/checkout@v2
-            - env:
-                  GITHUB_TOKEN: ${{ github.token }}
+
             - run: |
                   npm install
             - run: |
                   npm run all
+              env:
+                  GITHUB_TOKEN: ${{ github.token }}
     notify-custom-name:
         runs-on: ${{ matrix.os }}
         name: custom name
