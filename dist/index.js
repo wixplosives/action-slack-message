@@ -129,8 +129,12 @@ const getKeys = () => {
         return __nccwpck_require__(2422);
     }
     else {
-        //dev - define your private auth key:
-        return __nccwpck_require__(6205);
+        try {
+            return __nccwpck_require__(6205);
+        }
+        catch (err) {
+            throw new Error('No dev key file found. You must create a local key file called `dev` to run test locally. see `./src/config/prod.ts` for example');
+        }
     }
 };
 exports.getKeys = getKeys;

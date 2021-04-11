@@ -1,7 +1,6 @@
 import { getTextString } from '../src/components/get-text-string';
 import { createSlackAttachment } from '../src/components/create-slack-attachment';
 import { getInnerJobId } from '../src/components/get-inner-job-id';
-import { getWorkflowJobs } from '../src/components/get-workflow-jobs';
 import { primaryBlue } from '../src/const';
 import { JOB_DATA, OS } from './const';
 import jobsData from './jobs-data.json';
@@ -46,19 +45,6 @@ describe('createSlackAttachment()', () => {
             status: ''
         });
         expect(attachment.color).toContain(primaryBlue);
-    });
-});
-
-describe('getWorkflowJobs()', () => {
-    it('should get correct workflow data', async () => {
-        const basicJobData = {
-            repoOwner: 'wixplosives',
-            repoName: 'action-slack-message',
-            runId: 728982924
-        };
-        const workflowJobs = await getWorkflowJobs(basicJobData);
-        const stringifiedResult = JSON.stringify(workflowJobs);
-        expect(stringifiedResult).toBe(jobsData);
     });
 });
 
