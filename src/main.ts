@@ -27,13 +27,13 @@ async function run(): Promise<void> {
             const workflowJobs = await getWorkflowJobs({
                 repoOwner,
                 repoName,
-                runId
+                runId,
             });
             const jobId = getJobId({
                 workflowJobs,
                 jobName,
                 matrixOs,
-                matrixNode
+                matrixNode,
             });
             actionLink = `https://github.com/${repoOwner}/${repoName}/runs/${jobId}?check_suite_focus=true`;
         }
@@ -45,11 +45,11 @@ async function run(): Promise<void> {
             ref,
             sha,
             matrixOs,
-            matrixNode
+            matrixNode,
         });
 
         const client = new WebClient(slackToken, {
-            logLevel: LogLevel.ERROR
+            logLevel: LogLevel.ERROR,
         });
 
         const slackAttachment = createSlackAttachment({
@@ -57,14 +57,14 @@ async function run(): Promise<void> {
             actionLink,
             textString,
             status,
-            jobName
+            jobName,
         });
 
         try {
             const result = await client.chat.postMessage({
                 channel,
                 text,
-                attachments: [slackAttachment]
+                attachments: [slackAttachment],
             });
 
             // eslint-disable-next-line no-console

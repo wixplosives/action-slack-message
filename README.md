@@ -49,13 +49,13 @@ notify-custom-name:
 You need to pass as an argument the custom job name, as the following:
 
 ```yaml
-        steps:
-            - name: Notify slack
-              uses: 'wixplosives/action-slack-message@master'
-              ...
-              with:
-                  ...
-                  custom_job_name: some custom name
+      steps:
+          - name: Notify slack
+            uses: 'wixplosives/action-slack-message@master'
+            ...
+            with:
+                ...
+                custom_job_name: some custom name
 ```
 
 ## Usage in a private repo:
