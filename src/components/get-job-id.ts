@@ -1,4 +1,4 @@
-import { IGetJobId } from '../types';
+import type { IGetJobId } from '../types';
 
 export const getJobId = ({ workflowJobs, jobName, matrixOs, matrixNode }: IGetJobId): string => {
     let jobId;

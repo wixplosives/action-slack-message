@@ -84,34 +84,37 @@ exports.getTextString = getTextString;
 /***/ }),
 
 /***/ 6001:
-/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
 
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.getWorkflowJobs = void 0;
 const core_1 = __nccwpck_require__(6762);
 const keys_1 = __nccwpck_require__(4987);
-const getWorkflowJobs = ({ repoOwner, repoName, runId }) => __awaiter(void 0, void 0, void 0, function* () {
+const getWorkflowJobs = async ({ repoOwner, repoName, runId }) => {
     const keys = keys_1.getKeys();
     const octokit = new core_1.Octokit({ auth: keys.githubToken });
-    const response = yield octokit.request('GET /repos/{owner}/{repo}/actions/runs/{run_id}/jobs', {
+    const response = await octokit.request('GET /repos/{owner}/{repo}/actions/runs/{run_id}/jobs', {
         owner: repoOwner,
         repo: repoName,
         ['run_id']: runId,
     });
     return response.data.jobs;
-});
+};
 exports.getWorkflowJobs = getWorkflowJobs;
+
+
+/***/ }),
+
+/***/ 6606:
+/***/ ((module) => {
+
+"use strict";
+
+module.exports = {
+    github_token: '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',
+};
 
 
 /***/ }),
@@ -129,7 +132,7 @@ const getKeys = () => {
     }
     else {
         try {
-            return __nccwpck_require__(6205);
+            return __nccwpck_require__(6606);
         }
         catch (err) {
             throw new Error('No dev key file found. You must create a local key file called `dev` to run test locally. see `./src/config/prod.ts` for example');
@@ -202,15 +205,6 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const core = __importStar(__nccwpck_require__(2186));
 const github_1 = __nccwpck_require__(5438);
@@ -219,72 +213,70 @@ const get_job_id_1 = __nccwpck_require__(203);
 const create_slack_attachment_1 = __nccwpck_require__(1702);
 const get_text_string_1 = __nccwpck_require__(4916);
 const get_workflow_jobs_1 = __nccwpck_require__(6001);
-function run() {
-    return __awaiter(this, void 0, void 0, function* () {
-        try {
-            const status = core.getInput('status');
-            const text = core.getInput('text');
-            const channel = core.getInput('channel');
-            const slackToken = core.getInput('slack_token');
-            const matrixOs = core.getInput('matrix_os');
-            const matrixNode = core.getInput('matrix_node');
-            const customJobName = core.getInput('custom_job_name');
-            let actionLink = core.getInput('action_link');
-            const jobName = customJobName || github_1.context.job;
-            const { workflow, sha, ref } = github_1.context;
-            const { owner: repoOwner, repo: repoName } = github_1.context.repo;
-            const runId = github_1.context.runId;
-            if (!actionLink) {
-                const workflowJobs = yield get_workflow_jobs_1.getWorkflowJobs({
-                    repoOwner,
-                    repoName,
-                    runId,
-                });
-                const jobId = get_job_id_1.getJobId({
-                    workflowJobs,
-                    jobName,
-                    matrixOs,
-                    matrixNode,
-                });
-                actionLink = `https://github.com/${repoOwner}/${repoName}/runs/${jobId}?check_suite_focus=true`;
-            }
-            const textString = get_text_string_1.getTextString({
-                status,
+async function run() {
+    try {
+        const status = core.getInput('status');
+        const text = core.getInput('text');
+        const channel = core.getInput('channel');
+        const slackToken = core.getInput('slack_token');
+        const matrixOs = core.getInput('matrix_os');
+        const matrixNode = core.getInput('matrix_node');
+        const customJobName = core.getInput('custom_job_name');
+        let actionLink = core.getInput('action_link');
+        const jobName = customJobName || github_1.context.job;
+        const { workflow, sha, ref } = github_1.context;
+        const { owner: repoOwner, repo: repoName } = github_1.context.repo;
+        const runId = github_1.context.runId;
+        if (!actionLink) {
+            const workflowJobs = await get_workflow_jobs_1.getWorkflowJobs({
                 repoOwner,
                 repoName,
-                ref,
-                sha,
+                runId,
+            });
+            const jobId = get_job_id_1.getJobId({
+                workflowJobs,
+                jobName,
                 matrixOs,
                 matrixNode,
             });
-            const client = new web_api_1.WebClient(slackToken, {
-                logLevel: web_api_1.LogLevel.ERROR,
+            actionLink = `https://github.com/${repoOwner}/${repoName}/runs/${jobId}?check_suite_focus=true`;
+        }
+        const textString = get_text_string_1.getTextString({
+            status,
+            repoOwner,
+            repoName,
+            ref,
+            sha,
+            matrixOs,
+            matrixNode,
+        });
+        const client = new web_api_1.WebClient(slackToken, {
+            logLevel: web_api_1.LogLevel.ERROR,
+        });
+        const slackAttachment = create_slack_attachment_1.createSlackAttachment({
+            workflow,
+            actionLink,
+            textString,
+            status,
+            jobName,
+        });
+        try {
+            const result = await client.chat.postMessage({
+                channel,
+                text,
+                attachments: [slackAttachment],
             });
-            const slackAttachment = create_slack_attachment_1.createSlackAttachment({
-                workflow,
-                actionLink,
-                textString,
-                status,
-                jobName,
-            });
-            try {
-                const result = yield client.chat.postMessage({
-                    channel,
-                    text,
-                    attachments: [slackAttachment],
-                });
-                // eslint-disable-next-line no-console
-                console.log(result);
-            }
-            catch (error) {
-                // eslint-disable-next-line no-console
-                console.error(error);
-            }
+            // eslint-disable-next-line no-console
+            console.log(result);
         }
         catch (error) {
-            core.setFailed(error.message);
+            // eslint-disable-next-line no-console
+            console.error(error);
         }
-    });
+    }
+    catch (error) {
+        core.setFailed(error.message);
+    }
 }
 void run();
 
@@ -14188,14 +14180,6 @@ function wrappy (fn, cb) {
     return ret
   }
 }
-
-
-/***/ }),
-
-/***/ 6205:
-/***/ ((module) => {
-
-module.exports = eval("require")("./dev");
 
 
 /***/ }),

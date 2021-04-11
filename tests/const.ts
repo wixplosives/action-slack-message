@@ -6,7 +6,7 @@ export const OS = {
 
 export const IX_JOB_DATA = {
     id: 2295360965,
-    run_id: 728982924,
+    ['run_id']: 728982924,
     name: 'notify-3-os-on-2-nodes-matrix (14, ubuntu-latest)',
 };
 

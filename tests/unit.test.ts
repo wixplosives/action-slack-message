@@ -8,8 +8,6 @@ import jobsData from './jobs-data.json';
 
 const parsedJsonData = JSON.parse(jobsData);
 
-describe('main.ts', () => {});
-
 describe('getTextString()', () => {
     it('outputs all variables', () => {
         const textString = getTextString({
@@ -50,7 +48,7 @@ describe('createSlackAttachment()', () => {
 });
 
 describe('getJobId()', () => {
-    it('finds id of custom name job, with 2 os', async () => {
+    it('finds id of custom name job, with 2 os', () => {
         const ubuntuArgs = {
             workflowJobs: parsedJsonData,
             jobName: JOB_DATA.CUSTOM_NAME.JOB_NAME,
@@ -58,7 +56,7 @@ describe('getJobId()', () => {
             matrixNode: '',
         };
 
-        const ubuntuJobId = await getJobId(ubuntuArgs);
+        const ubuntuJobId = getJobId(ubuntuArgs);
 
         expect(ubuntuJobId).to.be.equal(JOB_DATA.CUSTOM_NAME.RESULTS.UBUNTU);
 
@@ -67,26 +65,26 @@ describe('getJobId()', () => {
             matrixOs: OS.WINDOWS,
         };
 
-        const windowsJobId = await getJobId(windowsArgs);
+        const windowsJobId = getJobId(windowsArgs);
 
         expect(windowsJobId).to.be.equal(JOB_DATA.CUSTOM_NAME.RESULTS.WINDOWS);
     });
 
-    it('finds  id of a job with 2 node versions', async () => {
+    it('finds  id of a job with 2 node versions', () => {
         const nodeFourteenArgs = {
             workflowJobs: parsedJsonData,
             jobName: JOB_DATA.TWO_NODES.JOB_NAME,
             matrixOs: '',
             matrixNode: '14',
         };
-        const nodeFourteenJobId = await getJobId(nodeFourteenArgs);
+        const nodeFourteenJobId = getJobId(nodeFourteenArgs);
         expect(nodeFourteenJobId).to.be.equal(JOB_DATA.TWO_NODES.RESULTS._14);
 
         const nodeTwelveArgs = {
             ...nodeFourteenArgs,
             matrixNode: '12',
         };
-        const nodeTwelveJobId = await getJobId(nodeTwelveArgs);
+        const nodeTwelveJobId = getJobId(nodeTwelveArgs);
         expect(nodeTwelveJobId).to.be.equal(JOB_DATA.TWO_NODES.RESULTS._12);
     });
 
