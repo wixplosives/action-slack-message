@@ -1,7 +1,7 @@
 import * as core from '@actions/core';
 import { context } from '@actions/github';
 import { WebClient, LogLevel } from '@slack/web-api';
-import { getInnerJobId } from './components/get-inner-job-id';
+import { getJobId } from './components/get-job-id';
 import type { Status } from './types';
 import { createSlackAttachment } from './components/create-slack-attachment';
 import { getTextString } from './components/get-text-string';
@@ -29,13 +29,13 @@ async function run(): Promise<void> {
                 repoName,
                 runId
             });
-            const innerJobId = getInnerJobId({
+            const jobId = getJobId({
                 workflowJobs,
                 jobName,
                 matrixOs,
                 matrixNode
             });
-            actionLink = `https://github.com/${repoOwner}/${repoName}/runs/${innerJobId}?check_suite_focus=true`;
+            actionLink = `https://github.com/${repoOwner}/${repoName}/runs/${jobId}?check_suite_focus=true`;
         }
 
         const textString = getTextString({

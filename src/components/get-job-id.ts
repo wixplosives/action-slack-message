@@ -1,11 +1,11 @@
-import { IGetInnerJobId } from '../types';
+import { IGetJobId } from '../types';
 
-export const getInnerJobId = ({
+export const getJobId = ({
     workflowJobs,
     jobName,
     matrixOs,
     matrixNode
-}: IGetInnerJobId): string => {
+}: IGetJobId): string => {
     let jobId;
     for (const job of workflowJobs) {
         const currentJobName = job.name;

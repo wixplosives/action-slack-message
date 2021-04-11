@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 import { getTextString } from '../src/components/get-text-string';
 import { createSlackAttachment } from '../src/components/create-slack-attachment';
-import { getInnerJobId } from '../src/components/get-inner-job-id';
+import { getJobId } from '../src/components/get-job-id';
 import { primaryBlue } from '../src/const';
 import { JOB_DATA, OS } from './const';
 import jobsData from './jobs-data.json';
@@ -49,8 +49,8 @@ describe('createSlackAttachment()', () => {
     });
 });
 
-describe('getInnerJobId()', () => {
-    it('finds inner id of custom name job, with 2 os', async () => {
+describe('getJobId()', () => {
+    it('finds id of custom name job, with 2 os', async () => {
         const ubuntuArgs = {
             workflowJobs: parsedJsonData,
             jobName: JOB_DATA.CUSTOM_NAME.JOB_NAME,
@@ -58,155 +58,151 @@ describe('getInnerJobId()', () => {
             matrixNode: ''
         };
 
-        const ubuntuInnerJobId = await getInnerJobId(ubuntuArgs);
+        const ubuntuJobId = await getJobId(ubuntuArgs);
 
-        expect(ubuntuInnerJobId).to.be.equal(
-            JOB_DATA.CUSTOM_NAME.RESULTS.UBUNTU
-        );
+        expect(ubuntuJobId).to.be.equal(JOB_DATA.CUSTOM_NAME.RESULTS.UBUNTU);
 
         const windowsArgs = {
             ...ubuntuArgs,
             matrixOs: OS.WINDOWS
         };
 
-        const windowsJobId = await getInnerJobId(windowsArgs);
+        const windowsJobId = await getJobId(windowsArgs);
 
         expect(windowsJobId).to.be.equal(JOB_DATA.CUSTOM_NAME.RESULTS.WINDOWS);
     });
 
-    it('finds inner id of a job with 2 node versions', async () => {
+    it('finds  id of a job with 2 node versions', async () => {
         const nodeFourteenArgs = {
             workflowJobs: parsedJsonData,
             jobName: JOB_DATA.TWO_NODES.JOB_NAME,
             matrixOs: '',
             matrixNode: '14'
         };
-        const nodeFourteenInnerJobId = await getInnerJobId(nodeFourteenArgs);
-        expect(nodeFourteenInnerJobId).to.be.equal(
-            JOB_DATA.TWO_NODES.RESULTS._14
-        );
+        const nodeFourteenJobId = await getJobId(nodeFourteenArgs);
+        expect(nodeFourteenJobId).to.be.equal(JOB_DATA.TWO_NODES.RESULTS._14);
 
         const nodeTwelveArgs = {
             ...nodeFourteenArgs,
             matrixNode: '12'
         };
-        const nodeTwelveJobId = await getInnerJobId(nodeTwelveArgs);
+        const nodeTwelveJobId = await getJobId(nodeTwelveArgs);
         expect(nodeTwelveJobId).to.be.equal(JOB_DATA.TWO_NODES.RESULTS._12);
     });
 
-    it('finds inner id of a job with 2 node versions and 3 os - macos 14', () => {
+    it('finds  id of a job with 2 node versions and 3 os - macos 14', () => {
         const args = {
             workflowJobs: parsedJsonData,
             jobName: JOB_DATA.THREE_OS_TWO_NODES.JOB_NAME,
             matrixOs: OS.UBUNTU,
             matrixNode: '14'
         };
-        const ubuntuFourteenInnerJobId = getInnerJobId(args);
-        expect(ubuntuFourteenInnerJobId).to.be.equal(
+        const ubuntuFourteenJobId = getJobId(args);
+        expect(ubuntuFourteenJobId).to.be.equal(
             JOB_DATA.THREE_OS_TWO_NODES.RESULTS.UBUNTU_14
         );
     });
-    it('finds inner id of a job with 2 node versions and 3 os - macos 12', () => {
+    it('finds  id of a job with 2 node versions and 3 os - macos 12', () => {
         const args = {
             workflowJobs: parsedJsonData,
             jobName: JOB_DATA.THREE_OS_TWO_NODES.JOB_NAME,
             matrixOs: OS.UBUNTU,
             matrixNode: '12'
         };
-        const ubuntuTwelveInnerJobId = getInnerJobId(args);
-        expect(ubuntuTwelveInnerJobId).to.be.equal(
+        const ubuntuTwelveJobId = getJobId(args);
+        expect(ubuntuTwelveJobId).to.be.equal(
             JOB_DATA.THREE_OS_TWO_NODES.RESULTS.UBUNTU_12
         );
     });
-    it('finds inner id of a job with 2 node versions and 3 os - macos 14', () => {
+    it('finds  id of a job with 2 node versions and 3 os - macos 14', () => {
         const args = {
             workflowJobs: parsedJsonData,
             jobName: JOB_DATA.THREE_OS_TWO_NODES.JOB_NAME,
             matrixOs: OS.MACOS,
             matrixNode: '14'
         };
-        const macosFourteenInnerJobId = getInnerJobId(args);
-        expect(macosFourteenInnerJobId).to.be.equal(
+        const macosFourteenJobId = getJobId(args);
+        expect(macosFourteenJobId).to.be.equal(
             JOB_DATA.THREE_OS_TWO_NODES.RESULTS.MACOS_14
         );
     });
-    it('finds inner id of a job with 2 node versions and 3 os - macos 12', () => {
+    it('finds  id of a job with 2 node versions and 3 os - macos 12', () => {
         const args = {
             workflowJobs: parsedJsonData,
             jobName: JOB_DATA.THREE_OS_TWO_NODES.JOB_NAME,
             matrixOs: OS.MACOS,
             matrixNode: '12'
         };
-        const macosTwelveInnerJobId = getInnerJobId(args);
-        expect(macosTwelveInnerJobId).to.be.equal(
+        const macosTwelveJobId = getJobId(args);
+        expect(macosTwelveJobId).to.be.equal(
             JOB_DATA.THREE_OS_TWO_NODES.RESULTS.MACOS_12
         );
     });
-    it('finds inner id of a job with 2 node versions and 3 os - windows 14', () => {
+    it('finds  id of a job with 2 node versions and 3 os - windows 14', () => {
         const args = {
             workflowJobs: parsedJsonData,
             jobName: JOB_DATA.THREE_OS_TWO_NODES.JOB_NAME,
             matrixOs: OS.WINDOWS,
             matrixNode: '14'
         };
-        const windowsFourteenInnerJobId = getInnerJobId(args);
-        expect(windowsFourteenInnerJobId).to.be.equal(
+        const windowsFourteenJobId = getJobId(args);
+        expect(windowsFourteenJobId).to.be.equal(
             JOB_DATA.THREE_OS_TWO_NODES.RESULTS.WINDOWS_14
         );
     });
-    it('finds inner id of a job with 2 node versions and 3 os - windows 12', () => {
+    it('finds  id of a job with 2 node versions and 3 os - windows 12', () => {
         const args = {
             workflowJobs: parsedJsonData,
             jobName: JOB_DATA.THREE_OS_TWO_NODES.JOB_NAME,
             matrixOs: OS.WINDOWS,
             matrixNode: '12'
         };
-        const windowsTwelveInnerJobId = getInnerJobId(args);
-        expect(windowsTwelveInnerJobId).to.be.equal(
+        const windowsTwelveJobId = getJobId(args);
+        expect(windowsTwelveJobId).to.be.equal(
             JOB_DATA.THREE_OS_TWO_NODES.RESULTS.WINDOWS_12
         );
     });
-    it('finds inner id of a job with 2 OS - windows', () => {
+    it('finds  id of a job with 2 OS - windows', () => {
         const args = {
             workflowJobs: parsedJsonData,
             jobName: JOB_DATA.TWO_OS.JOB_NAME,
             matrixOs: OS.WINDOWS,
             matrixNode: ''
         };
-        const windowsInnerJobId = getInnerJobId(args);
-        expect(windowsInnerJobId).to.be.equal(JOB_DATA.TWO_OS.RESULTS.WINDOWS);
+        const windowsJobId = getJobId(args);
+        expect(windowsJobId).to.be.equal(JOB_DATA.TWO_OS.RESULTS.WINDOWS);
     });
 
-    it('finds inner id of a job with 2 OS - ubuntu', () => {
+    it('finds  id of a job with 2 OS - ubuntu', () => {
         const args = {
             workflowJobs: parsedJsonData,
             jobName: JOB_DATA.TWO_OS.JOB_NAME,
             matrixOs: OS.UBUNTU,
             matrixNode: ''
         };
-        const ubuntuInnerJobId = getInnerJobId(args);
-        expect(ubuntuInnerJobId).to.be.equal(JOB_DATA.TWO_OS.RESULTS.UBUNTU);
+        const ubuntuJobId = getJobId(args);
+        expect(ubuntuJobId).to.be.equal(JOB_DATA.TWO_OS.RESULTS.UBUNTU);
     });
 
-    it('finds inner id of a job with 1 os and 1 node', () => {
+    it('finds  id of a job with 1 os and 1 node', () => {
         const args = {
             workflowJobs: parsedJsonData,
             jobName: JOB_DATA.ONE_OS_AND_NODE.JOB_NAME,
             matrixOs: '',
             matrixNode: ''
         };
-        const innerJobId = getInnerJobId(args);
-        expect(innerJobId).to.be.equal(JOB_DATA.ONE_OS_AND_NODE.RESULTS);
+        const JobId = getJobId(args);
+        expect(JobId).to.be.equal(JOB_DATA.ONE_OS_AND_NODE.RESULTS);
     });
 
-    it('finds inner id of a job with 1 os', () => {
+    it('finds  id of a job with 1 os', () => {
         const args = {
             workflowJobs: parsedJsonData,
             jobName: JOB_DATA.ONE_OS.JOB_NAME,
             matrixOs: '',
             matrixNode: ''
         };
-        const innerJobId = getInnerJobId(args);
-        expect(innerJobId).to.be.equal(JOB_DATA.ONE_OS.RESULTS);
+        const JobId = getJobId(args);
+        expect(JobId).to.be.equal(JOB_DATA.ONE_OS.RESULTS);
     });
 });

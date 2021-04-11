@@ -32,14 +32,14 @@ exports.createSlackAttachment = createSlackAttachment;
 
 /***/ }),
 
-/***/ 4659:
+/***/ 203:
 /***/ ((__unused_webpack_module, exports) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.getInnerJobId = void 0;
-const getInnerJobId = ({ workflowJobs, jobName, matrixOs, matrixNode }) => {
+exports.getJobId = void 0;
+const getJobId = ({ workflowJobs, jobName, matrixOs, matrixNode }) => {
     let jobId;
     for (const job of workflowJobs) {
         const currentJobName = job.name;
@@ -55,7 +55,7 @@ const getInnerJobId = ({ workflowJobs, jobName, matrixOs, matrixNode }) => {
         throw new Error('Action link not found');
     return jobId;
 };
-exports.getInnerJobId = getInnerJobId;
+exports.getJobId = getJobId;
 
 
 /***/ }),
@@ -215,7 +215,7 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 const core = __importStar(__nccwpck_require__(2186));
 const github_1 = __nccwpck_require__(5438);
 const web_api_1 = __nccwpck_require__(431);
-const get_inner_job_id_1 = __nccwpck_require__(4659);
+const get_job_id_1 = __nccwpck_require__(203);
 const create_slack_attachment_1 = __nccwpck_require__(1702);
 const get_text_string_1 = __nccwpck_require__(4916);
 const get_workflow_jobs_1 = __nccwpck_require__(6001);
@@ -240,13 +240,13 @@ function run() {
                     repoName,
                     runId
                 });
-                const innerJobId = get_inner_job_id_1.getInnerJobId({
+                const jobId = get_job_id_1.getJobId({
                     workflowJobs,
                     jobName,
                     matrixOs,
                     matrixNode
                 });
-                actionLink = `https://github.com/${repoOwner}/${repoName}/runs/${innerJobId}?check_suite_focus=true`;
+                actionLink = `https://github.com/${repoOwner}/${repoName}/runs/${jobId}?check_suite_focus=true`;
             }
             const textString = get_text_string_1.getTextString({
                 status,

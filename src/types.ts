@@ -11,7 +11,7 @@ export type Status =
 
 export type MrkDwnIn = ('text' | 'pretext' | 'fields')[];
 
-export interface IGetInnerJobId {
+export interface IGetJobId {
     workflowJobs: Job[];
     jobName: string;
     matrixOs: string;
