@@ -1,7 +1,5 @@
-/* eslint-disable @typescript-eslint/no-require-imports */
-
 export interface IKeys {
-    github_token: string;
+    githubToken: string;
 }
 
 export const getKeys = (): IKeys => {

@@ -8,13 +8,13 @@ export const getWorkflowJobs = async ({
     runId
 }: IGetWorkflowJobs): Promise<Job[]> => {
     const keys = getKeys();
-    const octokit = new Octokit({ auth: keys.github_token });
+    const octokit = new Octokit({ auth: keys.githubToken });
     const response = await octokit.request(
         'GET /repos/{owner}/{repo}/actions/runs/{run_id}/jobs',
         {
             owner: repoOwner,
             repo: repoName,
-            run_id: runId
+            ['run_id']: runId
         }
     );
 
