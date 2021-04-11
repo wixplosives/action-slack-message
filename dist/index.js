@@ -21,10 +21,10 @@ const const_1 = __nccwpck_require__(6695);
 const createSlackAttachment = ({ workflow, actionLink, textString, status, jobName = '' }) => {
     return {
         title: `${workflow}${jobName ? `: ${jobName}` : ''} `,
-        title_link: actionLink,
+        ['title_link']: actionLink,
         text: textString,
         color: const_1.colors[status],
-        mrkdwn_in: ['text']
+        ['mrkdwn_in']: ['text']
     };
 };
 exports.createSlackAttachment = createSlackAttachment;
@@ -103,11 +103,11 @@ const core_1 = __nccwpck_require__(6762);
 const keys_1 = __nccwpck_require__(4987);
 const getWorkflowJobs = ({ repoOwner, repoName, runId }) => __awaiter(void 0, void 0, void 0, function* () {
     const keys = keys_1.getKeys();
-    const octokit = new core_1.Octokit({ auth: keys.github_token });
+    const octokit = new core_1.Octokit({ auth: keys.githubToken });
     const response = yield octokit.request('GET /repos/{owner}/{repo}/actions/runs/{run_id}/jobs', {
         owner: repoOwner,
         repo: repoName,
-        run_id: runId
+        ['run_id']: runId
     });
     return response.data.jobs;
 });
@@ -121,7 +121,6 @@ exports.getWorkflowJobs = getWorkflowJobs;
 
 "use strict";
 
-/* eslint-disable @typescript-eslint/no-require-imports */
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.getKeys = void 0;
 const getKeys = () => {
@@ -148,7 +147,7 @@ exports.getKeys = getKeys;
 "use strict";
 
 module.exports = {
-    github_token: process.env['GITHUB_TOKEN']
+    githubToken: process.env['GITHUB_TOKEN']
 };
 
 

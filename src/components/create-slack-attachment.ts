@@ -11,10 +11,10 @@ export interface ICreateSlackAttachment {
 
 export interface ISlackAttachment {
     title: string;
-    title_link: string;
+    ['title_link']: string;
     text: string;
     color: string;
-    mrkdwn_in: MrkDwnIn;
+    ['mrkdwn_in']: MrkDwnIn;
 }
 
 export const createSlackAttachment = ({
@@ -26,9 +26,9 @@ export const createSlackAttachment = ({
 }: ICreateSlackAttachment): ISlackAttachment => {
     return {
         title: `${workflow}${jobName ? `: ${jobName}` : ''} `,
-        title_link: actionLink,
+        ['title_link']: actionLink,
         text: textString,
         color: colors[status],
-        mrkdwn_in: ['text']
+        ['mrkdwn_in']: ['text']
     };
 };
