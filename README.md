@@ -51,7 +51,7 @@ You need to pass as an argument the custom job name, as the following:
 ```yaml
         steps:
             - name: Notify slack
-              uses: 'wixplosives/action-slack-message@main'
+              uses: 'wixplosives/action-slack-message@master'
               ...
               with:
                   ...
@@ -64,7 +64,7 @@ Add github.token as an environment variable
 
 ```yaml
 - name: Notify slack
-  uses: 'wixplosives/action-slack-message@main'
+  uses: 'wixplosives/action-slack-message@master'
   env:
       GITHUB_TOKEN: ${{ github.token }}
 ```
