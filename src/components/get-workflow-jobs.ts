@@ -1,6 +1,6 @@
 import { Octokit } from '@octokit/core';
 import { getKeys } from '../config/keys';
-import { IGetWorkflowJobs, Job } from '../types';
+import type { IGetWorkflowJobs, Job } from '../types';
 
 export const getWorkflowJobs = async ({ repoOwner, repoName, runId }: IGetWorkflowJobs): Promise<Job[]> => {
     const keys = getKeys();
