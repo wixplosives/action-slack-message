@@ -11,5 +11,5 @@ export const colors = {
     true: good,
     cancelled: primaryBlue,
     info: primaryBlue,
-    '': primaryBlue
+    '': primaryBlue,
 };

@@ -1,11 +1,6 @@
 import { IGetJobId } from '../types';
 
-export const getJobId = ({
-    workflowJobs,
-    jobName,
-    matrixOs,
-    matrixNode
-}: IGetJobId): string => {
+export const getJobId = ({ workflowJobs, jobName, matrixOs, matrixNode }: IGetJobId): string => {
     let jobId;
     for (const job of workflowJobs) {
         const currentJobName = job.name;

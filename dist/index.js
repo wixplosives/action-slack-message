@@ -18,13 +18,13 @@ module.exports = JSON.parse("{\"name\":\"@slack/web-api\",\"version\":\"6.1.0\",
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.createSlackAttachment = void 0;
 const const_1 = __nccwpck_require__(6695);
-const createSlackAttachment = ({ workflow, actionLink, textString, status, jobName = '' }) => {
+const createSlackAttachment = ({ workflow, actionLink, textString, status, jobName = '', }) => {
     return {
         title: `${workflow}${jobName ? `: ${jobName}` : ''} `,
         ['title_link']: actionLink,
         text: textString,
         color: const_1.colors[status],
-        ['mrkdwn_in']: ['text']
+        ['mrkdwn_in']: ['text'],
     };
 };
 exports.createSlackAttachment = createSlackAttachment;
@@ -107,7 +107,7 @@ const getWorkflowJobs = ({ repoOwner, repoName, runId }) => __awaiter(void 0, vo
     const response = yield octokit.request('GET /repos/{owner}/{repo}/actions/runs/{run_id}/jobs', {
         owner: repoOwner,
         repo: repoName,
-        ['run_id']: runId
+        ['run_id']: runId,
     });
     return response.data.jobs;
 });
@@ -147,7 +147,7 @@ exports.getKeys = getKeys;
 "use strict";
 
 module.exports = {
-    githubToken: process.env['GITHUB_TOKEN']
+    githubToken: process.env['GITHUB_TOKEN'],
 };
 
 
@@ -172,7 +172,7 @@ exports.colors = {
     true: exports.good,
     cancelled: exports.primaryBlue,
     info: exports.primaryBlue,
-    '': exports.primaryBlue
+    '': exports.primaryBlue,
 };
 
 
@@ -238,13 +238,13 @@ function run() {
                 const workflowJobs = yield get_workflow_jobs_1.getWorkflowJobs({
                     repoOwner,
                     repoName,
-                    runId
+                    runId,
                 });
                 const jobId = get_job_id_1.getJobId({
                     workflowJobs,
                     jobName,
                     matrixOs,
-                    matrixNode
+                    matrixNode,
                 });
                 actionLink = `https://github.com/${repoOwner}/${repoName}/runs/${jobId}?check_suite_focus=true`;
             }
@@ -255,23 +255,23 @@ function run() {
                 ref,
                 sha,
                 matrixOs,
-                matrixNode
+                matrixNode,
             });
             const client = new web_api_1.WebClient(slackToken, {
-                logLevel: web_api_1.LogLevel.ERROR
+                logLevel: web_api_1.LogLevel.ERROR,
             });
             const slackAttachment = create_slack_attachment_1.createSlackAttachment({
                 workflow,
                 actionLink,
                 textString,
                 status,
-                jobName
+                jobName,
             });
             try {
                 const result = yield client.chat.postMessage({
                     channel,
                     text,
-                    attachments: [slackAttachment]
+                    attachments: [slackAttachment],
                 });
                 // eslint-disable-next-line no-console
                 console.log(result);

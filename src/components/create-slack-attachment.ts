@@ -22,13 +22,13 @@ export const createSlackAttachment = ({
     actionLink,
     textString,
     status,
-    jobName = ''
+    jobName = '',
 }: ICreateSlackAttachment): ISlackAttachment => {
     return {
         title: `${workflow}${jobName ? `: ${jobName}` : ''} `,
         ['title_link']: actionLink,
         text: textString,
         color: colors[status],
-        ['mrkdwn_in']: ['text']
+        ['mrkdwn_in']: ['text'],
     };
 };
