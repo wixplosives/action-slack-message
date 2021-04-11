@@ -27,5 +27,5 @@ export interface IGetWorkflowJobs {
 export interface Job {
     id: number;
     name: string;
-    run_id: number;
+    ['run_id']: number;
 }
