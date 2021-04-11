@@ -1,6 +1,6 @@
 name: 'action-slack-message'
 description: 'Sends slack messages'
-author: 'Yarden Porat'
+author: 'Wix.com'
 inputs:
     channel:
         required: true
