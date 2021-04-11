@@ -1,3 +1,4 @@
+import { expect } from 'chai';
 import { getTextString } from '../src/components/get-text-string';
 import { createSlackAttachment } from '../src/components/create-slack-attachment';
 import { getInnerJobId } from '../src/components/get-inner-job-id';
@@ -18,11 +19,11 @@ describe('getTextString()', () => {
             ref: 'master',
             sha: 'ABC'
         });
-        expect(textString).toContain('owner');
-        expect(textString).toContain('testRepo');
-        expect(textString).toContain('master');
-        expect(textString).toContain('ABC');
-        expect(textString).toContain('FAILED');
+        expect(textString).to.contain('owner');
+        expect(textString).to.contain('testRepo');
+        expect(textString).to.contain('master');
+        expect(textString).to.contain('ABC');
+        expect(textString).to.contain('FAILED');
     });
 
     it('not showing status when its empty', () => {
@@ -33,7 +34,7 @@ describe('getTextString()', () => {
             ref: 'master',
             sha: 'ABC'
         });
-        expect(textString.includes('status')).toBe(false);
+        expect(textString.includes('status')).to.be.false;
     });
 });
 describe('createSlackAttachment()', () => {
@@ -44,7 +45,7 @@ describe('createSlackAttachment()', () => {
             textString: '',
             status: ''
         });
-        expect(attachment.color).toContain(primaryBlue);
+        expect(attachment.color).to.contain(primaryBlue);
     });
 });
 
@@ -59,7 +60,9 @@ describe('getInnerJobId()', () => {
 
         const ubuntuInnerJobId = await getInnerJobId(ubuntuArgs);
 
-        expect(ubuntuInnerJobId).toBe(JOB_DATA.CUSTOM_NAME.RESULTS.UBUNTU);
+        expect(ubuntuInnerJobId).to.be.equal(
+            JOB_DATA.CUSTOM_NAME.RESULTS.UBUNTU
+        );
 
         const windowsArgs = {
             ...ubuntuArgs,
@@ -68,7 +71,7 @@ describe('getInnerJobId()', () => {
 
         const windowsJobId = await getInnerJobId(windowsArgs);
 
-        expect(windowsJobId).toBe(JOB_DATA.CUSTOM_NAME.RESULTS.WINDOWS);
+        expect(windowsJobId).to.be.equal(JOB_DATA.CUSTOM_NAME.RESULTS.WINDOWS);
     });
 
     it('finds inner id of a job with 2 node versions', async () => {
@@ -79,14 +82,16 @@ describe('getInnerJobId()', () => {
             matrixNode: '14'
         };
         const nodeFourteenInnerJobId = await getInnerJobId(nodeFourteenArgs);
-        expect(nodeFourteenInnerJobId).toBe(JOB_DATA.TWO_NODES.RESULTS._14);
+        expect(nodeFourteenInnerJobId).to.be.equal(
+            JOB_DATA.TWO_NODES.RESULTS._14
+        );
 
         const nodeTwelveArgs = {
             ...nodeFourteenArgs,
             matrixNode: '12'
         };
         const nodeTwelveJobId = await getInnerJobId(nodeTwelveArgs);
-        expect(nodeTwelveJobId).toBe(JOB_DATA.TWO_NODES.RESULTS._12);
+        expect(nodeTwelveJobId).to.be.equal(JOB_DATA.TWO_NODES.RESULTS._12);
     });
 
     it('finds inner id of a job with 2 node versions and 3 os - macos 14', () => {
@@ -97,7 +102,7 @@ describe('getInnerJobId()', () => {
             matrixNode: '14'
         };
         const ubuntuFourteenInnerJobId = getInnerJobId(args);
-        expect(ubuntuFourteenInnerJobId).toBe(
+        expect(ubuntuFourteenInnerJobId).to.be.equal(
             JOB_DATA.THREE_OS_TWO_NODES.RESULTS.UBUNTU_14
         );
     });
@@ -109,7 +114,7 @@ describe('getInnerJobId()', () => {
             matrixNode: '12'
         };
         const ubuntuTwelveInnerJobId = getInnerJobId(args);
-        expect(ubuntuTwelveInnerJobId).toBe(
+        expect(ubuntuTwelveInnerJobId).to.be.equal(
             JOB_DATA.THREE_OS_TWO_NODES.RESULTS.UBUNTU_12
         );
     });
@@ -121,7 +126,7 @@ describe('getInnerJobId()', () => {
             matrixNode: '14'
         };
         const macosFourteenInnerJobId = getInnerJobId(args);
-        expect(macosFourteenInnerJobId).toBe(
+        expect(macosFourteenInnerJobId).to.be.equal(
             JOB_DATA.THREE_OS_TWO_NODES.RESULTS.MACOS_14
         );
     });
@@ -133,7 +138,7 @@ describe('getInnerJobId()', () => {
             matrixNode: '12'
         };
         const macosTwelveInnerJobId = getInnerJobId(args);
-        expect(macosTwelveInnerJobId).toBe(
+        expect(macosTwelveInnerJobId).to.be.equal(
             JOB_DATA.THREE_OS_TWO_NODES.RESULTS.MACOS_12
         );
     });
@@ -145,7 +150,7 @@ describe('getInnerJobId()', () => {
             matrixNode: '14'
         };
         const windowsFourteenInnerJobId = getInnerJobId(args);
-        expect(windowsFourteenInnerJobId).toBe(
+        expect(windowsFourteenInnerJobId).to.be.equal(
             JOB_DATA.THREE_OS_TWO_NODES.RESULTS.WINDOWS_14
         );
     });
@@ -157,7 +162,7 @@ describe('getInnerJobId()', () => {
             matrixNode: '12'
         };
         const windowsTwelveInnerJobId = getInnerJobId(args);
-        expect(windowsTwelveInnerJobId).toBe(
+        expect(windowsTwelveInnerJobId).to.be.equal(
             JOB_DATA.THREE_OS_TWO_NODES.RESULTS.WINDOWS_12
         );
     });
@@ -169,7 +174,7 @@ describe('getInnerJobId()', () => {
             matrixNode: ''
         };
         const windowsInnerJobId = getInnerJobId(args);
-        expect(windowsInnerJobId).toBe(JOB_DATA.TWO_OS.RESULTS.WINDOWS);
+        expect(windowsInnerJobId).to.be.equal(JOB_DATA.TWO_OS.RESULTS.WINDOWS);
     });
 
     it('finds inner id of a job with 2 OS - ubuntu', () => {
@@ -180,7 +185,7 @@ describe('getInnerJobId()', () => {
             matrixNode: ''
         };
         const ubuntuInnerJobId = getInnerJobId(args);
-        expect(ubuntuInnerJobId).toBe(JOB_DATA.TWO_OS.RESULTS.UBUNTU);
+        expect(ubuntuInnerJobId).to.be.equal(JOB_DATA.TWO_OS.RESULTS.UBUNTU);
     });
 
     it('finds inner id of a job with 1 os and 1 node', () => {
@@ -191,7 +196,7 @@ describe('getInnerJobId()', () => {
             matrixNode: ''
         };
         const innerJobId = getInnerJobId(args);
-        expect(innerJobId).toBe(JOB_DATA.ONE_OS_AND_NODE.RESULTS);
+        expect(innerJobId).to.be.equal(JOB_DATA.ONE_OS_AND_NODE.RESULTS);
     });
 
     it('finds inner id of a job with 1 os', () => {
@@ -202,6 +207,6 @@ describe('getInnerJobId()', () => {
             matrixNode: ''
         };
         const innerJobId = getInnerJobId(args);
-        expect(innerJobId).toBe(JOB_DATA.ONE_OS.RESULTS);
+        expect(innerJobId).to.be.equal(JOB_DATA.ONE_OS.RESULTS);
     });
 });

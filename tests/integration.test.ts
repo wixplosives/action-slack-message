@@ -1,8 +1,9 @@
+import { expect } from 'chai';
 import { getWorkflowJobs } from '../src/components/get-workflow-jobs';
 import { IX_JOB_DATA } from './const';
 
 describe('getWorkflowJobs()', () => {
-    it.only('should get correct workflow data', async () => {
+    it('should get correct workflow data', async () => {
         const basicJobData = {
             repoOwner: 'wixplosives',
             repoName: 'action-slack-message',
@@ -11,8 +12,8 @@ describe('getWorkflowJobs()', () => {
         const workflowJobs = await getWorkflowJobs(basicJobData);
         const testedJob = workflowJobs.find(job => job.id === IX_JOB_DATA.id);
         if (testedJob) {
-            expect(testedJob.name).toBe(IX_JOB_DATA.name);
-            expect(testedJob.run_id).toBe(IX_JOB_DATA.run_id);
+            expect(testedJob.name).to.be.eq(IX_JOB_DATA.name);
+            expect(testedJob.run_id).to.be.eq(IX_JOB_DATA.run_id);
         }
     });
 });
