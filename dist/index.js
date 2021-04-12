@@ -107,18 +107,6 @@ exports.getWorkflowJobs = getWorkflowJobs;
 
 /***/ }),
 
-/***/ 6606:
-/***/ ((module) => {
-
-"use strict";
-
-module.exports = {
-    github_token: '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',
-};
-
-
-/***/ }),
-
 /***/ 4987:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
@@ -132,7 +120,7 @@ const getKeys = () => {
     }
     else {
         try {
-            return __nccwpck_require__(6606);
+            return __nccwpck_require__(6205);
         }
         catch (err) {
             throw new Error('No dev key file found. You must create a local key file called `dev` to run test locally. see `./src/config/prod.ts` for example');
@@ -14180,6 +14168,14 @@ function wrappy (fn, cb) {
     return ret
   }
 }
+
+
+/***/ }),
+
+/***/ 6205:
+/***/ ((module) => {
+
+module.exports = eval("require")("./dev");
 
 
 /***/ }),
