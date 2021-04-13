@@ -32,9 +32,21 @@ $ npm test
 ```
 
 ## Arguments
+This is most basic example of how to run the action. ```if always()``` is required because we want to send status update even if action fails.
 
+```
+- name: Notify slack
+  if: always()
+  uses: 'wixplosives/action-slack-message@master'
+  env:
+      GITHUB_TOKEN: ${{ github.token }}
+  with:
+      text: 'My text is so awesome'
+      status: ${{job.status}}
+      channel: 'testing-yarden-public'
+      slack_token: ${{ secrets.SLACK_BOT_TOKEN }}
 ### **Custom job name**
-
+```
 When you define a custom job name, like this:
 
 ```yaml
