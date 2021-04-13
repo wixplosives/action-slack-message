@@ -31,11 +31,31 @@ Run the tests :heavy_check_mark:
 $ npm test
 ```
 
-## Arguments
+## Run it to send slack message
+This is most basic example of how to run the action.
 
+```
+- name: Notify slack 
+  uses: 'wixplosives/action-slack-message@master' 
+  with:
+      text: 'My text is so awesome'      
+      channel: 'testing-yarden-public'
+      slack_token: ${{ secrets.SLACK_BOT_TOKEN }}
+```
+### Run it to notify about job status
+```if always()``` is required because we want to send status update even if action fails.
+```
+- name: Notify slack
+  if: always()
+  uses: 'wixplosives/action-slack-message@master'  
+  with:
+      text: 'My text is so awesome'
+      status: ${{job.status}}
+      channel: 'testing-yarden-public'
+      slack_token: ${{ secrets.SLACK_BOT_TOKEN }}
 ### **Custom job name**
-
-When you define a custom job name, like this:
+```
+### When you define a custom job name, like this
 
 ```yaml
 notify-custom-name:
