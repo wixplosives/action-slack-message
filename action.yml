@@ -2,40 +2,40 @@ name: 'action-slack-message'
 description: 'Sends slack messages'
 author: 'Wix.com'
 inputs:
-    channel:
-        required: true
-        description: 'channel to send message'
-        default: 'core3-ci'
-    slack_token:
-        required: true
-        description: 'slack token'
-        default: ''
-    status:
-        required: false
-        description: 'failed | success | true | false | info'
-        default: ''
-    text:
-        required: false
-        description: 'Optional text'
-        default: ''
-    custom_job_name:
-        required: false
-        description: 'if job has custom name defined in `name` field pass it here, otherwise it won`t find inner job in github api'
-    action_link:
-        required: false
-        description: 'custom direct link to action'
-        default: ''
-    matrix_os:
-        required: false
-        description: 'current os in the matrix'
-        default: ${{matrix.os}}
-    matrix_node:
-        required: false
-        description: 'current node version in the matrix'
-        default: ${{matrix.node-version}}
+  channel:
+    required: true
+    description: 'channel to send message'
+    default: 'core3-ci'
+  slack_token:
+    required: true
+    description: 'slack token'
+    default: ''
+  status:
+    required: false
+    description: 'failed | success | true | false | info'
+    default: ''
+  text:
+    required: false
+    description: 'Optional text'
+    default: ''
+  custom_job_name:
+    required: false
+    description: 'if job has custom name defined in `name` field pass it here, otherwise it won`t find inner job in github api'
+  action_link:
+    required: false
+    description: 'custom direct link to action'
+    default: ''
+  matrix_os:
+    required: false
+    description: 'current os in the matrix'
+    default: ${{matrix.os}}
+  matrix_node:
+    required: false
+    description: 'current node version in the matrix'
+    default: ${{matrix.node-version}}
 runs:
-    using: 'node12'
-    main: 'dist/index.js'
+  using: 'node12'
+  main: 'dist/index.js'
 branding:
-    icon: upload-cloud
-    color: blue
+  icon: upload-cloud
+  color: blue

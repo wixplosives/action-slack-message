@@ -3,5 +3,5 @@ module.exports = {
     extension: ['js', 'json', 'ts', 'tsx'],
     slow: 200,
     timeout: 10000,
-    colors: true
+    colors: true,
 };
