@@ -8,7 +8,15 @@ export interface ITextString {
     matrixNode?: string;
 }
 
-export const getTextString = ({ status, repoOwner, repoName, ref, sha, matrixOs, matrixNode }: ITextString): string => {
+export const getMessageText = ({
+    status,
+    repoOwner,
+    repoName,
+    ref,
+    sha,
+    matrixOs,
+    matrixNode,
+}: ITextString): string => {
     const repoUrl = `https://github.com/${repoOwner}/${repoName}`;
     const statusString = status ? `Status: *${status.toUpperCase()}*` : '';
     const repoString = `*Repo*: <${repoUrl}|${repoName}>`;
