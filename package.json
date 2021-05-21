@@ -38,7 +38,7 @@
     "@ts-tools/node": "^2.1.1",
     "@types/chai": "^4.2.16",
     "@types/mocha": "^8.2.2",
-    "@types/node": "14",
+    "@types/node": "15",
     "@typescript-eslint/eslint-plugin": "^4.22.0",
     "@typescript-eslint/parser": "^4.22.0",
     "@vercel/ncc": "^0.28.3",
