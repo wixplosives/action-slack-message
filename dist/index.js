@@ -148,7 +148,7 @@ async function run() {
     const matrixOs = core.getInput('matrix_os');
     const matrixNode = core.getInput('matrix_node');
     const customJobName = core.getInput('custom_job_name');
-    const fileName = core.getInput('fileName');
+    const fileName = core.getInput('file_name');
     let actionLink = core.getInput('action_link');
     const jobName = customJobName || github_1.context.job;
     const { workflow, sha, ref } = github_1.context;
