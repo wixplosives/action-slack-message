@@ -33,32 +33,33 @@ $ npm test
 
 This is most basic example of how to run the action.
 
-```
+```yaml
 - name: Notify slack
   uses: 'wixplosives/action-slack-message@master'
   with:
-      text: 'My text is so awesome'
-      channel: 'testing-yarden-public'
-      slack_token: ${{ secrets.SLACK_BOT_TOKEN }}
+    text: 'My text is so awesome'
+    channel: 'testing-yarden-public'
+    slack_token: ${{ secrets.SLACK_BOT_TOKEN }}
 ```
 
 ### Run it to notify about job status
 
 `if always()` is required because we want to send status update even if action fails.
 
-```
+```yaml
 - name: Notify slack
   if: always()
   uses: 'wixplosives/action-slack-message@master'
   with:
-      text: 'My text is so awesome'
-      status: ${{job.status}}
-      channel: 'testing-yarden-public'
-      slack_token: ${{ secrets.SLACK_BOT_TOKEN }}
-### **Custom job name**
+    text: 'My text is so awesome'
+    status: ${{job.status}}
+    channel: 'testing-yarden-public'
+    slack_token: ${{ secrets.SLACK_BOT_TOKEN }}
 ```
 
-### When you define a custom job name, like this
+### **Custom job name**
+
+When you define a custom job name, like this
 
 ```yaml
 notify-custom-name:
@@ -90,4 +91,18 @@ Add github.token as an environment variable
   uses: 'wixplosives/action-slack-message@master'
   env:
     GITHUB_TOKEN: ${{ github.token }}
+```
+
+## Send a file:
+
+Add github.token as an environment variable
+
+```yaml
+- name: Notify slack
+  uses: 'wixplosives/action-slack-message@master'
+  env:
+    GITHUB_TOKEN: ${{ github.token }}
+    channel: 'testing-yarden-public'
+    slack_token: ${{ secrets.SLACK_BOT_TOKEN }}
+    file_name: file.txt
 ```

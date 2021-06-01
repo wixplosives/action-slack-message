@@ -69,20 +69,13 @@ async function run(): Promise<void> {
 
     if (fileName) {
         try {
-            // Call the files.upload method using the WebClient
             const results = await client.files.upload({
-                // channels can be a list of one to many strings
                 channels: channel,
-                // eslint-disable-next-line camelcase
-                initial_comment: "Here's my file :smile:",
-                // Include your filename in a ReadStream here
+                initial_comment: `File sent for job: ${jobName}`,
                 file: createReadStream(fileName),
             });
-
-            // eslint-disable-next-line no-console
             console.log(results);
         } catch (error) {
-            // eslint-disable-next-line no-console
             console.error(error);
         }
     }
