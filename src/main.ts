@@ -6,6 +6,7 @@ import type { Status } from './types';
 import { getMessageText } from './get-message-text';
 import { getWorkflowJobs } from './get-workflow-jobs';
 import { colors } from './colors';
+import { createReadStream } from 'fs';
 
 async function run(): Promise<void> {
     const status = core.getInput('status') as Status;
@@ -15,6 +16,7 @@ async function run(): Promise<void> {
     const matrixOs = core.getInput('matrix_os');
     const matrixNode = core.getInput('matrix_node');
     const customJobName = core.getInput('custom_job_name');
+    const fileName = core.getInput('file_name');
     let actionLink = core.getInput('action_link');
 
     const jobName = customJobName || context.job;
@@ -64,6 +66,21 @@ async function run(): Promise<void> {
         text,
         attachments: [slackAttachment],
     });
+
+    if (fileName) {
+        try {
+            const results = await client.files.upload({
+                channels: channel,
+                ['initial_comment']: `File sent for job: ${jobName}`,
+                file: createReadStream(fileName),
+            });
+            // eslint-disable-next-line no-console
+            console.log(results);
+        } catch (error) {
+            // eslint-disable-next-line no-console
+            console.error(error);
+        }
+    }
 
     // eslint-disable-next-line no-console
     console.log(result);
