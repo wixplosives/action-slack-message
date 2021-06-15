@@ -102,6 +102,7 @@ Add github.token as an environment variable
   uses: 'wixplosives/action-slack-message@master'
   env:
     GITHUB_TOKEN: ${{ github.token }}
+  with:
     channel: 'testing-yarden-public'
     slack_token: ${{ secrets.SLACK_BOT_TOKEN }}
     file_name: file.txt
