@@ -41,6 +41,10 @@ inputs:
     required: false
     description: 'A pattern for filenames to upload'
     default: ''
+  fail_on_error:
+    required: false
+    description: 'A pattern for filenames to upload'
+    default: 'true'
 runs:
   using: 'node12'
   main: 'dist/index.js'

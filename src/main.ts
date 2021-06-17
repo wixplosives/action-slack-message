@@ -1,5 +1,5 @@
-import { createReadStream, readdir, lstatSync } from 'fs';
-import { promisify } from 'util';
+import path from 'path';
+import { createReadStream } from 'fs';
 import * as core from '@actions/core';
 import { context } from '@actions/github';
 import { WebClient, LogLevel, MessageAttachment } from '@slack/web-api';
@@ -8,8 +8,7 @@ import type { Status } from './types';
 import { getMessageText } from './get-message-text';
 import { getWorkflowJobs } from './get-workflow-jobs';
 import { colors } from './colors';
-
-const readDirAsync = promisify(readdir);
+import { getMatchingFiles, verifyFiles } from './send-file';
 
 async function run(): Promise<void> {
     const status = core.getInput('status') as Status;
@@ -30,6 +29,10 @@ async function run(): Promise<void> {
     const { workflow, sha, ref } = context;
     const { owner: repoOwner, repo: repoName } = context.repo;
     const runId = context.runId;
+
+    if (fileName || filePattern) {
+        await verifyFiles({ fileName, filePattern });
+    }
 
     if (!actionLink) {
         const workflowJobs = await getWorkflowJobs({
@@ -78,47 +81,47 @@ async function run(): Promise<void> {
     console.log(result);
 
     if (fileName || filePattern) {
-        try {
-            if (filePattern) {
+        if (filePattern) {
+            // eslint-disable-next-line no-console
+            console.log('Sending files by pattern...');
+
+            const filePaths = await getMatchingFiles(filePattern);
+
+            for (const filepath of filePaths) {
                 // eslint-disable-next-line no-console
-                console.log('Sending files by pattern...');
-                const fileNames = await readDirAsync('./');
-                const matchedFilenames = fileNames.filter(
-                    (filename) => filename.match(filePattern) && lstatSync(filename).isFile()
-                );
+                console.log(`Sending file: ${path.parse(filepath).base}`);
 
-                for (const filename of matchedFilenames) {
-                    // eslint-disable-next-line no-console
-                    console.log(`Sending file: ${filename}`);
-                    const results = await client.files.upload({
-                        channels: channel,
-                        ['initial_comment']: `File \`${filename}\` sent for job: ${jobName}`,
-                        file: createReadStream(filename),
-                    });
-
-                    // eslint-disable-next-line no-console
-                    console.log(results);
-                }
-            } else {
                 const results = await client.files.upload({
                     channels: channel,
-                    ['initial_comment']: `File \`${fileName}\`sent for job: ${jobName}`,
-                    file: createReadStream(fileName),
+                    ['initial_comment']: `File \`${path.parse(filepath).base}\` sent for job: ${jobName}`,
+                    file: createReadStream(filepath),
                 });
 
                 // eslint-disable-next-line no-console
                 console.log(results);
             }
-        } catch (error) {
+        } else {
+            const filePath = path.resolve(fileName);
+            const results = await client.files.upload({
+                channels: channel,
+                ['initial_comment']: `File \`${path.parse(filePath).base}\` sent for job: ${jobName}`,
+                file: createReadStream(fileName),
+            });
+
             // eslint-disable-next-line no-console
-            console.error(error);
+            console.log(results);
         }
     }
 }
 
 // eslint-disable-next-line github/no-then
 run().catch((e) => {
+    const fail = (core.getInput('fail_on_error') || 'false').toUpperCase() === 'TRUE';
     // eslint-disable-next-line no-console
     console.error(e);
-    core.setFailed(e.message);
+    if (fail) {
+        core.setFailed(e.message);
+    } else {
+        core.info(e.message);
+    }
 });
