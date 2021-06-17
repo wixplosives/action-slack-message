@@ -210,7 +210,7 @@ async function run() {
                     console.log(`Sending file: ${filename}`);
                     const results = await client.files.upload({
                         channels: channel,
-                        ['initial_comment']: `File sent for job: ${jobName}`,
+                        ['initial_comment']: `File \`${filename}\` sent for job: ${jobName}`,
                         file: fs_1.createReadStream(filename),
                     });
                     // eslint-disable-next-line no-console
@@ -220,7 +220,7 @@ async function run() {
             else {
                 const results = await client.files.upload({
                     channels: channel,
-                    ['initial_comment']: `File sent for job: ${jobName}`,
+                    ['initial_comment']: `File \`${fileName}\`sent for job: ${jobName}`,
                     file: fs_1.createReadStream(fileName),
                 });
                 // eslint-disable-next-line no-console
