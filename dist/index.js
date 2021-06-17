@@ -130,12 +130,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-const path_1 = __importDefault(__nccwpck_require__(5622));
-const fs_1 = __nccwpck_require__(5747);
 const core = __importStar(__nccwpck_require__(2186));
 const github_1 = __nccwpck_require__(5438);
 const web_api_1 = __nccwpck_require__(431);
@@ -204,33 +199,11 @@ async function run() {
     });
     // eslint-disable-next-line no-console
     console.log(result);
-    if (fileName || filePattern) {
-        if (filePattern) {
-            // eslint-disable-next-line no-console
-            console.log('Sending files by pattern...');
-            const filePaths = await send_file_1.getMatchingFiles(filePattern);
-            for (const filepath of filePaths) {
-                // eslint-disable-next-line no-console
-                console.log(`Sending file: ${path_1.default.parse(filepath).base}`);
-                const results = await client.files.upload({
-                    channels: channel,
-                    ['initial_comment']: `File \`${path_1.default.parse(filepath).base}\` sent for job: ${jobName}`,
-                    file: fs_1.createReadStream(filepath),
-                });
-                // eslint-disable-next-line no-console
-                console.log(results);
-            }
-        }
-        else {
-            const filePath = path_1.default.resolve(fileName);
-            const results = await client.files.upload({
-                channels: channel,
-                ['initial_comment']: `File \`${path_1.default.parse(filePath).base}\` sent for job: ${jobName}`,
-                file: fs_1.createReadStream(fileName),
-            });
-            // eslint-disable-next-line no-console
-            console.log(results);
-        }
+    if (filePattern) {
+        await send_file_1.sendFiles({ client, filePattern, channel, jobName });
+    }
+    if (fileName) {
+        await send_file_1.sendFile({ client, fileName, channel, jobName });
     }
 }
 // eslint-disable-next-line github/no-then
@@ -258,11 +231,39 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.getMatchingFiles = exports.verifyFiles = void 0;
+exports.getMatchingFiles = exports.verifyFiles = exports.sendFiles = exports.sendFile = void 0;
 const path_1 = __importDefault(__nccwpck_require__(5622));
 const fs_1 = __nccwpck_require__(5747);
 const util_1 = __nccwpck_require__(1669);
 const readDirAsync = util_1.promisify(fs_1.readdir);
+const sendFile = async ({ client, fileName, channel, jobName }) => {
+    const filePath = path_1.default.resolve(fileName);
+    const results = await client.files.upload({
+        channels: channel,
+        ['initial_comment']: `File \`${path_1.default.parse(filePath).base}\` sent for job: ${jobName}`,
+        file: fs_1.createReadStream(fileName),
+    });
+    // eslint-disable-next-line no-console
+    console.log(results);
+};
+exports.sendFile = sendFile;
+const sendFiles = async ({ client, filePattern, channel, jobName }) => {
+    // eslint-disable-next-line no-console
+    console.log('Sending files by pattern...');
+    const filePaths = await exports.getMatchingFiles(filePattern);
+    for (const filepath of filePaths) {
+        // eslint-disable-next-line no-console
+        console.log(`Sending file: ${path_1.default.parse(filepath).base}`);
+        const results = await client.files.upload({
+            channels: channel,
+            ['initial_comment']: `File \`${path_1.default.parse(filepath).base}\` sent for job: ${jobName}`,
+            file: fs_1.createReadStream(filepath),
+        });
+        // eslint-disable-next-line no-console
+        console.log(results);
+    }
+};
+exports.sendFiles = sendFiles;
 const verifyFiles = async ({ fileName, filePattern }) => {
     const filePath = fileName ? path_1.default.resolve(fileName) : '';
     if (fileName && !fs_1.existsSync(filePath)) {

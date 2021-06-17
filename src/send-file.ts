@@ -1,15 +1,63 @@
 import path from 'path';
-import { readdir, lstatSync, existsSync } from 'fs';
+import { readdir, lstatSync, existsSync, createReadStream } from 'fs';
 import { promisify } from 'util';
+import type { WebClient } from '@slack/web-api';
 
 const readDirAsync = promisify(readdir);
 
-interface IVerfifyFiles {
+interface sendFile {
+    client: WebClient;
+    fileName: string;
+    channel: string;
+    jobName: string;
+}
+
+export const sendFile = async ({ client, fileName, channel, jobName }: sendFile) => {
+    const filePath = path.resolve(fileName);
+    const results = await client.files.upload({
+        channels: channel,
+        ['initial_comment']: `File \`${path.parse(filePath).base}\` sent for job: ${jobName}`,
+        file: createReadStream(fileName),
+    });
+
+    // eslint-disable-next-line no-console
+    console.log(results);
+};
+
+interface sendFiles {
+    client: WebClient;
+    filePattern: string;
+    channel: string;
+    jobName: string;
+}
+
+export const sendFiles = async ({ client, filePattern, channel, jobName }: sendFiles) => {
+    // eslint-disable-next-line no-console
+    console.log('Sending files by pattern...');
+
+    const filePaths = await getMatchingFiles(filePattern);
+
+    for (const filepath of filePaths) {
+        // eslint-disable-next-line no-console
+        console.log(`Sending file: ${path.parse(filepath).base}`);
+
+        const results = await client.files.upload({
+            channels: channel,
+            ['initial_comment']: `File \`${path.parse(filepath).base}\` sent for job: ${jobName}`,
+            file: createReadStream(filepath),
+        });
+
+        // eslint-disable-next-line no-console
+        console.log(results);
+    }
+};
+
+interface IVerifyFiles {
     fileName?: string;
     filePattern?: string;
 }
 
-export const verifyFiles = async ({ fileName, filePattern }: IVerfifyFiles) => {
+export const verifyFiles = async ({ fileName, filePattern }: IVerifyFiles) => {
     const filePath = fileName ? path.resolve(fileName) : '';
 
     if (fileName && !existsSync(filePath)) {

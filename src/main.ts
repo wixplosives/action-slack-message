@@ -1,5 +1,3 @@
-import path from 'path';
-import { createReadStream } from 'fs';
 import * as core from '@actions/core';
 import { context } from '@actions/github';
 import { WebClient, LogLevel, MessageAttachment } from '@slack/web-api';
@@ -8,7 +6,7 @@ import type { Status } from './types';
 import { getMessageText } from './get-message-text';
 import { getWorkflowJobs } from './get-workflow-jobs';
 import { colors } from './colors';
-import { getMatchingFiles, verifyFiles } from './send-file';
+import { sendFile, sendFiles, verifyFiles } from './send-file';
 
 async function run(): Promise<void> {
     const status = core.getInput('status') as Status;
@@ -80,37 +78,11 @@ async function run(): Promise<void> {
     // eslint-disable-next-line no-console
     console.log(result);
 
-    if (fileName || filePattern) {
-        if (filePattern) {
-            // eslint-disable-next-line no-console
-            console.log('Sending files by pattern...');
-
-            const filePaths = await getMatchingFiles(filePattern);
-
-            for (const filepath of filePaths) {
-                // eslint-disable-next-line no-console
-                console.log(`Sending file: ${path.parse(filepath).base}`);
-
-                const results = await client.files.upload({
-                    channels: channel,
-                    ['initial_comment']: `File \`${path.parse(filepath).base}\` sent for job: ${jobName}`,
-                    file: createReadStream(filepath),
-                });
-
-                // eslint-disable-next-line no-console
-                console.log(results);
-            }
-        } else {
-            const filePath = path.resolve(fileName);
-            const results = await client.files.upload({
-                channels: channel,
-                ['initial_comment']: `File \`${path.parse(filePath).base}\` sent for job: ${jobName}`,
-                file: createReadStream(fileName),
-            });
-
-            // eslint-disable-next-line no-console
-            console.log(results);
-        }
+    if (filePattern) {
+        await sendFiles({ client, filePattern, channel, jobName });
+    }
+    if (fileName) {
+        await sendFile({ client, fileName, channel, jobName });
     }
 }
 
