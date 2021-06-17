@@ -138,7 +138,7 @@ const get_job_id_1 = __nccwpck_require__(2595);
 const get_message_text_1 = __nccwpck_require__(8045);
 const get_workflow_jobs_1 = __nccwpck_require__(7806);
 const colors_1 = __nccwpck_require__(5950);
-const fs_1 = __nccwpck_require__(5747);
+const send_file_1 = __nccwpck_require__(4000);
 async function run() {
     const status = core.getInput('status');
     const text = core.getInput('text');
@@ -148,11 +148,17 @@ async function run() {
     const matrixNode = core.getInput('matrix_node');
     const customJobName = core.getInput('custom_job_name');
     const fileName = core.getInput('file_name');
+    const filePattern = core.getInput('file_pattern');
     let actionLink = core.getInput('action_link');
+    // eslint-disable-next-line no-console
+    console.log({ status, text, channel, matrixOs, matrixNode, customJobName, fileName, filePattern, actionLink });
     const jobName = customJobName || github_1.context.job;
     const { workflow, sha, ref } = github_1.context;
     const { owner: repoOwner, repo: repoName } = github_1.context.repo;
     const runId = github_1.context.runId;
+    if (fileName || filePattern) {
+        await send_file_1.verifyFiles({ fileName, filePattern });
+    }
     if (!actionLink) {
         const workflowJobs = await get_workflow_jobs_1.getWorkflowJobs({
             repoOwner,
@@ -191,30 +197,90 @@ async function run() {
         text,
         attachments: [slackAttachment],
     });
-    if (fileName) {
-        try {
-            const results = await client.files.upload({
-                channels: channel,
-                ['initial_comment']: `File sent for job: ${jobName}`,
-                file: fs_1.createReadStream(fileName),
-            });
-            // eslint-disable-next-line no-console
-            console.log(results);
-        }
-        catch (error) {
-            // eslint-disable-next-line no-console
-            console.error(error);
-        }
-    }
     // eslint-disable-next-line no-console
     console.log(result);
+    if (filePattern) {
+        await send_file_1.sendFiles({ client, filePattern, channel, jobName });
+    }
+    if (fileName) {
+        await send_file_1.sendFile({ client, fileName, channel, jobName });
+    }
 }
 // eslint-disable-next-line github/no-then
 run().catch((e) => {
+    const fail = (core.getInput('fail_on_error') || 'false').toUpperCase() === 'TRUE';
     // eslint-disable-next-line no-console
     console.error(e);
-    core.setFailed(e.message);
+    if (fail) {
+        core.setFailed(e.message);
+    }
+    else {
+        core.info(e.message);
+    }
 });
+
+
+/***/ }),
+
+/***/ 4000:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
+
+"use strict";
+
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.getMatchingFiles = exports.verifyFiles = exports.sendFiles = exports.sendFile = void 0;
+const path_1 = __importDefault(__nccwpck_require__(5622));
+const fs_1 = __nccwpck_require__(5747);
+const util_1 = __nccwpck_require__(1669);
+const readDirAsync = util_1.promisify(fs_1.readdir);
+const sendFile = async ({ client, fileName, channel, jobName }) => {
+    const filePath = path_1.default.resolve(fileName);
+    const results = await client.files.upload({
+        channels: channel,
+        ['initial_comment']: `File \`${path_1.default.parse(filePath).base}\` sent for job: ${jobName}`,
+        file: fs_1.createReadStream(fileName),
+    });
+    // eslint-disable-next-line no-console
+    console.log(results);
+};
+exports.sendFile = sendFile;
+const sendFiles = async ({ client, filePattern, channel, jobName }) => {
+    // eslint-disable-next-line no-console
+    console.log('Sending files by pattern...');
+    const filePaths = await exports.getMatchingFiles(filePattern);
+    for (const filepath of filePaths) {
+        // eslint-disable-next-line no-console
+        console.log(`Sending file: ${path_1.default.parse(filepath).base}`);
+        const results = await client.files.upload({
+            channels: channel,
+            ['initial_comment']: `File \`${path_1.default.parse(filepath).base}\` sent for job: ${jobName}`,
+            file: fs_1.createReadStream(filepath),
+        });
+        // eslint-disable-next-line no-console
+        console.log(results);
+    }
+};
+exports.sendFiles = sendFiles;
+const verifyFiles = async ({ fileName, filePattern }) => {
+    const filePath = fileName ? path_1.default.resolve(fileName) : '';
+    if (fileName && !fs_1.existsSync(filePath)) {
+        throw new Error("file_name was given, but wasn't found");
+    }
+    const filePaths = filePattern ? await exports.getMatchingFiles(filePattern) : [];
+    if (filePattern && filePaths.length === 0) {
+        throw new Error('file_pattern was given, but no files matching the given pattern');
+    }
+};
+exports.verifyFiles = verifyFiles;
+const getMatchingFiles = async (filePattern) => {
+    const fileNames = await readDirAsync('./');
+    const matchedFilenames = fileNames.filter((filename) => filename.match(filePattern) && fs_1.lstatSync(filename).isFile());
+    return matchedFilenames.map((filename) => path_1.default.resolve(filename));
+};
+exports.getMatchingFiles = getMatchingFiles;
 
 
 /***/ }),

@@ -37,6 +37,14 @@ inputs:
     required: false
     description: 'file name to upload'
     default: ''
+  file_pattern:
+    required: false
+    description: 'A pattern for filenames to upload'
+    default: ''
+  fail_on_error:
+    required: false
+    description: 'Should fail the step on error. Default: true'
+    default: 'true'
 runs:
   using: 'node12'
   main: 'dist/index.js'

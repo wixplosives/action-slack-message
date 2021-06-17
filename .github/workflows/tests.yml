@@ -18,7 +18,7 @@ jobs:
       - run: npm test
         env:
           GITHUB_TOKEN: ${{ github.token }}
-  ### below are just test cases ###
+        ### below are just test cases ###
   notify-custom-name:
     runs-on: ${{ matrix.os }}
     name: custom name

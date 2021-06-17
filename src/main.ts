@@ -6,7 +6,7 @@ import type { Status } from './types';
 import { getMessageText } from './get-message-text';
 import { getWorkflowJobs } from './get-workflow-jobs';
 import { colors } from './colors';
-import { createReadStream } from 'fs';
+import { sendFile, sendFiles, verifyFiles } from './send-file';
 
 async function run(): Promise<void> {
     const status = core.getInput('status') as Status;
@@ -17,12 +17,20 @@ async function run(): Promise<void> {
     const matrixNode = core.getInput('matrix_node');
     const customJobName = core.getInput('custom_job_name');
     const fileName = core.getInput('file_name');
+    const filePattern = core.getInput('file_pattern');
     let actionLink = core.getInput('action_link');
+
+    // eslint-disable-next-line no-console
+    console.log({ status, text, channel, matrixOs, matrixNode, customJobName, fileName, filePattern, actionLink });
 
     const jobName = customJobName || context.job;
     const { workflow, sha, ref } = context;
     const { owner: repoOwner, repo: repoName } = context.repo;
     const runId = context.runId;
+
+    if (fileName || filePattern) {
+        await verifyFiles({ fileName, filePattern });
+    }
 
     if (!actionLink) {
         const workflowJobs = await getWorkflowJobs({
@@ -67,28 +75,25 @@ async function run(): Promise<void> {
         attachments: [slackAttachment],
     });
 
-    if (fileName) {
-        try {
-            const results = await client.files.upload({
-                channels: channel,
-                ['initial_comment']: `File sent for job: ${jobName}`,
-                file: createReadStream(fileName),
-            });
-            // eslint-disable-next-line no-console
-            console.log(results);
-        } catch (error) {
-            // eslint-disable-next-line no-console
-            console.error(error);
-        }
-    }
-
     // eslint-disable-next-line no-console
     console.log(result);
+
+    if (filePattern) {
+        await sendFiles({ client, filePattern, channel, jobName });
+    }
+    if (fileName) {
+        await sendFile({ client, fileName, channel, jobName });
+    }
 }
 
 // eslint-disable-next-line github/no-then
 run().catch((e) => {
+    const fail = (core.getInput('fail_on_error') || 'false').toUpperCase() === 'TRUE';
     // eslint-disable-next-line no-console
     console.error(e);
-    core.setFailed(e.message);
+    if (fail) {
+        core.setFailed(e.message);
+    } else {
+        core.info(e.message);
+    }
 });
