@@ -131,6 +131,8 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
+const fs_1 = __nccwpck_require__(5747);
+const util_1 = __nccwpck_require__(1669);
 const core = __importStar(__nccwpck_require__(2186));
 const github_1 = __nccwpck_require__(5438);
 const web_api_1 = __nccwpck_require__(431);
@@ -138,7 +140,7 @@ const get_job_id_1 = __nccwpck_require__(2595);
 const get_message_text_1 = __nccwpck_require__(8045);
 const get_workflow_jobs_1 = __nccwpck_require__(7806);
 const colors_1 = __nccwpck_require__(5950);
-const fs_1 = __nccwpck_require__(5747);
+const readDirAsync = util_1.promisify(fs_1.readdir);
 async function run() {
     const status = core.getInput('status');
     const text = core.getInput('text');
@@ -148,6 +150,7 @@ async function run() {
     const matrixNode = core.getInput('matrix_node');
     const customJobName = core.getInput('custom_job_name');
     const fileName = core.getInput('file_name');
+    const filePattern = core.getInput('file_pattern');
     let actionLink = core.getInput('action_link');
     const jobName = customJobName || github_1.context.job;
     const { workflow, sha, ref } = github_1.context;
@@ -191,23 +194,38 @@ async function run() {
         text,
         attachments: [slackAttachment],
     });
-    if (fileName) {
+    // eslint-disable-next-line no-console
+    console.log(result);
+    if (fileName || filePattern) {
         try {
-            const results = await client.files.upload({
-                channels: channel,
-                ['initial_comment']: `File sent for job: ${jobName}`,
-                file: fs_1.createReadStream(fileName),
-            });
-            // eslint-disable-next-line no-console
-            console.log(results);
+            if (filePattern) {
+                const fileNames = await readDirAsync('./');
+                const matchedFilenames = fileNames.filter((filename) => filename.match(filePattern) && fs_1.lstatSync(filename).isFile());
+                for (const filename of matchedFilenames) {
+                    const results = await client.files.upload({
+                        channels: channel,
+                        ['initial_comment']: `File sent for job: ${jobName}`,
+                        file: fs_1.createReadStream(filename),
+                    });
+                    // eslint-disable-next-line no-console
+                    console.log(results);
+                }
+            }
+            else {
+                const results = await client.files.upload({
+                    channels: channel,
+                    ['initial_comment']: `File sent for job: ${jobName}`,
+                    file: fs_1.createReadStream(fileName),
+                });
+                // eslint-disable-next-line no-console
+                console.log(results);
+            }
         }
         catch (error) {
             // eslint-disable-next-line no-console
             console.error(error);
         }
     }
-    // eslint-disable-next-line no-console
-    console.log(result);
 }
 // eslint-disable-next-line github/no-then
 run().catch((e) => {

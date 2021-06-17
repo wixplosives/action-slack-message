@@ -1,3 +1,5 @@
+import { createReadStream, readdir, lstatSync } from 'fs';
+import { promisify } from 'util';
 import * as core from '@actions/core';
 import { context } from '@actions/github';
 import { WebClient, LogLevel, MessageAttachment } from '@slack/web-api';
@@ -6,7 +8,8 @@ import type { Status } from './types';
 import { getMessageText } from './get-message-text';
 import { getWorkflowJobs } from './get-workflow-jobs';
 import { colors } from './colors';
-import { createReadStream } from 'fs';
+
+const readDirAsync = promisify(readdir);
 
 async function run(): Promise<void> {
     const status = core.getInput('status') as Status;
@@ -17,6 +20,7 @@ async function run(): Promise<void> {
     const matrixNode = core.getInput('matrix_node');
     const customJobName = core.getInput('custom_job_name');
     const fileName = core.getInput('file_name');
+    const filePattern = core.getInput('file_pattern');
     let actionLink = core.getInput('action_link');
 
     const jobName = customJobName || context.job;
@@ -67,23 +71,42 @@ async function run(): Promise<void> {
         attachments: [slackAttachment],
     });
 
-    if (fileName) {
+    // eslint-disable-next-line no-console
+    console.log(result);
+
+    if (fileName || filePattern) {
         try {
-            const results = await client.files.upload({
-                channels: channel,
-                ['initial_comment']: `File sent for job: ${jobName}`,
-                file: createReadStream(fileName),
-            });
-            // eslint-disable-next-line no-console
-            console.log(results);
+            if (filePattern) {
+                const fileNames = await readDirAsync('./');
+                const matchedFilenames = fileNames.filter(
+                    (filename) => filename.match(filePattern) && lstatSync(filename).isFile()
+                );
+
+                for (const filename of matchedFilenames) {
+                    const results = await client.files.upload({
+                        channels: channel,
+                        ['initial_comment']: `File sent for job: ${jobName}`,
+                        file: createReadStream(filename),
+                    });
+
+                    // eslint-disable-next-line no-console
+                    console.log(results);
+                }
+            } else {
+                const results = await client.files.upload({
+                    channels: channel,
+                    ['initial_comment']: `File sent for job: ${jobName}`,
+                    file: createReadStream(fileName),
+                });
+
+                // eslint-disable-next-line no-console
+                console.log(results);
+            }
         } catch (error) {
             // eslint-disable-next-line no-console
             console.error(error);
         }
     }
-
-    // eslint-disable-next-line no-console
-    console.log(result);
 }
 
 // eslint-disable-next-line github/no-then
