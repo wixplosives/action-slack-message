@@ -23,6 +23,9 @@ async function run(): Promise<void> {
     const filePattern = core.getInput('file_pattern');
     let actionLink = core.getInput('action_link');
 
+    // eslint-disable-next-line no-console
+    console.log({ status, text, channel, matrixOs, matrixNode, customJobName, fileName, filePattern, actionLink });
+
     const jobName = customJobName || context.job;
     const { workflow, sha, ref } = context;
     const { owner: repoOwner, repo: repoName } = context.repo;

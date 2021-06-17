@@ -152,6 +152,8 @@ async function run() {
     const fileName = core.getInput('file_name');
     const filePattern = core.getInput('file_pattern');
     let actionLink = core.getInput('action_link');
+    // eslint-disable-next-line no-console
+    console.log({ status, text, channel, matrixOs, matrixNode, customJobName, fileName, filePattern, actionLink });
     const jobName = customJobName || github_1.context.job;
     const { workflow, sha, ref } = github_1.context;
     const { owner: repoOwner, repo: repoName } = github_1.context.repo;
