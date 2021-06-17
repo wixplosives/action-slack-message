@@ -18,100 +18,126 @@ jobs:
       - run: npm test
         env:
           GITHUB_TOKEN: ${{ github.token }}
-  ### below are just test cases ###
-  # notify-custom-name:
-  #   runs-on: ${{ matrix.os }}
-  #   name: custom name
-  #   strategy:
-  #     matrix:
-  #       os: [ubuntu-latest, windows-latest]
-  #   steps:
-  #     - name: Notify slack
-  #       uses: 'wixplosives/action-slack-message@master'
-  #       env:
-  #         GITHUB_TOKEN: ${{ github.token }}
-  #       with:
-  #         text: 'Custom name with OS matrix'
-  #         status: ${{job.status}}
-  #         channel: 'testing-yarden-public'
-  #         slack_token: ${{ secrets.SLACK_BOT_TOKEN }}
-  #         custom_job_name: custom name
-  # notify-2-node-versions: # Send a Slack message
-  #   runs-on: ubuntu-latest
-  #   strategy:
-  #     matrix:
-  #       node-version: [14, 12]
-  #   steps:
-  #     - uses: actions/setup-node@v2
-  #       with:
-  #         node-version: ${{ matrix.node }}
-  #     - name: Notify slack
-  #       uses: 'wixplosives/action-slack-message@master'
-  #       env:
-  #         GITHUB_TOKEN: ${{ github.token }}
-  #       with:
-  #         text: '2 OS - Details should only detail the Node Version'
-  #         status: ${{job.status}}
-  #         channel: 'testing-yarden-public'
-  #         slack_token: ${{ secrets.SLACK_BOT_TOKEN }}
-  # notify-3-os-on-2-nodes-matrix:
-  #   runs-on: ${{ matrix.os }}
-  #   strategy:
-  #     matrix:
-  #       node-version: [14, 12]
-  #       os: [ubuntu-latest, macos-latest, windows-latest]
-  #   steps:
-  #     - uses: actions/setup-node@v2
-  #       with:
-  #         node-version: ${{ matrix.node }}
-  #     - name: Notify slack
-  #       uses: 'wixplosives/action-slack-message@master'
-  #       env:
-  #         GITHUB_TOKEN: ${{ github.token }}
-  #       with:
-  #         text: '3 OS + 2 Nodes - Full detail'
-  #         status: ${{job.status}}
-  #         channel: 'testing-yarden-public'
-  #         slack_token: ${{ secrets.SLACK_BOT_TOKEN }}
-  # notify-2-os-matrix:
-  #   runs-on: ${{ matrix.os }}
-  #   strategy:
-  #     matrix:
-  #       os: [ubuntu-latest, windows-latest]
-  #   steps:
-  #     - name: Notify slack
-  #       uses: 'wixplosives/action-slack-message@master'
-  #       env:
-  #         GITHUB_TOKEN: ${{ github.token }}
-  #       with:
-  #         text: '2 OS - Details should only detail the OS'
-  #         status: ${{job.status}}
-  #         channel: 'testing-yarden-public'
-  #         slack_token: ${{ secrets.SLACK_BOT_TOKEN }}
-  # notify-1-os-1-node:
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/setup-node@v2
-  #       with:
-  #         node-version: 14
-  #     - name: Notify slack
-  #       uses: 'wixplosives/action-slack-message@master'
-  #       env:
-  #         GITHUB_TOKEN: ${{ github.token }}
-  #       with:
-  #         text: '1 OS 1 node: no details'
-  #         status: ${{job.status}}
-  #         channel: 'testing-yarden-public'
-  #         slack_token: ${{ secrets.SLACK_BOT_TOKEN }}
-  # notify-1-os-only:
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: Notify slack
-  #       uses: 'wixplosives/action-slack-message@master'
-  #       env:
-  #         GITHUB_TOKEN: ${{ github.token }}
-  #       with:
-  #         text: '1 OS: no details'
-  #         status: ${{job.status}}
-  #         channel: 'testing-yarden-public'
-  #         slack_token: ${{ secrets.SLACK_BOT_TOKEN }}
+      ### below are just test cases ###
+      # notify-custom-name:
+      #   runs-on: ${{ matrix.os }}
+      #   name: custom name
+      #   strategy:
+      #     matrix:
+      #       os: [ubuntu-latest, windows-latest]
+      #   steps:
+      #     - name: Notify slack
+      #       uses: 'wixplosives/action-slack-message@master'
+      #       env:
+      #         GITHUB_TOKEN: ${{ github.token }}
+      #       with:
+      #         text: 'Custom name with OS matrix'
+      #         status: ${{job.status}}
+      #         channel: 'testing-yarden-public'
+      #         slack_token: ${{ secrets.SLACK_BOT_TOKEN }}
+      #         custom_job_name: custom name
+      # notify-2-node-versions: # Send a Slack message
+      #   runs-on: ubuntu-latest
+      #   strategy:
+      #     matrix:
+      #       node-version: [14, 12]
+      #   steps:
+      #     - uses: actions/setup-node@v2
+      #       with:
+      #         node-version: ${{ matrix.node }}
+      #     - name: Notify slack
+      #       uses: 'wixplosives/action-slack-message@master'
+      #       env:
+      #         GITHUB_TOKEN: ${{ github.token }}
+      #       with:
+      #         text: '2 OS - Details should only detail the Node Version'
+      #         status: ${{job.status}}
+      #         channel: 'testing-yarden-public'
+      #         slack_token: ${{ secrets.SLACK_BOT_TOKEN }}
+      # notify-3-os-on-2-nodes-matrix:
+      #   runs-on: ${{ matrix.os }}
+      #   strategy:
+      #     matrix:
+      #       node-version: [14, 12]
+      #       os: [ubuntu-latest, macos-latest, windows-latest]
+      #   steps:
+      #     - uses: actions/setup-node@v2
+      #       with:
+      #         node-version: ${{ matrix.node }}
+      #     - name: Notify slack
+      #       uses: 'wixplosives/action-slack-message@master'
+      #       env:
+      #         GITHUB_TOKEN: ${{ github.token }}
+      #       with:
+      #         text: '3 OS + 2 Nodes - Full detail'
+      #         status: ${{job.status}}
+      #         channel: 'testing-yarden-public'
+      #         slack_token: ${{ secrets.SLACK_BOT_TOKEN }}
+      # notify-2-os-matrix:
+      #   runs-on: ${{ matrix.os }}
+      #   strategy:
+      #     matrix:
+      #       os: [ubuntu-latest, windows-latest]
+      #   steps:
+      #     - name: Notify slack
+      #       uses: 'wixplosives/action-slack-message@master'
+      #       env:
+      #         GITHUB_TOKEN: ${{ github.token }}
+      #       with:
+      #         text: '2 OS - Details should only detail the OS'
+      #         status: ${{job.status}}
+      #         channel: 'testing-yarden-public'
+      #         slack_token: ${{ secrets.SLACK_BOT_TOKEN }}
+      # notify-1-os-1-node:
+      #   runs-on: ubuntu-latest
+      #   steps:
+      #     - uses: actions/setup-node@v2
+      #       with:
+      #         node-version: 14
+      #     - name: Notify slack
+      #       uses: 'wixplosives/action-slack-message@master'
+      #       env:
+      #         GITHUB_TOKEN: ${{ github.token }}
+      #       with:
+      #         text: '1 OS 1 node: no details'
+      #         status: ${{job.status}}
+      #         channel: 'testing-yarden-public'
+      #         slack_token: ${{ secrets.SLACK_BOT_TOKEN }}
+      # notify-1-os-only:
+      #   runs-on: ubuntu-latest
+      #   steps:
+      #     - name: Notify slack
+      #       uses: 'wixplosives/action-slack-message@master'
+      #       env:
+      #         GITHUB_TOKEN: ${{ github.token }}
+      #       with:
+      #         text: '1 OS: no details'
+      #         status: ${{job.status}}
+      #         channel: 'testing-yarden-public'
+      #         slack_token: ${{ secrets.SLACK_BOT_TOKEN }}
+  file-sending:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    steps:
+      - name: Send tracing file to Slack
+        if: always()
+        uses: 'wixplosives/action-slack-message@yarden/send-file-by-pattern'
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        with:
+          channel: testing-yarden-public
+          slack_token: ${{ secrets.SLACK_BOT_TOKEN }}
+          file_name: README.md
+          action_link: 'https://github.com/${{github.repository}}/actions/runs/${{github.run_id}}'
+      - name: Send tracing file to Slack
+        if: always()
+        uses: 'wixplosives/action-slack-message@yarden/send-file-by-pattern'
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        with:
+          channel: testing-yarden-public
+          slack_token: ${{ secrets.SLACK_BOT_TOKEN }}
+          file_pattern: ttier
+          action_link: 'https://github.com/${{github.repository}}/actions/runs/${{github.run_id}}'

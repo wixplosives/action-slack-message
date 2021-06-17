@@ -92,7 +92,7 @@ async function run(): Promise<void> {
                     console.log(`Sending file: ${filename}`);
                     const results = await client.files.upload({
                         channels: channel,
-                        ['initial_comment']: `File sent for job: ${jobName}`,
+                        ['initial_comment']: `File \`${filename}\` sent for job: ${jobName}`,
                         file: createReadStream(filename),
                     });
 
