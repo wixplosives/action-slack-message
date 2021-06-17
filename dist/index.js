@@ -199,9 +199,13 @@ async function run() {
     if (fileName || filePattern) {
         try {
             if (filePattern) {
+                // eslint-disable-next-line no-console
+                console.log('Sending files by pattern...');
                 const fileNames = await readDirAsync('./');
                 const matchedFilenames = fileNames.filter((filename) => filename.match(filePattern) && fs_1.lstatSync(filename).isFile());
                 for (const filename of matchedFilenames) {
+                    // eslint-disable-next-line no-console
+                    console.log(`Sending file: ${filename}`);
                     const results = await client.files.upload({
                         channels: channel,
                         ['initial_comment']: `File sent for job: ${jobName}`,
