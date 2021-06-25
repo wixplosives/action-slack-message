@@ -21,6 +21,10 @@ inputs:
   custom_job_name:
     required: false
     description: 'if job has custom name defined in `name` field pass it here, otherwise it won`t find inner job in github api'
+  output_format:
+    required: false
+    description: 'lets the user define the formatting of the published message'
+    default: ''
   action_link:
     required: false
     description: 'custom direct link to action'
