@@ -18,6 +18,7 @@ async function run(): Promise<void> {
     const customJobName = core.getInput('custom_job_name');
     const fileName = core.getInput('file_name');
     const filePattern = core.getInput('file_pattern');
+    const outputFormat = core.getInput('output_format');
     let actionLink = core.getInput('action_link');
 
     // eslint-disable-next-line no-console
@@ -72,7 +73,7 @@ async function run(): Promise<void> {
     const result = await client.chat.postMessage({
         channel,
         text,
-        attachments: [slackAttachment],
+        attachments: outputFormat === 'simple' ? [] : [slackAttachment],
     });
 
     // eslint-disable-next-line no-console
