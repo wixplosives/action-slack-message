@@ -126,4 +126,5 @@ jobs:
           text: 'Output with no attachment'
           status: ${{job.status}}
           channel: 'testing-yarden-public'
+          slack_token: ${{ secrets.SLACK_BOT_TOKEN }}
           output_format: simple
