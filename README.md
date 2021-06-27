@@ -82,6 +82,13 @@ You need to pass as an argument the custom job name, as the following:
                 custom_job_name: some custom name
 ```
 
+### **output format**
+
+passing the following values to "output_format" will modify the output as follows:
+`simple` : removes attachment from message
+
+any other values will result in the default formatting
+
 ## Usage in a private repo:
 
 Add github.token as an environment variable
