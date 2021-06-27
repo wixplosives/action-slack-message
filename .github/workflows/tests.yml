@@ -119,7 +119,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Notify slack
-        uses: 'wixplosives/action-slack-message@master'
+        uses: 'wixplosives/action-slack-message@ariki/simple-output'
         env:
           GITHUB_TOKEN: ${{ github.token }}
         with:
