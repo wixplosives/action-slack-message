@@ -50,7 +50,7 @@ const getJobId = ({ workflowJobs, jobName, matrixOs, matrixNode }) => {
             return job.id;
         }
     }
-    throw new Error(`cannot determine jobId`);
+    throw new Error(`cannot determine jobId for ${workflowJobs.toString()}`);
 };
 exports.getJobId = getJobId;
 
