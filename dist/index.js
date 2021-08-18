@@ -44,13 +44,15 @@ exports.getJobId = void 0;
 const getJobId = ({ workflowJobs, jobName, matrixOs, matrixNode }) => {
     for (const job of workflowJobs) {
         const currentJobName = job.name;
+        // eslint-disable-next-line no-console
+        console.log(currentJobName);
         if (currentJobName.includes(jobName) &&
             currentJobName.includes(matrixOs) &&
             currentJobName.includes(matrixNode)) {
             return job.id;
         }
     }
-    throw new Error(`cannot determine jobId for ${workflowJobs.toString()}`);
+    throw new Error(`cannot determine jobId`);
 };
 exports.getJobId = getJobId;
 
