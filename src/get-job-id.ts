@@ -10,6 +10,8 @@ export interface IGetJobIdOptions {
 export const getJobId = ({ workflowJobs, jobName, matrixOs, matrixNode }: IGetJobIdOptions): number => {
     for (const job of workflowJobs) {
         const currentJobName = job.name;
+        // eslint-disable-next-line no-console
+        console.log(currentJobName);
         if (
             currentJobName.includes(jobName) &&
             currentJobName.includes(matrixOs) &&
