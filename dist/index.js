@@ -41,14 +41,12 @@ exports.colors = {
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.getJobId = void 0;
-const getJobId = ({ workflowJobs, jobName, matrixOs, matrixNode }) => {
+const getJobId = ({ workflowJobs, jobName, matrixOs }) => {
     for (const job of workflowJobs) {
         const currentJobName = job.name;
         // eslint-disable-next-line no-console
         console.log(currentJobName);
-        if (currentJobName.includes(jobName) &&
-            currentJobName.includes(matrixOs) &&
-            currentJobName.includes(matrixNode)) {
+        if (currentJobName.includes(jobName) && currentJobName.includes(matrixOs)) {
             return job.id;
         }
     }
