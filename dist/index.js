@@ -42,10 +42,6 @@ exports.colors = {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.getJobId = void 0;
 const getJobId = ({ workflowJobs, jobName, matrixOs }) => {
-    // eslint-disable-next-line no-console
-    console.log(workflowJobs);
-    // eslint-disable-next-line no-console
-    console.log(jobName);
     for (const job of workflowJobs) {
         const currentJobName = job.name;
         // eslint-disable-next-line no-console
