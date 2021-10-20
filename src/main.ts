@@ -13,7 +13,7 @@ async function run(): Promise<void> {
     const text = core.getInput('text');
     const channel = core.getInput('channel');
     const slackToken = core.getInput('slack_token');
-    const matrixOs = core.getInput('matrix_os');
+    const matrixOs = core.getInput('matrix_os') ?? core.getInput('matrix_platform');
     const matrixNode = core.getInput('matrix_node');
     const customJobName = core.getInput('custom_job_name');
     const fileName = core.getInput('file_name');
