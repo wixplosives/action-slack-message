@@ -140,11 +140,12 @@ const get_workflow_jobs_1 = __nccwpck_require__(7806);
 const colors_1 = __nccwpck_require__(5950);
 const send_file_1 = __nccwpck_require__(4000);
 async function run() {
+    var _a;
     const status = core.getInput('status');
     const text = core.getInput('text');
     const channel = core.getInput('channel');
     const slackToken = core.getInput('slack_token');
-    const matrixOs = core.getInput('matrix_os');
+    const matrixOs = (_a = core.getInput('matrix_os')) !== null && _a !== void 0 ? _a : core.getInput('matrix_platform');
     const matrixNode = core.getInput('matrix_node');
     const customJobName = core.getInput('custom_job_name');
     const fileName = core.getInput('file_name');
