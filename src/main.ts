@@ -29,6 +29,10 @@ async function run(): Promise<void> {
     const { owner: repoOwner, repo: repoName } = context.repo;
     const runId = context.runId;
 
+    if (fileName || filePattern) {
+        await verifyFiles({ fileName, filePattern });
+    }
+
     if (!actionLink) {
         const workflowJobs = await getWorkflowJobs({
             repoOwner,
@@ -74,10 +78,6 @@ async function run(): Promise<void> {
 
     // eslint-disable-next-line no-console
     console.log(result);
-
-    if (fileName || filePattern) {
-        await verifyFiles({ fileName, filePattern });
-    }
 
     if (filePattern) {
         await sendFiles({ client, filePattern, channel, jobName });
