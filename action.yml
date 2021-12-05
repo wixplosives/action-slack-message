@@ -45,6 +45,10 @@ inputs:
     required: false
     description: 'A pattern for filenames to upload'
     default: ''
+  cancel_if_no_file:
+    required: false
+    description: 'Should skip message sending if file given but not found. Default: false'
+    default: 'false'
   fail_on_missing_file:
     required: false
     description: 'Should fail the step if file was given but not found. Default: false'
