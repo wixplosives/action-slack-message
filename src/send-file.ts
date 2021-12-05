@@ -53,20 +53,30 @@ export const sendFiles = async ({ client, filePattern, channel, jobName }: sendF
 };
 
 interface IVerifyFiles {
+    failOnMissingFile: boolean;
     fileName?: string;
     filePattern?: string;
 }
 
-export const verifyFiles = async ({ fileName, filePattern }: IVerifyFiles) => {
+export const verifyFiles = async ({ fileName, filePattern, failOnMissingFile }: IVerifyFiles) => {
     const filePath = fileName ? path.resolve(fileName) : '';
 
-    if (fileName && !existsSync(filePath)) {
-        throw new Error("file_name was given, but wasn't found");
-    }
+    try {
+        if (fileName && !existsSync(filePath)) {
+            throw new Error("file_name was given, but wasn't found");
+        }
 
-    const filePaths = filePattern ? await getMatchingFiles(filePattern) : [];
-    if (filePattern && filePaths.length === 0) {
-        throw new Error('file_pattern was given, but no files matching the given pattern');
+        const filePaths = filePattern ? await getMatchingFiles(filePattern) : [];
+        if (filePattern && filePaths.length === 0) {
+            throw new Error('file_pattern was given, but no files matching the given pattern');
+        }
+        return true;
+    } catch (err) {
+        if (failOnMissingFile) {
+            throw err;
+        } else {
+            return false;
+        }
     }
 };
 

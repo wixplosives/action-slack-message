@@ -19,7 +19,9 @@ async function run(): Promise<void> {
     const fileName = core.getInput('file_name');
     const filePattern = core.getInput('file_pattern');
     const outputFormat = core.getInput('output_format');
+    const failOnMissingFile = core.getInput('fail_on_missing_file') === 'true';
     let actionLink = core.getInput('action_link');
+    let verified = false;
 
     // eslint-disable-next-line no-console
     console.log({ status, text, channel, matrixOs, matrixNode, customJobName, fileName, filePattern, actionLink });
@@ -30,7 +32,7 @@ async function run(): Promise<void> {
     const runId = context.runId;
 
     if (fileName || filePattern) {
-        await verifyFiles({ fileName, filePattern });
+        verified = await verifyFiles({ fileName, filePattern, failOnMissingFile });
     }
 
     if (!actionLink) {
@@ -79,10 +81,10 @@ async function run(): Promise<void> {
     // eslint-disable-next-line no-console
     console.log(result);
 
-    if (filePattern) {
+    if (filePattern && verified) {
         await sendFiles({ client, filePattern, channel, jobName });
     }
-    if (fileName) {
+    if (fileName && verified) {
         await sendFile({ client, fileName, channel, jobName });
     }
 }
