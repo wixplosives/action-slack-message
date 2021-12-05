@@ -20,17 +20,21 @@ describe.only('send-file', () => {
 
     describe('verifyFiles()', () => {
         it('single file - exist', async function () {
-            expect(await verifyFiles({ fileName: 'README.md' })).to.equal(undefined);
+            expect(await verifyFiles({ fileName: 'README.md', failOnMissingFile: true })).to.be.true;
         });
         it('single file - does not exist', async function () {
-            await expect(verifyFiles({ fileName: 'READMEzxczxczxc.md' })).to.be.rejectedWith(Error);
+            await expect(verifyFiles({ fileName: 'READMEzxczxczxc.md', failOnMissingFile: true })).to.be.rejectedWith(
+                Error
+            );
         });
 
         it('pattern - exist', async function () {
-            expect(await verifyFiles({ filePattern: 'git' })).to.equal(undefined);
+            expect(await verifyFiles({ filePattern: 'git', failOnMissingFile: true })).to.be.true;
         });
         it('pattern - does not exist', async function () {
-            await expect(verifyFiles({ filePattern: 'ZCZXCASCDACACAC' })).to.be.rejectedWith(Error);
+            await expect(verifyFiles({ filePattern: 'ZCZXCASCDACACAC', failOnMissingFile: true })).to.be.rejectedWith(
+                Error
+            );
         });
     });
 });
