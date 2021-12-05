@@ -20,6 +20,7 @@ async function run(): Promise<void> {
     const filePattern = core.getInput('file_pattern');
     const outputFormat = core.getInput('output_format');
     const failOnMissingFile = core.getInput('fail_on_missing_file') === 'true';
+    const skipOnMissingFile = core.getInput('cancel_if_no_file') === 'true';
     let actionLink = core.getInput('action_link');
     let verified = false;
 
@@ -33,6 +34,11 @@ async function run(): Promise<void> {
 
     if (fileName || filePattern) {
         verified = await verifyFiles({ fileName, filePattern, failOnMissingFile });
+    }
+    if (skipOnMissingFile && !verified) {
+        // eslint-disable-next-line no-console
+        console.log('Skipping message sending due to missing file.');
+        return;
     }
 
     if (!actionLink) {

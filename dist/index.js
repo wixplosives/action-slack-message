@@ -152,6 +152,7 @@ async function run() {
     const filePattern = core.getInput('file_pattern');
     const outputFormat = core.getInput('output_format');
     const failOnMissingFile = core.getInput('fail_on_missing_file') === 'true';
+    const skipOnMissingFile = core.getInput('cancel_if_no_file') === 'true';
     let actionLink = core.getInput('action_link');
     let verified = false;
     // eslint-disable-next-line no-console
@@ -162,6 +163,11 @@ async function run() {
     const runId = github_1.context.runId;
     if (fileName || filePattern) {
         verified = await send_file_1.verifyFiles({ fileName, filePattern, failOnMissingFile });
+    }
+    if (skipOnMissingFile && !verified) {
+        // eslint-disable-next-line no-console
+        console.log('Skipping message sending due to missing file.');
+        return;
     }
     if (!actionLink) {
         const workflowJobs = await get_workflow_jobs_1.getWorkflowJobs({
