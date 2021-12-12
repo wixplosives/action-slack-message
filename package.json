@@ -10,7 +10,7 @@
     "build": "npm run build:ts && npm run bundle",
     "build:ts": "tsc -p tsconfig.build.json",
     "bundle": "ncc build --source-map --license licenses.txt",
-    "lint": "eslint . -f codeframe",
+    "lint": "eslint .",
     "typecheck": "tsc --noEmit",
     "pretest": "npm run typecheck && npm run lint",
     "test": "mocha \"test/**/*.test.ts\"",
@@ -29,28 +29,28 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "@actions/core": "^1.2.7",
-    "@actions/github": "^4.0.0",
-    "@octokit/core": "^3.4.0",
-    "@slack/web-api": "^6.1.0"
+    "@actions/core": "^1.6.0",
+    "@actions/github": "^5.0.0",
+    "@octokit/core": "^3.5.1",
+    "@slack/web-api": "^6.5.1"
   },
   "devDependencies": {
-    "@ts-tools/node": "^2.1.1",
-    "@types/chai": "^4.2.16",
+    "@ts-tools/node": "^3.0.1",
+    "@types/chai": "^4.3.0",
     "@types/chai-as-promised": "^7.1.4",
-    "@types/mocha": "^8.2.2",
+    "@types/mocha": "^9.0.0",
     "@types/node": "14",
-    "@typescript-eslint/eslint-plugin": "^4.22.0",
-    "@typescript-eslint/parser": "^4.22.0",
-    "@vercel/ncc": "^0.28.3",
+    "@typescript-eslint/eslint-plugin": "^5.6.0",
+    "@typescript-eslint/parser": "^5.6.0",
+    "@vercel/ncc": "^0.33.0",
     "chai": "^4.3.4",
     "chai-as-promised": "^7.1.1",
-    "eslint": "^7.24.0",
-    "eslint-config-prettier": "^8.2.0",
-    "eslint-plugin-github": "^4.1.3",
-    "eslint-plugin-no-only-tests": "^2.5.0",
-    "mocha": "^8.3.2",
+    "eslint": "^8.4.1",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-github": "^4.3.5",
+    "eslint-plugin-no-only-tests": "^2.6.0",
+    "mocha": "^9.1.3",
     "rimraf": "^3.0.2",
-    "typescript": "^4.2.4"
+    "typescript": "^4.5.3"
   }
 }
