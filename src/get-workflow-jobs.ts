@@ -1,5 +1,4 @@
 import { Octokit } from '@octokit/core';
-import type { Job } from './types';
 
 export interface IGetWorkflowJobsOptions {
     repoOwner: string;
@@ -7,7 +6,7 @@ export interface IGetWorkflowJobsOptions {
     runId: number;
 }
 
-export const getWorkflowJobs = async ({ repoOwner, repoName, runId }: IGetWorkflowJobsOptions): Promise<Job[]> => {
+export const getWorkflowJobs = async ({ repoOwner, repoName, runId }: IGetWorkflowJobsOptions) => {
     const githubToken = process.env['GITHUB_TOKEN'];
     if (!githubToken) {
         throw new Error(`GITHUB_TOKEN environment variable must be provided`);
@@ -19,5 +18,5 @@ export const getWorkflowJobs = async ({ repoOwner, repoName, runId }: IGetWorkfl
         ['run_id']: runId,
     });
 
-    return response.data.jobs as Job[];
+    return response.data.jobs;
 };
