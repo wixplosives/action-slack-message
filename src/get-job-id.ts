@@ -17,6 +17,7 @@ export const getJobId = ({ workflowJobs, jobName, matrixOs, matrixNode, customJo
         console.log('currentJobName.includes(matrixOs)', currentJobName.includes(matrixOs));
         // eslint-disable-next-line no-console
         console.log('currentJobName.includes(matrixNode)', currentJobName.includes(matrixNode));
+
         if (customJobName && currentJobName === customJobName) {
             return job.id;
         } else if (
