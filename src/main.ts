@@ -52,6 +52,7 @@ async function run(): Promise<void> {
             jobName,
             matrixOs,
             matrixNode,
+            customJobName,
         });
         actionLink = `https://github.com/${repoOwner}/${repoName}/runs/${jobId}?check_suite_focus=true`;
     }
