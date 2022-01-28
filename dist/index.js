@@ -38,6 +38,9 @@ const getJobId = ({ workflowJobs, jobName, matrixOs, matrixNode }) => {
         // eslint-disable-next-line no-console
         console.log('job', job);
         const currentJobName = job.name;
+        console.log('currentJobName.includes(jobName)', currentJobName.includes(jobName));
+        console.log('currentJobName.includes(jobName)', currentJobName.includes(matrixOs));
+        console.log('currentJobName.includes(jobName)', currentJobName.includes(matrixNode));
         if (currentJobName.includes(jobName) &&
             currentJobName.includes(matrixOs) &&
             currentJobName.includes(matrixNode)) {
