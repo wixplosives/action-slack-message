@@ -117,6 +117,7 @@ jobs:
           slack_token: ${{ secrets.SLACK_BOT_TOKEN }}
   notify-2-os-1-node-as-matrix:
     runs-on: ${{ matrix.os }}
+    name: custom name / ${{ matrix.os }}
     strategy:
       matrix:
         node-version: [16]
@@ -130,6 +131,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ github.token }}
         with:
+          custom_job_name: custom name / ${{ matrix.os }}
           text: '2 OS, 1 Node in matrix: no details'
           status: ${{job.status}}
           channel: 'testing-yarden-public'
