@@ -13,8 +13,11 @@ export const getJobId = ({ workflowJobs, jobName, matrixOs, matrixNode }: IGetJo
         console.log('job', job);
 
         const currentJobName = job.name;
+        // eslint-disable-next-line no-console
         console.log('currentJobName.includes(jobName)', currentJobName.includes(jobName));
+        // eslint-disable-next-line no-console
         console.log('currentJobName.includes(matrixOs)', currentJobName.includes(matrixOs));
+        // eslint-disable-next-line no-console
         console.log('currentJobName.includes(matrixNode)', currentJobName.includes(matrixNode));
         if (
             currentJobName.includes(jobName) &&

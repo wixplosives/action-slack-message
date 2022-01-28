@@ -27,7 +27,7 @@ jobs:
         os: [ubuntu-latest, windows-latest]
     steps:
       - name: Notify slack
-        uses: 'wixplosives/action-slack-message@master'
+        uses: 'wixplosives/action-slack-message@yarden/cross'
         env:
           GITHUB_TOKEN: ${{ github.token }}
         with:
@@ -46,7 +46,7 @@ jobs:
         with:
           node-version: ${{ matrix.node }}
       - name: Notify slack
-        uses: 'wixplosives/action-slack-message@master'
+        uses: 'wixplosives/action-slack-message@yarden/cross'
         env:
           GITHUB_TOKEN: ${{ github.token }}
         with:
@@ -65,7 +65,7 @@ jobs:
         with:
           node-version: ${{ matrix.node }}
       - name: Notify slack
-        uses: 'wixplosives/action-slack-message@master'
+        uses: 'wixplosives/action-slack-message@yarden/cross'
         env:
           GITHUB_TOKEN: ${{ github.token }}
         with:
@@ -80,7 +80,7 @@ jobs:
         os: [ubuntu-latest, windows-latest]
     steps:
       - name: Notify slack
-        uses: 'wixplosives/action-slack-message@master'
+        uses: 'wixplosives/action-slack-message@yarden/cross'
         env:
           GITHUB_TOKEN: ${{ github.token }}
         with:
@@ -95,7 +95,7 @@ jobs:
         with:
           node-version: 14
       - name: Notify slack
-        uses: 'wixplosives/action-slack-message@master'
+        uses: 'wixplosives/action-slack-message@yarden/cross'
         env:
           GITHUB_TOKEN: ${{ github.token }}
         with:
@@ -107,7 +107,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Notify slack
-        uses: 'wixplosives/action-slack-message@master'
+        uses: 'wixplosives/action-slack-message@yarden/cross'
         env:
           GITHUB_TOKEN: ${{ github.token }}
         with:
@@ -115,11 +115,30 @@ jobs:
           status: ${{job.status}}
           channel: 'testing-yarden-public'
           slack_token: ${{ secrets.SLACK_BOT_TOKEN }}
+  notify-2-os-1-node-as-matrix:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        node-version: [16]
+        os: [ubuntu-latest, windows-latest]
+    steps:
+      - uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node }}
+      - name: Notify slack
+        uses: 'wixplosives/action-slack-message@yarden/cross'
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        with:
+          text: '2 OS, 1 Node in matrix: no details'
+          status: ${{job.status}}
+          channel: 'testing-yarden-public'
+          slack_token: ${{ secrets.SLACK_BOT_TOKEN }}
   use-simple-output:
     runs-on: ubuntu-latest
     steps:
       - name: Notify slack
-        uses: 'wixplosives/action-slack-message@master'
+        uses: 'wixplosives/action-slack-message@yarden/cross'
         env:
           GITHUB_TOKEN: ${{ github.token }}
         with:
