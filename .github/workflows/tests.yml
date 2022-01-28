@@ -132,7 +132,7 @@ jobs:
           GITHUB_TOKEN: ${{ github.token }}
         with:
           custom_job_name: custom name / ${{ matrix.os }}
-          text: '2 OS, 1 Node in matrix: no details'
+          text: '2 OS, 1 Node in matrix: ${{ matrix.os }}'
           status: ${{job.status}}
           channel: 'testing-yarden-public'
           slack_token: ${{ secrets.SLACK_BOT_TOKEN }}

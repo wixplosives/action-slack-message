@@ -33,10 +33,8 @@ exports.colors = {
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.getJobId = void 0;
-const getJobId = ({ workflowJobs, jobName, matrixOs, matrixNode }) => {
+const getJobId = ({ workflowJobs, jobName, matrixOs, matrixNode, customJobName }) => {
     for (const job of workflowJobs) {
-        // eslint-disable-next-line no-console
-        console.log('job', job);
         const currentJobName = job.name;
         // eslint-disable-next-line no-console
         console.log('currentJobName.includes(jobName)', currentJobName.includes(jobName));
@@ -44,7 +42,10 @@ const getJobId = ({ workflowJobs, jobName, matrixOs, matrixNode }) => {
         console.log('currentJobName.includes(matrixOs)', currentJobName.includes(matrixOs));
         // eslint-disable-next-line no-console
         console.log('currentJobName.includes(matrixNode)', currentJobName.includes(matrixNode));
-        if (currentJobName.includes(jobName) &&
+        if (customJobName && currentJobName === customJobName) {
+            return job.id;
+        }
+        else if (currentJobName.includes(jobName) &&
             currentJobName.includes(matrixOs) &&
             currentJobName.includes(matrixNode)) {
             return job.id;
@@ -180,6 +181,7 @@ async function run() {
             jobName,
             matrixOs,
             matrixNode,
+            customJobName,
         });
         actionLink = `https://github.com/${repoOwner}/${repoName}/runs/${jobId}?check_suite_focus=true`;
     }
