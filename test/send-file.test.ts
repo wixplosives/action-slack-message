@@ -5,8 +5,7 @@ import { getMatchingFiles, verifyFiles } from '../src/send-file';
 
 chai.use(chaiAsPromised);
 
-// eslint-disable-next-line no-only-tests/no-only-tests
-describe.only('send-file', () => {
+describe('send-file', () => {
     describe('getMatchingFiles()', () => {
         it('existing file', async function () {
             const matching = await getMatchingFiles('READ');

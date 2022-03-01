@@ -4,7 +4,7 @@ import { IX_JOB_DATA } from './expected-test-output';
 
 if (process.env['GITHUB_TOKEN']) {
     describe('getWorkflowJobs()', () => {
-        it('should get correct workflow data', async () => {
+        it('should get correct workflow data', async function () {
             const basicJobData = {
                 repoOwner: 'wixplosives',
                 repoName: 'action-slack-message',
