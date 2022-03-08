@@ -40,7 +40,7 @@
     "@types/chai-as-promised": "^7.1.5",
     "@types/mocha": "^9.1.0",
     "@types/node": "16",
-    "@typescript-eslint/eslint-plugin": "~5.12.1",
+    "@typescript-eslint/eslint-plugin": "~5.14.0",
     "@typescript-eslint/parser": "~5.12.1",
     "@vercel/ncc": "^0.33.3",
     "chai": "^4.3.6",
