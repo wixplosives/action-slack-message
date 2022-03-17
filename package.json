@@ -31,7 +31,7 @@
   "dependencies": {
     "@actions/core": "^1.6.0",
     "@actions/github": "^5.0.0",
-    "@octokit/core": "^3.5.1",
+    "@octokit/core": "^3.6.0",
     "@slack/web-api": "^6.7.0"
   },
   "devDependencies": {
@@ -40,17 +40,17 @@
     "@types/chai-as-promised": "^7.1.5",
     "@types/mocha": "^9.1.0",
     "@types/node": "16",
-    "@typescript-eslint/eslint-plugin": "~5.12.1",
-    "@typescript-eslint/parser": "~5.12.1",
+    "@typescript-eslint/eslint-plugin": "~5.15.0",
+    "@typescript-eslint/parser": "~5.15.0",
     "@vercel/ncc": "^0.33.3",
     "chai": "^4.3.6",
     "chai-as-promised": "^7.1.1",
-    "eslint": "^8.10.0",
-    "eslint-config-prettier": "^8.4.0",
+    "eslint": "^8.11.0",
+    "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-github": "^4.3.5",
     "eslint-plugin-no-only-tests": "^2.6.0",
-    "mocha": "^9.2.1",
+    "mocha": "^9.2.2",
     "rimraf": "^3.0.2",
-    "typescript": "~4.5.5"
+    "typescript": "~4.6.2"
   }
 }
