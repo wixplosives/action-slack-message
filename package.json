@@ -38,7 +38,7 @@
     "@ts-tools/node": "^3.0.1",
     "@types/chai": "^4.3.1",
     "@types/chai-as-promised": "^7.1.5",
-    "@types/mocha": "^9.1.0",
+    "@types/mocha": "^9.1.1",
     "@types/node": "16",
     "@typescript-eslint/eslint-plugin": "~5.20.0",
     "@typescript-eslint/parser": "~5.20.0",
