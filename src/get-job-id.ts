@@ -22,5 +22,7 @@ export const getJobId = ({ workflowJobs, jobName, matrixOs, matrixNode, customJo
             return job.id;
         }
     }
+    // eslint-disable-next-line no-console
+    console.log({ workflowJobs, jobName, matrixOs, matrixNode, customJobName });
     throw new Error(`cannot determine jobId`);
 };
