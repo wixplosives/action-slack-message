@@ -5,7 +5,7 @@ import type { WebClient } from '@slack/web-api';
 
 const readDirAsync = promisify(readdir);
 
-interface sendFile {
+export interface sendFile {
     client: WebClient;
     fileName: string;
     channel: string;
@@ -24,7 +24,7 @@ export const sendFile = async ({ client, fileName, channel, jobName }: sendFile)
     console.log(results);
 };
 
-interface sendFiles {
+export interface sendFiles {
     client: WebClient;
     filePattern: string;
     channel: string;
@@ -52,7 +52,7 @@ export const sendFiles = async ({ client, filePattern, channel, jobName }: sendF
     }
 };
 
-interface IVerifyFiles {
+export interface IVerifyFiles {
     failOnMissingFile: boolean;
     fileName?: string;
     filePattern?: string;
