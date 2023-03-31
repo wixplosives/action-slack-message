@@ -51,6 +51,6 @@
     "eslint-plugin-no-only-tests": "^3.1.0",
     "mocha": "^10.2.0",
     "rimraf": "^4.4.1",
-    "typescript": "~5.0.2"
+    "typescript": "~5.0.3"
   }
 }
