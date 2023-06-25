@@ -8,7 +8,7 @@ if (process.env['GITHUB_TOKEN']) {
             const basicJobData = {
                 repoOwner: 'wixplosives',
                 repoName: 'action-slack-message',
-                runId: 728982924,
+                runId: 5369132284,
             };
             const workflowJobs = await getWorkflowJobs(basicJobData);
             const testedJob = workflowJobs.find((job) => job.id === IX_JOB_DATA.id);
