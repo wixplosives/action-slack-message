@@ -23,7 +23,7 @@ describe('send-file', () => {
         });
         it('single file - does not exist', async function () {
             await expect(verifyFiles({ fileName: 'READMEzxczxczxc.md', failOnMissingFile: true })).to.be.rejectedWith(
-                Error
+                Error,
             );
         });
 
@@ -32,7 +32,7 @@ describe('send-file', () => {
         });
         it('pattern - does not exist', async function () {
             await expect(verifyFiles({ filePattern: 'ZCZXCASCDACACAC', failOnMissingFile: true })).to.be.rejectedWith(
-                Error
+                Error,
             );
         });
     });

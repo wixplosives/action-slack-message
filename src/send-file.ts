@@ -83,7 +83,7 @@ export const verifyFiles = async ({ fileName, filePattern, failOnMissingFile }: 
 export const getMatchingFiles = async (filePattern: string) => {
     const fileNames = await readDirAsync('./');
     const matchedFilenames = fileNames.filter(
-        (filename) => filename.match(filePattern) && lstatSync(filename).isFile()
+        (filename) => filename.match(filePattern) && lstatSync(filename).isFile(),
     );
     return matchedFilenames.map((filename) => path.resolve(filename));
 };
