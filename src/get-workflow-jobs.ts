@@ -16,6 +16,7 @@ export const getWorkflowJobs = async ({ repoOwner, repoName, runId }: IGetWorkfl
         owner: repoOwner,
         repo: repoName,
         ['run_id']: runId,
+        per_page: 100
     });
 
     return response.data.jobs;
